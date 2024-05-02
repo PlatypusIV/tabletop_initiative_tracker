@@ -1,0 +1,17 @@
+initiative order
+
+add new cahracters
+
+change character positions in initiative
+
+add buffs/debuffs (round based)
+
+track buffs/debuffs
+
+browser cache for buffs/debuffs/characters/monsters
+
+web view for start
+
+----------------------------------------------------------------
+by initiative roll position
+
