@@ -12,6 +12,8 @@ browser cache for buffs/debuffs/characters/monsters
 
 web view for start
 
+add character modal
+
 ----------------------------------------------------------------
 by initiative roll position
 
@@ -29,5 +31,10 @@ footer
 get css to work
 
 
+
+
 reset button
     reset confirmation prompt
+
+setup laptop for remote work
+

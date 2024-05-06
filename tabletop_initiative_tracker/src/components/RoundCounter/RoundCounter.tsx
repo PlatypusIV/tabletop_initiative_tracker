@@ -1,8 +1,12 @@
 import React from 'react';
-import './RouncCounter.css';
+import './RoundCounter.css';
 
-export default function RoundCounter():JSX.Element {
+interface Props {
+  currentRound: number; 
+}
+
+export default function RoundCounter(props:Props):JSX.Element {
   return (
-    <div>RoundCounter</div>
+    <h1 className='roundCounterTitle'>{props.currentRound}</h1>
   )
 }

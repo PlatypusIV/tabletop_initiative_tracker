@@ -1,0 +1,11 @@
+.characterContainer {
+    color: black;
+    background-color: antiquewhite;
+    max-width: 200px;
+    margin: 10px;
+}
+
+.characterContainerTitle {
+    font-size: 18px;
+    font-weight: 500;
+}

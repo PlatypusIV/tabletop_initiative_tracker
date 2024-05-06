@@ -10,7 +10,15 @@ interface Props{
 
 export default function CharacterContainer(props:Props):JSX.Element {
     const {name, initiativePosition, initiativeScore} = props;
+
+    
   return (
-    <div><h3>{name}</h3></div>
+    <div className='characterContainer'>
+        <h3 className='characterContainerTitle'>{name}</h3>
+        <>{initiativePosition}</>
+        <>{initiativeScore}</>
+        <button>Up</button>
+        <button>Down</button>
+        </div>
   )
 }

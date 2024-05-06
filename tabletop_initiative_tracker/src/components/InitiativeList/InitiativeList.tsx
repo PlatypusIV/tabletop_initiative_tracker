@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import CharacterContainer from '../CharacterContainer/CharacterContainer';
 import './InitiativeList.css';
+import { Character } from '../../utils/interface';
 
+interface Props {
+  initiativeQueue: Character[];
+}
 
-export default function InitiativeList() {
+export default function InitiativeList(props: Props): JSX.Element {
+  const {initiativeQueue} = props;
+
   return (
-    <div className='initiativeList'>InitiativeList</div>
+    <div className='initiativeList'>{initiativeQueue.map(character=>{
+      return <CharacterContainer 
+        name={character.name}
+        initiativePosition={character.position}
+        initiativeScore={character.initiativeScore}
+        />
+    })
+    }</div>
   )
 }
