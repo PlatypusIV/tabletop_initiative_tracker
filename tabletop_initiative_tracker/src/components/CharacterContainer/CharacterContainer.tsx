@@ -5,11 +5,12 @@ interface Props{
     name: string;
     initiativePosition: number;
     initiativeScore?: number;
+    removeCharacter: (position: number) => void;
 }
 
 
 export default function CharacterContainer(props:Props):JSX.Element {
-    const {name, initiativePosition, initiativeScore} = props;
+    const {name, initiativePosition, initiativeScore, removeCharacter} = props;
 
     
   return (
@@ -19,6 +20,7 @@ export default function CharacterContainer(props:Props):JSX.Element {
         <>{initiativeScore}</>
         <button>Up</button>
         <button>Down</button>
+        <button onClick={()=>removeCharacter(initiativePosition)}>Remove</button>
         </div>
   )
 }

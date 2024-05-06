@@ -11,7 +11,7 @@ import { Character } from './utils/interface'
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
-  const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number| undefined>();
+  const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
 
   // useEffect(()=>{
   //   console.log(localStorage.getItem('oldInitiative'));
@@ -21,24 +21,42 @@ export default function App(): JSX.Element {
   //   }
   // },[]);
 
+  // useEffect(()=>{
+  //   console.log('new Initiative Queue: ', initiativeQueue);
+  // }, [initiativeQueue]);
+
   useEffect(()=>{
-    console.log('new Initiative Queue: ', initiativeQueue);
-  }, [initiativeQueue]);
+    console.log('new currentCharacter number: ', currentCharacterNumber);
+  }, [currentCharacterNumber]);
 
   function continueAlongInitiative(): void {
-    console.log('Next button was clicked!');
-    console.log('initiatives: ', initiativeQueue);
+    if(initiativeQueue.length){
+      let temp;
+      if(currentCharacterNumber >= initiativeQueue.length-1){
+        temp = 0;
+        setCurrentRoundNumber(currentRoundNumber+1);
+      }else{
+        temp = currentCharacterNumber+1;
+      }
+      setCurrentCharacterNumber(temp);
+    }
   }
 
   function addNewCharacterToQueue(): void {
     const temp = initiativeQueue;
-    temp.push({name:'Insert name', position: temp.length+1, initiativeScore: 0});
-
+    temp.push({name:'Insert name', position: temp.length, initiativeScore: 0});
     setInitiativeQueue([...temp]);
   }
 
-  function removeCharacterFromQueue(): void {
-    console.log('removing character from queue!');
+  //this is not the best, but il make it better after the mvp is out
+  function removeCharacterFromQueue(positionToRemove: number): void {
+    initiativeQueue.splice(positionToRemove,1);
+    const temp = initiativeQueue.map((char, index)=> {
+      return {
+      ...char,
+      position: index,
+    }});
+    setInitiativeQueue([...temp]);
   }
 
   function changeQueuePosition(){
@@ -48,7 +66,7 @@ export default function App(): JSX.Element {
   return (
     <div className='app'>
         <Header />
-        <div className='content'><InitiativeList initiativeQueue={initiativeQueue}/> <div className='controlSection'>
+        <div className='content'><InitiativeList initiativeQueue={initiativeQueue} removeCharacter={removeCharacterFromQueue}/> <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>
               <ControlBox continueInitiativeQueue={continueAlongInitiative}
               addNewCharacter={addNewCharacterToQueue}/>
