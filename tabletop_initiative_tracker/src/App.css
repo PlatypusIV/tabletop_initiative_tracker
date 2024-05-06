@@ -14,3 +14,9 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.controlSection {
+    width: 30%;
+    height: 100%;
+    /* margin: 8px; */
+}
