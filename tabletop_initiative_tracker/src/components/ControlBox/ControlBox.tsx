@@ -4,14 +4,17 @@ import './ControlBox.css';
 interface Props {
   addNewCharacter : () => void;
   continueInitiativeQueue : () => void;
+  resetInitiativeQueue : () => void;
 }
 
-
-export default function ControlBox({addNewCharacter, continueInitiativeQueue}: Props) {
+//add confirmation prompt for reset
+export default function ControlBox(props: Props) {
   return (
     <div className='controlBox'>
-      <button onClick={continueInitiativeQueue}>Next</button>
-      <button onClick={addNewCharacter}>Add character</button>
+      <button onClick={props.continueInitiativeQueue}>Next</button>
+      <button onClick={props.addNewCharacter}>Add character</button>
+      
+      <button onClick={props.resetInitiativeQueue}>Reset initiative</button>
     </div>
   )
 }

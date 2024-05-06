@@ -20,6 +20,7 @@ export default function CharacterContainer(props:Props):JSX.Element {
         <>{initiativeScore}</>
         <button>Up</button>
         <button>Down</button>
+        <button>Edit</button>
         <button onClick={()=>removeCharacter(initiativePosition)}>Remove</button>
         </div>
   )

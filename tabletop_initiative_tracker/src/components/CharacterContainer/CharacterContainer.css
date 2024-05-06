@@ -2,6 +2,7 @@
     color: black;
     background-color: antiquewhite;
     max-width: 200px;
+    min-height: 60px;
     margin: 10px;
 }
 

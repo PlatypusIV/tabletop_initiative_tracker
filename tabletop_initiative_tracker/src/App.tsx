@@ -63,13 +63,19 @@ export default function App(): JSX.Element {
     console.log('Changes queue position.');
   }
 
+  function resetInitiativeQueue(){
+    setInitiativeQueue([]);
+    setCurrentCharacterNumber(0);
+    setCurrentRoundNumber(1);
+  }
+
   return (
     <div className='app'>
         <Header />
         <div className='content'><InitiativeList initiativeQueue={initiativeQueue} removeCharacter={removeCharacterFromQueue}/> <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>
               <ControlBox continueInitiativeQueue={continueAlongInitiative}
-              addNewCharacter={addNewCharacterToQueue}/>
+              addNewCharacter={addNewCharacterToQueue} resetInitiativeQueue={resetInitiativeQueue}/>
             </div>
           </div>
         <Footer />
