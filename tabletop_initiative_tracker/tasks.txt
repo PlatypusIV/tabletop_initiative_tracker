@@ -27,3 +27,7 @@ footer
 
 
 get css to work
+
+
+reset button
+    reset confirmation prompt

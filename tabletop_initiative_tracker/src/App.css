@@ -13,10 +13,15 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin: 8px;
 }
 
 .controlSection {
-    width: 30%;
+    width: 10%;
     height: 100%;
-    /* margin: 8px; */
+    margin: 8px;
+    border: aqua 8px solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }

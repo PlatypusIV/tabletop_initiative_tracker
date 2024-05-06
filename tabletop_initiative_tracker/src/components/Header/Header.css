@@ -5,12 +5,9 @@ header {
     justify-content: center;
     display: flex;
     flex-direction: column;
-    
-
-
 }
 
-.titleHeader {
+.headerTitle {
     font-size: 36px;
     font-weight: 600;
 }
