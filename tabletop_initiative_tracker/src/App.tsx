@@ -1,17 +1,20 @@
-import { useEffect, useState } from 'react'
-// import reactLogo from './assets/react.svg'
-import './App.css'
-import Header from './components/Header/Header'
-import Footer from './components/Footer/Footer'
-import InitiativeList from './components/InitiativeList/InitiativeList'
-import ControlBox from './components/ControlBox/ControlBox'
-import RoundCounter from './components/RoundCounter/RoundCounter'
-import { Character } from './utils/interface'
+import { useEffect, useState } from 'react';
+// import reactLogo from './assets/react.svg';
+import './App.css';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import InitiativeList from './components/InitiativeList/InitiativeList';
+import ControlBox from './components/ControlBox/ControlBox';
+import RoundCounter from './components/RoundCounter/RoundCounter';
+import { Character } from './utils/interface';
+import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
+  const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
+  const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0});
 
   // useEffect(()=>{
   //   console.log(localStorage.getItem('oldInitiative'));
@@ -28,6 +31,10 @@ export default function App(): JSX.Element {
   useEffect(()=>{
     console.log('new currentCharacter number: ', currentCharacterNumber);
   }, [currentCharacterNumber]);
+
+  // useEffect(()=>{
+  //   console.log('new currentCharacter number: ', characterBeingEdited);
+  // },[characterBeingEdited]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -69,16 +76,30 @@ export default function App(): JSX.Element {
     setCurrentRoundNumber(1);
   }
 
+  function editCharacter(position: number){
+    console.log('Character to edit: ', initiativeQueue[position]);
+    setCharacterBeingEdited(initiativeQueue[position]);
+    setIsCharacterEditModalOpen(true);
+  }
+
+  function saveCharacterChanges(character: Character){
+    console.log('New character: ', character);
+    const temp = initiativeQueue;
+    temp[characterBeingEdited.position] = character;
+    setInitiativeQueue(temp);
+  }
+
   return (
     <div className='app'>
         <Header />
-        <div className='content'><InitiativeList initiativeQueue={initiativeQueue} removeCharacter={removeCharacterFromQueue}/> <div className='controlSection'>
+        <div className='content'><InitiativeList initiativeQueue={initiativeQueue} removeCharacter={removeCharacterFromQueue} editCharacter={editCharacter}/> <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>
               <ControlBox continueInitiativeQueue={continueAlongInitiative}
               addNewCharacter={addNewCharacterToQueue} resetInitiativeQueue={resetInitiativeQueue}/>
             </div>
           </div>
         <Footer />
+        <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges}/>
     </div>
   )
 }
