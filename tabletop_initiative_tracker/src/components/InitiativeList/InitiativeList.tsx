@@ -7,6 +7,7 @@ interface Props {
   initiativeQueue: Character[];
   removeCharacter: (position: number) => void;
   editCharacter: (position:number) => void;
+  changeCharacterPosition: (position: number, change: "+"| "-")=>void;
 }
 
 export default function InitiativeList(props: Props): JSX.Element {
@@ -20,6 +21,7 @@ export default function InitiativeList(props: Props): JSX.Element {
         initiativeScore={character.initiativeScore}
         removeCharacter={props.removeCharacter}
         editCharacter={props.editCharacter}
+        changeCharacterPosition={props.changeCharacterPosition}
         key={character.position}
         />
     })

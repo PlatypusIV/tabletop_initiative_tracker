@@ -39,3 +39,6 @@ reset button
 setup laptop for remote work
 
 implement Redux to get rid of Props mess
+
+------------------
+what change position?

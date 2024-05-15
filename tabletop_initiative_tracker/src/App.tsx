@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // import reactLogo from './assets/react.svg';
 import './App.css';
 import Header from './components/Header/Header';
@@ -18,7 +18,7 @@ export default function App(): JSX.Element {
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
       let temp;
-      if(currentCharacterNumber >= initiativeQueue.length-1){
+      if(currentCharacterNumber >= initiativeQueue.length){
         temp = 0;
         setCurrentRoundNumber(currentRoundNumber+1);
       }else{
@@ -46,8 +46,25 @@ export default function App(): JSX.Element {
     setInitiativeQueue([...temp]);
   }
 
-  function changeQueuePosition(){
-    console.log('Changes queue position.');
+  function changeQueuePosition(position: number, change: "+"| "-"){
+    const temp = initiativeQueue;
+    const characterToMove = temp[position];
+    if(change=== "-"){
+      if(position-1<0)return;
+      temp.splice(position,1);
+      temp.splice(position-1,0,characterToMove);
+
+    }else{
+      if(position+1>initiativeQueue.length)return;
+      temp.splice(position,1);
+      temp.splice(position+1,0,characterToMove);
+    }
+    const changedInitiativeQueue = temp.map((char, index)=> {
+      return {
+      ...char,
+      position: index,
+    }});
+    setInitiativeQueue([...changedInitiativeQueue]);
   }
 
   function resetInitiativeQueue(){
@@ -71,7 +88,14 @@ export default function App(): JSX.Element {
   return (
     <div className='app'>
         <Header />
-        <div className='content'><InitiativeList initiativeQueue={initiativeQueue} removeCharacter={removeCharacterFromQueue} editCharacter={editCharacter}/> <div className='controlSection'>
+        <div className='content'>
+          <InitiativeList 
+          initiativeQueue={initiativeQueue}
+           removeCharacter={removeCharacterFromQueue}
+            editCharacter={editCharacter}
+            changeCharacterPosition={changeQueuePosition}
+            /> 
+            <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>
               <div className='controlBox'>
               <button onClick={continueAlongInitiative}>Next</button>
