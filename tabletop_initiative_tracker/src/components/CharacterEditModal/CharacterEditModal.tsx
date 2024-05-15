@@ -31,7 +31,7 @@ export default function CharacterEditModal(props: Props) {
       <div>
         <label htmlFor="nameInput">name:</label>
         <input id='nameInput' type='text' placeholder={props.characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)}/>
-      <button onClick={saveCharacter}>{props.characterToEdit.name?'Save changes' : 'Add new Character'}</button>
+      <button onClick={saveCharacter}>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
       </div>
     </Modal>
   )
