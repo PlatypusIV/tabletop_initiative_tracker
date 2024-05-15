@@ -5,6 +5,7 @@ interface Props{
     name: string;
     initiativePosition: number;
     initiativeScore?: number;
+    currentlyActiveCharacter: number;
     removeCharacter: (position: number) => void;
     editCharacter: (position:number)=> void;
     changeCharacterPosition: (position: number, change: "+"| "-") => void;
@@ -12,11 +13,10 @@ interface Props{
 
 
 export default function CharacterContainer(props:Props):JSX.Element {
-    const {name, initiativePosition, initiativeScore, removeCharacter, editCharacter, changeCharacterPosition} = props;
+    const {name, initiativePosition, initiativeScore, removeCharacter, editCharacter, changeCharacterPosition, currentlyActiveCharacter} = props;
 
-    
   return (
-    <div className='characterContainer'>
+    <div className={initiativePosition === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
         <h3 className='characterContainerTitle'>{name}</h3>
         <>{initiativePosition}</>
         <>{initiativeScore}</>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import reactLogo from './assets/react.svg';
 import './App.css';
 import Header from './components/Header/Header';
@@ -15,10 +15,14 @@ export default function App(): JSX.Element {
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0});
 
+  useEffect(()=>{
+    console.log('currently active character: ', currentCharacterNumber);
+  },[currentCharacterNumber]);
+
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
       let temp;
-      if(currentCharacterNumber >= initiativeQueue.length){
+      if(currentCharacterNumber >= initiativeQueue.length-1){
         temp = 0;
         setCurrentRoundNumber(currentRoundNumber+1);
       }else{
@@ -94,6 +98,7 @@ export default function App(): JSX.Element {
            removeCharacter={removeCharacterFromQueue}
             editCharacter={editCharacter}
             changeCharacterPosition={changeQueuePosition}
+            currentlyActiveCharacter={currentCharacterNumber}
             /> 
             <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>

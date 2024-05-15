@@ -10,3 +10,7 @@
     font-size: 18px;
     font-weight: 500;
 }
+
+.active {
+    background-color: rgb(4, 214, 241);
+}

@@ -26,8 +26,10 @@ export default function CharacterEditModal(props: Props) {
   }
   
   return (
-    <Modal isOpen={props.isOpen}>
-      <button onClick={()=>props.closeModal()}>Close modal</button>
+    <Modal isOpen={props.isOpen} className='characterEditModal'>
+      <div>
+        <button onClick={()=>props.closeModal()}>Close modal</button>
+      </div>
       <div>
         <label htmlFor="nameInput">name:</label>
         <input id='nameInput' type='text' placeholder={props.characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)}/>
