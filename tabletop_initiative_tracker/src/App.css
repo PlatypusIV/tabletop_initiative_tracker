@@ -26,3 +26,19 @@
     flex-direction: column;
     justify-content: space-evenly;
 }
+
+.buttonArea {
+    border: 2px aliceblue solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.buttonArea button {
+    min-width: 100px;
+    margin: 4px;
+}
+
+/* Need to add all phone views too*/

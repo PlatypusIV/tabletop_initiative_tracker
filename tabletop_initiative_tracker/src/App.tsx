@@ -102,7 +102,7 @@ export default function App(): JSX.Element {
             /> 
             <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>
-              <div className='controlBox'>
+              <div className='buttonArea'>
               <button onClick={continueAlongInitiative}>Next</button>
               <button onClick={()=>setIsCharacterEditModalOpen(true)}>Add character</button>
               
