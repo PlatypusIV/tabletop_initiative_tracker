@@ -18,12 +18,19 @@ export default function CharacterContainer(props:Props):JSX.Element {
   return (
     <div className={initiativePosition === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
         <h3 className='characterContainerTitle'>{name}</h3>
-        <>{initiativePosition}</>
-        <>{initiativeScore}</>
-        <button onClick={()=>changeCharacterPosition(initiativePosition, '-')}>Up</button>
-        <button  onClick={()=>changeCharacterPosition(initiativePosition, '+')}>Down</button>
+        
+
         <button onClick={()=> editCharacter(props.initiativePosition)}>Edit</button>
         <button onClick={()=>removeCharacter(initiativePosition)}>Remove</button>
+        <div className='infoContainer'>
+          <p>{initiativePosition}</p>
+          <p>{initiativeScore}</p>
+        </div>
+
+        <div className='positionContainer'>
+          <button onClick={()=>changeCharacterPosition(initiativePosition, '-')}>Up</button>
+          <button  onClick={()=>changeCharacterPosition(initiativePosition, '+')}>Down</button>
+        </div>
         </div>
   )
 }

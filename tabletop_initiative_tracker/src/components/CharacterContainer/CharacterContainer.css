@@ -4,6 +4,9 @@
     max-width: 200px;
     min-height: 60px;
     margin: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .characterContainerTitle {
@@ -13,4 +16,15 @@
 
 .active {
     background-color: rgb(4, 214, 241);
+}
+
+.positionContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
 }
