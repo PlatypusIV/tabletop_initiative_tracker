@@ -8,6 +8,7 @@ interface Props {
     characterToEdit: Character;
     closeModal: ()=> void;
     saveCharacterChanges: (character:Character)=> void;
+    addCharacter: (character: Character)=> void;
 }
 
 export default function CharacterEditModal(props: Props) {
@@ -15,7 +16,12 @@ export default function CharacterEditModal(props: Props) {
 
 
   function saveCharacter(){
-    props.saveCharacterChanges({...props.characterToEdit,name});
+    if(!name)return;
+    if(props.characterToEdit.name ===''){
+      props.addCharacter({...props.characterToEdit,name});
+    }else{
+      props.saveCharacterChanges({...props.characterToEdit,name});
+    }
     props.closeModal();
   }
   
@@ -25,7 +31,7 @@ export default function CharacterEditModal(props: Props) {
       <div>
         <label htmlFor="nameInput">name:</label>
         <input id='nameInput' type='text' placeholder={props.characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)}/>
-      <button onClick={()=>saveCharacter()}>Save changes</button>
+      <button onClick={saveCharacter}>{props.characterToEdit.name?'Save changes' : 'Add new Character'}</button>
       </div>
     </Modal>
   )

@@ -1,9 +1,0 @@
-.controlBox {
-    /* margin: 2px; */
-    border: red 8px solid;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    flex: 1;
-}
