@@ -13,14 +13,19 @@ interface Props {
 
 export default function CharacterEditModal(props: Props) {
   const [name,setName] = useState<string>('');
+  const [hitpoints,setHitpoints] = useState(0);
 
+  function onHitpointChange(newHitpoints:string){
+    if(isNaN(parseInt(newHitpoints)))return;
+    setHitpoints(parseInt(newHitpoints));
+  }
 
   function saveCharacter(){
     if(!name)return;
     if(props.characterToEdit.name ===''){
-      props.addCharacter({...props.characterToEdit,name});
+      props.addCharacter({...props.characterToEdit,name, hitpoints});
     }else{
-      props.saveCharacterChanges({...props.characterToEdit,name});
+      props.saveCharacterChanges({...props.characterToEdit,name,hitpoints});
     }
     props.closeModal();
   }
@@ -31,10 +36,14 @@ export default function CharacterEditModal(props: Props) {
         <button onClick={()=>props.closeModal()}>Close modal</button>
       </div>
       <div>
-        <label htmlFor="nameInput">name:</label>
+        <label htmlFor="nameInput">Name:</label>
         <input id='nameInput' type='text' placeholder={props.characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)}/>
-      <button onClick={saveCharacter}>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
       </div>
+      <div>
+        <label htmlFor="hitpointInput">Hitpoints: </label>
+        <input type="number" name="" id="hitpointInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)}/>
+      </div>
+      <button onClick={saveCharacter}>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
     </Modal>
   )
 }

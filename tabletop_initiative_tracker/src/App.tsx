@@ -13,7 +13,7 @@ export default function App(): JSX.Element {
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
-  const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0});
+  const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
 
   useEffect(()=>{
     console.log('currently active character: ', currentCharacterNumber);
