@@ -16,10 +16,8 @@ export default function InitiativeList(props: Props): JSX.Element {
 
   return (
     <div className='initiativeList'>{initiativeQueue.map(character=>{
-      return <CharacterContainer 
-        name={character.name}
-        initiativePosition={character.position}
-        initiativeScore={character.initiativeScore}
+      return <CharacterContainer
+        character={character}
         removeCharacter={props.removeCharacter}
         editCharacter={props.editCharacter}
         changeCharacterPosition={props.changeCharacterPosition}

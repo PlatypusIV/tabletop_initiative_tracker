@@ -1,11 +1,10 @@
 import React from 'react';
+import { Character } from '../../utils/interface';
 import './CharacterContainer.css';
 
 interface Props{
-    name: string;
-    initiativePosition: number;
-    initiativeScore?: number;
     currentlyActiveCharacter: number;
+    character: Character;
     removeCharacter: (position: number) => void;
     editCharacter: (position:number)=> void;
     changeCharacterPosition: (position: number, change: "+"| "-") => void;
@@ -13,23 +12,33 @@ interface Props{
 
 
 export default function CharacterContainer(props:Props):JSX.Element {
-    const {name, initiativePosition, initiativeScore, removeCharacter, editCharacter, changeCharacterPosition, currentlyActiveCharacter} = props;
+    const {character, removeCharacter, editCharacter, changeCharacterPosition, currentlyActiveCharacter} = props;
+
+  function handleHitpointChange(changeInHitpoints){
+    console.log('change in hitpoints: ', changeInHitpoints);
+  }
 
   return (
-    <div className={initiativePosition === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
-        <h3 className='characterContainerTitle'>{name}</h3>
-        
-
-        <button onClick={()=> editCharacter(props.initiativePosition)}>Edit</button>
-        <button onClick={()=>removeCharacter(initiativePosition)}>Remove</button>
+    <div className={character.position === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
         <div className='infoContainer'>
-          <p>{initiativePosition}</p>
-          <p>{initiativeScore}</p>
+        <p className='characterContainerTitle'>Name: {character.name}</p>
+          <div>
+            <label htmlFor="hitpointInput">Hitpoints: </label><input className='hitpointInput' id='hitpointInput' defaultValue={character.hitpoints} type='text' onChange={(e)=> handleHitpointChange(e.target.value)}/>
+          </div>
+          <div>
+          <p>Position: {character.position}</p>
+          </div>
+          <div>
+          <p>Initiative score: {character.initiativeScore}</p>
+          </div>
+          <div className='editRemoveContainer'>
+        <button onClick={()=>removeCharacter(character.position)}>Remove</button>
+        <button onClick={()=> editCharacter(character.position)}>Edit</button>
         </div>
-
+        </div>
         <div className='positionContainer'>
-          <button onClick={()=>changeCharacterPosition(initiativePosition, '-')}>Up</button>
-          <button  onClick={()=>changeCharacterPosition(initiativePosition, '+')}>Down</button>
+          <button onClick={()=>changeCharacterPosition(character.position, '-')}>Up</button>
+          <button  onClick={()=>changeCharacterPosition(character.position, '+')}>Down</button>
         </div>
         </div>
   )
