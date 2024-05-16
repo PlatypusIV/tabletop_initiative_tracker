@@ -27,7 +27,14 @@ export default function CharacterEditModal(props: Props) {
     }else{
       props.saveCharacterChanges({...props.characterToEdit,name,hitpoints});
     }
+    
     props.closeModal();
+    clearModal();
+  }
+
+  function clearModal(){
+    setName('');
+    setHitpoints(0);
   }
   
   return (
@@ -41,7 +48,7 @@ export default function CharacterEditModal(props: Props) {
       </div>
       <div>
         <label htmlFor="hitpointInput">Hitpoints: </label>
-        <input type="number" name="" id="hitpointInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)}/>
+        <input type="number" name="hitpointInput" id="hitpointInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)}/>
       </div>
       <button onClick={saveCharacter}>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
     </Modal>

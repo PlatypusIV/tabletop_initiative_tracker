@@ -14,7 +14,18 @@ interface Props{
 export default function CharacterContainer(props:Props):JSX.Element {
     const {character, removeCharacter, editCharacter, changeCharacterPosition, currentlyActiveCharacter} = props;
 
-  function handleHitpointChange(changeInHitpoints){
+    //debounce this and other such inputs too
+  function handleHitpointChange(changeInHitpoints: string){
+    //check for - or +
+    //then split by the numbers on each side
+    //if there is no - or + check if value is number
+    //if entering a string then simply return
+
+    const newHitpointValue = parseInt(changeInHitpoints);
+
+    if(isNaN(newHitpointValue)) return;
+
+    
     console.log('change in hitpoints: ', changeInHitpoints);
   }
 

@@ -18,6 +18,10 @@ export default function App(): JSX.Element {
   useEffect(()=>{
     console.log('currently active character: ', currentCharacterNumber);
   },[currentCharacterNumber]);
+  
+  useEffect(()=>{
+    console.log('initiativeQueue: ', initiativeQueue);
+  },[initiativeQueue]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -81,6 +85,12 @@ export default function App(): JSX.Element {
     console.log('Character to edit: ', initiativeQueue[position]);
     setCharacterBeingEdited(initiativeQueue[position]);
     setIsCharacterEditModalOpen(true);
+  }
+
+  function editCharacterStats(character: Character, position: number){
+    const temp = initiativeQueue;
+    temp[position] = character;
+    setInitiativeQueue([...temp]);
   }
 
   function saveCharacterChanges(character: Character){
