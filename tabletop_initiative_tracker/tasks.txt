@@ -45,3 +45,7 @@ implement Redux to get rid of Props mess
 auto snap by initiative score and bonus
 
 hp tracking
+
+hp history
+
+when editing character, wont allow to add new cahracters

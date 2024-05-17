@@ -81,7 +81,7 @@ export default function App(): JSX.Element {
     setCurrentRoundNumber(1);
   }
 
-  function editCharacter(position: number){
+  function openCharacterEditor(position: number){
     console.log('Character to edit: ', initiativeQueue[position]);
     setCharacterBeingEdited(initiativeQueue[position]);
     setIsCharacterEditModalOpen(true);
@@ -106,7 +106,8 @@ export default function App(): JSX.Element {
           <InitiativeList 
           initiativeQueue={initiativeQueue}
            removeCharacter={removeCharacterFromQueue}
-            editCharacter={editCharacter}
+            editCharacter={editCharacterStats}
+            openCharacterEditor={openCharacterEditor}
             changeCharacterPosition={changeQueuePosition}
             currentlyActiveCharacter={currentCharacterNumber}
             /> 

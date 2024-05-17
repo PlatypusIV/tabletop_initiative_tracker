@@ -7,7 +7,8 @@ interface Props {
   initiativeQueue: Character[];
   currentlyActiveCharacter: number;
   removeCharacter: (position: number) => void;
-  editCharacter: (position:number) => void;
+  openCharacterEditor: (position:number) => void;
+  editCharacter: (character: Character, position:number) => void;
   changeCharacterPosition: (position: number, change: "+"| "-")=>void;
 }
 
@@ -19,9 +20,10 @@ export default function InitiativeList(props: Props): JSX.Element {
       return <CharacterContainer
         character={character}
         removeCharacter={props.removeCharacter}
-        editCharacter={props.editCharacter}
+        openCharacterEditor={props.openCharacterEditor}
         changeCharacterPosition={props.changeCharacterPosition}
         currentlyActiveCharacter={props.currentlyActiveCharacter}
+        editCharacter={props.editCharacter}
         key={character.position}
         />
     })

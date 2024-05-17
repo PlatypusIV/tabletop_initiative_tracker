@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Character } from '../../utils/interface';
 import './CharacterContainer.css';
 
@@ -6,27 +6,42 @@ interface Props{
     currentlyActiveCharacter: number;
     character: Character;
     removeCharacter: (position: number) => void;
-    editCharacter: (position:number)=> void;
+    openCharacterEditor: (position:number)=> void;
+    editCharacter: (character: Character, position: number)=> void;
     changeCharacterPosition: (position: number, change: "+"| "-") => void;
 }
 
 
 export default function CharacterContainer(props:Props):JSX.Element {
-    const {character, removeCharacter, editCharacter, changeCharacterPosition, currentlyActiveCharacter} = props;
+  const {character, removeCharacter, openCharacterEditor, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
+  const [currentHitpoints,setCurrentHitpoints] = useState('');
+  const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
 
-    //debounce this and other such inputs too
-  function handleHitpointChange(changeInHitpoints: string){
+  function handleHitpointChange(){
     //check for - or +
     //then split by the numbers on each side
     //if there is no - or + check if value is number
     //if entering a string then simply return
 
-    const newHitpointValue = parseInt(changeInHitpoints);
+    //check wether end or beginning has number
+    let newHitpointValue = 0;
 
+    if(currentHitpoints.match(/[^-+,\d,\s]/g)?.length) return;
+    
+    const tempSignArray = currentHitpoints.match(/[-+]/g);
+    if(tempSignArray?.length){
+      const numbers = currentHitpoints.split(/[+-]+/g);
+      newHitpointValue =parseInt(numbers[0]);
+      for(let i= 0;i<tempSignArray.length;i++){
+        newHitpointValue = tempSignArray[i] === "+" ? newHitpointValue + parseInt(numbers[i+1]) :newHitpointValue - parseInt(numbers[i+1]);
+      }
+    }else {
+      newHitpointValue = parseInt(currentHitpoints);
+    }
     if(isNaN(newHitpointValue)) return;
 
-    
-    console.log('change in hitpoints: ', changeInHitpoints);
+    editCharacter({...character, hitpoints: newHitpointValue}, character.position);
+    setIsHitpointInputVisible(false);
   }
 
   return (
@@ -34,7 +49,13 @@ export default function CharacterContainer(props:Props):JSX.Element {
         <div className='infoContainer'>
         <p className='characterContainerTitle'>Name: {character.name}</p>
           <div>
-            <label htmlFor="hitpointInput">Hitpoints: </label><input className='hitpointInput' id='hitpointInput' defaultValue={character.hitpoints} type='text' onChange={(e)=> handleHitpointChange(e.target.value)}/>
+            <label>Hitpoints: </label>
+            {!isHitpointInputVisible && (<p className='hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints}</p>)}
+            {isHitpointInputVisible && (<div>
+              <input className='hitpointInput' id='hitpointInput' defaultValue={character.hitpoints}type='text' onChange={(e)=> setCurrentHitpoints(e.target.value)}/>
+              <button onClick={()=>handleHitpointChange()}>Calculate</button>
+            </div>
+            ) }
           </div>
           <div>
           <p>Position: {character.position}</p>
@@ -44,7 +65,7 @@ export default function CharacterContainer(props:Props):JSX.Element {
           </div>
           <div className='editRemoveContainer'>
         <button onClick={()=>removeCharacter(character.position)}>Remove</button>
-        <button onClick={()=> editCharacter(character.position)}>Edit</button>
+        <button onClick={()=> openCharacterEditor(character.position)}>Edit</button>
         </div>
         </div>
         <div className='positionContainer'>
