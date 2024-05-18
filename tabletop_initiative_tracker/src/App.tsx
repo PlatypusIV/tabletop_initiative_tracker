@@ -7,6 +7,7 @@ import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
+import { remapCharacterPositions } from './utils/utility';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
@@ -46,12 +47,7 @@ export default function App(): JSX.Element {
   //this is not the best, but il make it better after the mvp is out
   function removeCharacterFromQueue(positionToRemove: number): void {
     initiativeQueue.splice(positionToRemove,1);
-    const temp = initiativeQueue.map((char, index)=> {
-      return {
-      ...char,
-      position: index,
-    }});
-    setInitiativeQueue([...temp]);
+    setInitiativeQueue([...remapCharacterPositions(initiativeQueue)]);
   }
 
   function changeQueuePosition(position: number, change: "+"| "-"){
@@ -99,6 +95,11 @@ export default function App(): JSX.Element {
       setInitiativeQueue(temp);
   }
 
+  function sortByInitiativeScore(){
+    const temp = initiativeQueue.sort((a,b)=>(b.initiativeScore || 0) - (a.initiativeScore || 0));
+    setInitiativeQueue([...remapCharacterPositions(temp)]);
+  }
+
   return (
     <div className='app'>
         <Header />
@@ -117,6 +118,7 @@ export default function App(): JSX.Element {
               <button onClick={continueAlongInitiative}>Next</button>
               <button onClick={()=>setIsCharacterEditModalOpen(true)}>Add character</button>
               
+              <button onClick={sortByInitiativeScore}>Sort by initiative</button>
               <button onClick={resetInitiativeQueue}>Reset initiative</button>
             </div>
             </div>

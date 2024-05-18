@@ -14,16 +14,22 @@ interface Props {
 export default function CharacterEditModal(props: Props) {
   const [name,setName] = useState<string>('');
   const [hitpoints,setHitpoints] = useState(0);
+  const [initiativeScore,setInitiativeScore] = useState(0);
 
   function onHitpointChange(newHitpoints:string){
     if(isNaN(parseInt(newHitpoints)))return;
     setHitpoints(parseInt(newHitpoints));
   }
 
+  function onInitiativeScoreChange(newInitiativeScore: string){
+    if(isNaN(parseInt(newInitiativeScore)))return;
+    setInitiativeScore(parseInt(newInitiativeScore));
+  }
+
   function saveCharacter(){
     if(!name)return;
     if(props.characterToEdit.name ===''){
-      props.addCharacter({...props.characterToEdit,name, hitpoints});
+      props.addCharacter({...props.characterToEdit,name, hitpoints, initiativeScore});
     }else{
       props.saveCharacterChanges({...props.characterToEdit,name,hitpoints});
     }
@@ -35,6 +41,7 @@ export default function CharacterEditModal(props: Props) {
   function clearModal(){
     setName('');
     setHitpoints(0);
+    setInitiativeScore(0);
   }
   
   return (
@@ -49,6 +56,10 @@ export default function CharacterEditModal(props: Props) {
       <div>
         <label htmlFor="hitpointInput">Hitpoints: </label>
         <input type="number" name="hitpointInput" id="hitpointInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)}/>
+      </div>
+      <div>
+        <label htmlFor="initiativeScoreInput">Initiative score: </label>
+        <input type="number" name="initiativeScoreInput" id="initiativeScoreInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onInitiativeScoreChange(e.target.value)}/>
       </div>
       <button onClick={saveCharacter}>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
     </Modal>
