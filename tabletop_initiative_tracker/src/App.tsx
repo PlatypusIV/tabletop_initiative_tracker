@@ -5,15 +5,18 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
-import { Character } from './utils/interface';
+import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
 import { remapCharacterPositions } from './utils/utility';
+import EffectModal from './components/EffectModal/EffectModal';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
+  const [effectList, setEffectList] = useState<Effect[]>([]);
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
+  const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
 
   useEffect(()=>{
@@ -100,6 +103,14 @@ export default function App(): JSX.Element {
     setInitiativeQueue([...remapCharacterPositions(temp)]);
   }
 
+  function createNewEffect(effectToCreate: Partial<Effect>){
+    console.log('newEffectToCreate: ', effectToCreate);
+  }
+
+  function setEffect(effectToSet: Partial<Effect>){
+    console.log('newEffectToCreate: ', effectToSet);
+  }
+
   return (
     <div className='app'>
         <Header />
@@ -117,6 +128,7 @@ export default function App(): JSX.Element {
               <div className='buttonArea'>
               <button onClick={continueAlongInitiative}>Next</button>
               <button onClick={()=>setIsCharacterEditModalOpen(true)}>Add character</button>
+              <button onClick={()=>setIsEffectModalOpen(true)}>Add effect</button>
               
               <button onClick={sortByInitiativeScore}>Sort by initiative</button>
               <button onClick={resetInitiativeQueue}>Reset initiative</button>
@@ -125,6 +137,7 @@ export default function App(): JSX.Element {
           </div>
         <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
+        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect}/>
     </div>
   )
 }

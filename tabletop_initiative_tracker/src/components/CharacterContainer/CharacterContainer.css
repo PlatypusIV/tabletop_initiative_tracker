@@ -1,8 +1,8 @@
 .characterContainer {
     color: black;
     background-color: antiquewhite;
-    max-width: 250px;
-    min-height: 160px;
+    max-width: 260px;
+    min-height: 180px;
     margin: 10px;
     display: flex;
     flex-direction: row;
@@ -46,3 +46,4 @@
     background-color: aliceblue;
     color: black;
 }
+

@@ -15,6 +15,7 @@ interface Props{
 export default function CharacterContainer(props:Props):JSX.Element {
   const {character, removeCharacter, openCharacterEditor, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
   const [currentHitpoints,setCurrentHitpoints] = useState('');
+  const [isEffectsViewOpen,setIsEffectsViewOpen] = useState(false);
   const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
 
   function handleHitpointChange(){
@@ -64,7 +65,8 @@ export default function CharacterContainer(props:Props):JSX.Element {
           <p>Initiative score: {character.initiativeScore}</p>
           </div>
           <div className='effectContainer'>
-            {/*effects go in here*/}
+            {!isEffectsViewOpen && (<div></div>)}
+            {isEffectsViewOpen && (<div></div>)}
           </div>
         <div className='editRemoveContainer'>
         <button onClick={()=>removeCharacter(character.position)}>Remove</button>
