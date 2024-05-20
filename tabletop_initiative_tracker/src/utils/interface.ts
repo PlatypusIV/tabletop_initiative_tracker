@@ -12,4 +12,5 @@ export interface Character {
 export interface Effect {
     name: string;
     duration: number;
+    damagePerRound?: number;
 }

@@ -44,8 +44,14 @@ implement Redux to get rid of Props mess
 
 auto snap by initiative score and bonus
 
-hp tracking
-
 hp history
 
 when editing character, wont allow to add new cahracters
+
+confirmation prompts
+    reset initiative
+    remove character
+
+create effect
+
+effect area on character container

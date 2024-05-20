@@ -63,7 +63,10 @@ export default function CharacterContainer(props:Props):JSX.Element {
           <div>
           <p>Initiative score: {character.initiativeScore}</p>
           </div>
-          <div className='editRemoveContainer'>
+          <div className='effectContainer'>
+            {/*effects go in here*/}
+          </div>
+        <div className='editRemoveContainer'>
         <button onClick={()=>removeCharacter(character.position)}>Remove</button>
         <button onClick={()=> openCharacterEditor(character.position)}>Edit</button>
         </div>
