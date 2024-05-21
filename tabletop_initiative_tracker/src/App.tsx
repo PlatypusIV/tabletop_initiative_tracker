@@ -18,14 +18,10 @@ export default function App(): JSX.Element {
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
-
-  useEffect(()=>{
-    console.log('currently active character: ', currentCharacterNumber);
-  },[currentCharacterNumber]);
   
   useEffect(()=>{
-    console.log('initiativeQueue: ', initiativeQueue);
-  },[initiativeQueue]);
+    console.log('effectList: ', effectList);
+  },[effectList]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -105,9 +101,12 @@ export default function App(): JSX.Element {
 
   function createNewEffect(effectToCreate: Partial<Effect>){
     console.log('newEffectToCreate: ', effectToCreate);
+    const newEffectList = effectList;
+    newEffectList.push(effectToCreate as Effect);
+    setEffectList([...newEffectList]);
   }
 
-  function setEffect(effectToSet: Partial<Effect>){
+  function applyEffect(effectToSet: Partial<Effect>, positionList: number[]){
     console.log('newEffectToCreate: ', effectToSet);
   }
 
@@ -128,7 +127,7 @@ export default function App(): JSX.Element {
               <div className='buttonArea'>
               <button onClick={continueAlongInitiative}>Next</button>
               <button onClick={()=>setIsCharacterEditModalOpen(true)}>Add character</button>
-              <button onClick={()=>setIsEffectModalOpen(true)}>Add effect</button>
+              <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
               
               <button onClick={sortByInitiativeScore}>Sort by initiative</button>
               <button onClick={resetInitiativeQueue}>Reset initiative</button>
@@ -137,7 +136,7 @@ export default function App(): JSX.Element {
           </div>
         <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
-        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect}/>
+        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue}/>
     </div>
   )
 }
