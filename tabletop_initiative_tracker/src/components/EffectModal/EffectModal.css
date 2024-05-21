@@ -61,3 +61,11 @@ li {
     text-align: left;
     word-wrap: break-word;
 }
+
+.effectListItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    word-wrap: break-word;
+}
+

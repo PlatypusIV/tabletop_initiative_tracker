@@ -12,19 +12,25 @@ interface Props{
     characterList?: Character[];
     closeModal: ()=> void;
     createNewEffect: (newEffect: Partial<Effect>) => void;
+    applyEffects:(effectsToSet: Partial<Effect>[], characterPositionList: number[])=> void;
+    deleteEffect:(effectPosition:number)=>void;
 }
 
 export default function EffectModal(props: Props) {
-
-    const {effectList, createNewEffect, characterList} = props;
+    const {effectList, createNewEffect, characterList, applyEffects} = props;
     const [name, setName] = useState('');
     const [duration, setDuration] = useState<number | undefined>();
     const [damagePerRound, setDamagePerRound] = useState<number | undefined>();
     const [charactersToEffect, setCharactersToEffect] = useState<Record<number, boolean>>({});
+    const [effectsToApply, setEffectsToApply] = useState<Record<number, Effect>>({});
 
     useState(()=>{
       console.log('charas effected: ', charactersToEffect);
     },[charactersToEffect]);
+
+    useState(()=>{
+      console.log('effectsToApply: ', effectsToApply);
+    },[effectsToApply]);
 
     //update with reusable error handling
     function onFieldValueChange(key: string, newDuration: string){
@@ -61,8 +67,24 @@ export default function EffectModal(props: Props) {
       setCharactersToEffect({...temp});
     }
 
-    function applyEffects(){
+    function changeEffectsToApply(toApply: boolean, effectIndex:number, effect: Effect){
+      const temp = effectsToApply;
+      toApply?  temp[effectIndex]= effect : delete temp[effectIndex];
+      setEffectsToApply({...temp});
+    }
+
+    function editExistingEffect(position:number, ){
+
+    }
+
+    function applyEffectsToCharacters(){
       console.log('charactersToEffect: ', charactersToEffect);
+      console.log('effectsToApply: ', effectsToApply);
+    }
+
+    //will delete effect from list
+    function removeEffect(position: number){
+      console.log('effect to remove: ', position);
     }
 
   return (
@@ -87,14 +109,24 @@ export default function EffectModal(props: Props) {
           <button onClick={createEffect}>{props.name=== '' ? 'Add new Effect' : 'Save effect'}</button>
         </div>
         <div className='existingEffectsContainer'>
-            <ul>{effectList?.map((effect, index)=>(<li key={index}>{effect.name}</li>))}</ul>
+            <ul>
+              {effectList?.map((effect, index)=>(<li key={index} className='effectListItem'>
+                  <label htmlFor={`effect${index}`}>{effect.name}<input type="checkbox" id={`effect${index}`} onChange={(e)=> changeEffectsToApply(e.target.checked, index, effect)}/>
+                  </label>
+                  <input type="text" placeholder={effect.duration.toString() || 'enter duration'}/>
+                  <button>Remove</button>
+              </li>))}
+            </ul>
         </div>
         <div className='characterContainerContainer'>
-            <ul>{characterList?.map((character)=>(<li key={character.position}>
-              <label htmlFor="">{character.name}</label><input id={character.position.toString()} type='checkbox' name={character.name} value={character.position} onChange={(e)=>setAffectedCharacters(e.target.checked, character.position)}/></li>))}</ul>
+            <ul>{characterList?.map((character)=>(<li key={character.position} className='characterListItem'>
+              <label htmlFor="">{character.name}</label>
+                <input id={character.position.toString()} type='checkbox' name={character.name} value={character.position} onChange={(e)=>setAffectedCharacters(e.target.checked, character.position)}/>
+              </li>))}
+            </ul>
         </div>
       </div>
-      <button onClick={applyEffects}>Apply effect</button>
+      <button onClick={applyEffectsToCharacters}>Apply effect</button>
     </Modal>
     )
 }

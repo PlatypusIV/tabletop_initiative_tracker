@@ -106,8 +106,17 @@ export default function App(): JSX.Element {
     setEffectList([...newEffectList]);
   }
 
-  function applyEffect(effectToSet: Partial<Effect>, positionList: number[]){
-    console.log('newEffectToCreate: ', effectToSet);
+  function editExistingEffect(position: number, editedEffect: Effect){
+    
+  }
+
+  function applyEffects(effectsToSet: Partial<Effect>[], characterPositionList: number[]){
+    console.log('newEffectToCreate: ', effectsToSet);
+  }
+
+  function deleteEffect(position: number){
+    console.log('newEffectToCreate: ', position);
+
   }
 
   return (
@@ -136,7 +145,7 @@ export default function App(): JSX.Element {
           </div>
         <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
-        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue}/>
+        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects}/>
     </div>
   )
 }
