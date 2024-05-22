@@ -111,7 +111,7 @@ export default function App(): JSX.Element {
     
   }
 
-  function applyEffects(effectsToSet: Partial<Effect>[], characterPositionList: number[]){
+  function applyEffects(effectsToSet: string[], characterPositionList: number[]){
     console.log('newEffectToCreate: ', effectsToSet);
   }
 

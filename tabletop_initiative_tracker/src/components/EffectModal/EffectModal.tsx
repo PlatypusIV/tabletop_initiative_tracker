@@ -13,7 +13,7 @@ interface Props{
     closeModal: ()=> void;
     createNewEffect: (newEffect: Effect) => void;
     //Todo: make applyEffects work
-    applyEffects:(effectsToSet: Partial<Effect>[], characterPositionList: number[])=> void;
+    applyEffects:(effectsToSet: string[], characterPositionList: number[])=> void;
     deleteEffect:(effectId: string)=>void;
 }
 
@@ -23,7 +23,7 @@ export default function EffectModal(props: Props) {
     const [duration, setDuration] = useState<number | undefined>();
     const [damagePerRound, setDamagePerRound] = useState<number | undefined>();
     const [charactersToEffect, setCharactersToEffect] = useState<Record<number, boolean>>({});
-    const [effectsToApply, setEffectsToApply] = useState<Record<number, Effect>>({});
+    const [effectsToApply, setEffectsToApply] = useState<Record<string, Effect>>({});
 
     useState(()=>{
       console.log('charas effected: ', charactersToEffect);
@@ -68,9 +68,9 @@ export default function EffectModal(props: Props) {
       setCharactersToEffect({...temp});
     }
 
-    function changeEffectsToApply(toApply: boolean, effectIndex:number, effect: Effect){
+    function changeEffectsToApply(toApply: boolean, effectId: string, effect: Effect){
       const temp = effectsToApply;
-      toApply?  temp[effectIndex]= effect : delete temp[effectIndex];
+      toApply?  temp[effectId]= effect : delete temp[effectId];
       setEffectsToApply({...temp});
     }
 
@@ -113,8 +113,8 @@ export default function EffectModal(props: Props) {
         </div>
         <div className='existingEffectsContainer'>
             <ul>
-              {Object.keys(effectList)?.map((effectId, index)=>(<li key={index} className='effectListItem'>
-                  <label htmlFor={effectId}>{effectList[effectId].name}<input type="checkbox" id={effectId} onChange={(e)=> changeEffectsToApply(e.target.checked, index, effectList[effectId])}/>
+              {Object.keys(effectList)?.map((effectId)=>(<li key={effectId} className='effectListItem'>
+                  <label htmlFor={effectId}>{effectList[effectId].name}<input type="checkbox" id={effectId} onChange={(e)=> changeEffectsToApply(e.target.checked, effectId, effectList[effectId])}/>
                   </label>
                   <input type="text" placeholder={effectList[effectId].duration?.toString() || 'enter duration'}/>
                   <button onClick={()=>removeEffect(effectId)}>Remove</button>
