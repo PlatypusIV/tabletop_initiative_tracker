@@ -113,7 +113,7 @@ export default function EffectModal(props: Props) {
               {effectList?.map((effect, index)=>(<li key={index} className='effectListItem'>
                   <label htmlFor={`effect${index}`}>{effect.name}<input type="checkbox" id={`effect${index}`} onChange={(e)=> changeEffectsToApply(e.target.checked, index, effect)}/>
                   </label>
-                  <input type="text" placeholder={effect.duration.toString() || 'enter duration'}/>
+                  <input type="text" placeholder={effect.duration?.toString() || 'enter duration'}/>
                   <button>Remove</button>
               </li>))}
             </ul>
