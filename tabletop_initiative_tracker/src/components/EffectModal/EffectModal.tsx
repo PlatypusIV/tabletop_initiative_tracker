@@ -8,16 +8,17 @@ interface Props{
     isOpen: boolean;
     name?: string;
     duration?: number;
-    effectList?: Effect[];
+    effectList: Record<string,Effect>;
     characterList?: Character[];
     closeModal: ()=> void;
-    createNewEffect: (newEffect: Partial<Effect>) => void;
+    createNewEffect: (newEffect: Effect) => void;
+    //Todo: make applyEffects work
     applyEffects:(effectsToSet: Partial<Effect>[], characterPositionList: number[])=> void;
-    deleteEffect:(effectPosition:number)=>void;
+    deleteEffect:(effectId: string)=>void;
 }
 
 export default function EffectModal(props: Props) {
-    const {effectList, createNewEffect, characterList, applyEffects} = props;
+    const {effectList, createNewEffect, characterList, applyEffects, deleteEffect} = props;
     const [name, setName] = useState('');
     const [duration, setDuration] = useState<number | undefined>();
     const [damagePerRound, setDamagePerRound] = useState<number | undefined>();
@@ -73,7 +74,7 @@ export default function EffectModal(props: Props) {
       setEffectsToApply({...temp});
     }
 
-    function editExistingEffect(position:number, ){
+    function editExistingEffect(){
 
     }
 
@@ -83,8 +84,10 @@ export default function EffectModal(props: Props) {
     }
 
     //will delete effect from list
-    function removeEffect(position: number){
-      console.log('effect to remove: ', position);
+    function removeEffect(effectId: string){
+      deleteEffect(effectId);
+      console.log('effect to remove: ', effectId);
+
     }
 
   return (
@@ -110,11 +113,11 @@ export default function EffectModal(props: Props) {
         </div>
         <div className='existingEffectsContainer'>
             <ul>
-              {effectList?.map((effect, index)=>(<li key={index} className='effectListItem'>
-                  <label htmlFor={`effect${index}`}>{effect.name}<input type="checkbox" id={`effect${index}`} onChange={(e)=> changeEffectsToApply(e.target.checked, index, effect)}/>
+              {Object.keys(effectList)?.map((effectId, index)=>(<li key={index} className='effectListItem'>
+                  <label htmlFor={effectId}>{effectList[effectId].name}<input type="checkbox" id={effectId} onChange={(e)=> changeEffectsToApply(e.target.checked, index, effectList[effectId])}/>
                   </label>
-                  <input type="text" placeholder={effect.duration?.toString() || 'enter duration'}/>
-                  <button>Remove</button>
+                  <input type="text" placeholder={effectList[effectId].duration?.toString() || 'enter duration'}/>
+                  <button onClick={()=>removeEffect(effectId)}>Remove</button>
               </li>))}
             </ul>
         </div>

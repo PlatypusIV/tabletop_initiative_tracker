@@ -9,10 +9,11 @@ import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
 import { remapCharacterPositions } from './utils/utility';
 import EffectModal from './components/EffectModal/EffectModal';
+import {v4 as uuidv4} from 'uuid';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
-  const [effectList, setEffectList] = useState<Effect[]>([]);
+  const [effectList, setEffectList] = useState<Record<string,Effect>>({});
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
@@ -99,11 +100,11 @@ export default function App(): JSX.Element {
     setInitiativeQueue([...remapCharacterPositions(temp)]);
   }
 
-  function createNewEffect(effectToCreate: Partial<Effect>){
+  function createNewEffect(effectToCreate: Effect){
     console.log('newEffectToCreate: ', effectToCreate);
     const newEffectList = effectList;
-    newEffectList.push(effectToCreate as Effect);
-    setEffectList([...newEffectList]);
+    newEffectList[uuidv4()] = effectToCreate;
+    setEffectList({...newEffectList});
   }
 
   function editExistingEffect(position: number, editedEffect: Effect){
@@ -114,9 +115,11 @@ export default function App(): JSX.Element {
     console.log('newEffectToCreate: ', effectsToSet);
   }
 
-  function deleteEffect(position: number){
-    console.log('newEffectToCreate: ', position);
-
+  function deleteEffect(effectId: string){
+    console.log('newEffectToCreate: ', effectId);
+    const temp = effectList;
+    delete temp[effectId];
+    setEffectList({...temp});
   }
 
   return (
@@ -145,7 +148,7 @@ export default function App(): JSX.Element {
           </div>
         <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
-        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects}/>
+        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects} deleteEffect={deleteEffect}/>
     </div>
   )
 }

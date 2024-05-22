@@ -55,3 +55,5 @@ confirmation prompts
 create effect
 
 effect area on character container
+
+dice roll input
