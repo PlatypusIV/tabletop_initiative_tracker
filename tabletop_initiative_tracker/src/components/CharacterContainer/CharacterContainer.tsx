@@ -11,7 +11,6 @@ interface Props{
     changeCharacterPosition: (position: number, change: "+"| "-") => void;
 }
 
-
 export default function CharacterContainer(props:Props):JSX.Element {
   const {character, removeCharacter, openCharacterEditor, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
   const [currentHitpoints,setCurrentHitpoints] = useState('');

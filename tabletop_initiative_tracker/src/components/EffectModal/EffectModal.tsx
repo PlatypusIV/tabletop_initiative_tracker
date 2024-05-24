@@ -13,12 +13,13 @@ interface Props{
     closeModal: ()=> void;
     createNewEffect: (newEffect: Effect) => void;
     //Todo: make applyEffects work
-    applyEffects:(effectsToSet: string[], characterPositionList: number[])=> void;
+    applyEffects:(effectsToSet: Record<string, Effect>, characterPositionList: string[])=> void;
+    editExistingEffect: (effectId: string, changedEffect: Effect) => void;
     deleteEffect:(effectId: string)=>void;
 }
 
 export default function EffectModal(props: Props) {
-    const {effectList, createNewEffect, characterList, applyEffects, deleteEffect} = props;
+    const {effectList, createNewEffect, characterList, applyEffects, deleteEffect, editExistingEffect} = props;
     const [name, setName] = useState('');
     const [duration, setDuration] = useState<number | undefined>();
     const [damagePerRound, setDamagePerRound] = useState<number | undefined>();
@@ -34,7 +35,7 @@ export default function EffectModal(props: Props) {
     },[effectsToApply]);
 
     //update with reusable error handling
-    function onFieldValueChange(key: string, newDuration: string){
+    function onFieldValueChange(key: string, newDuration: string, effectId?: string){
         const newValueParsed = parseInt(newDuration);
         if(isNaN(newValueParsed)) return;
         switch(key){
@@ -48,6 +49,12 @@ export default function EffectModal(props: Props) {
             break;
         }
         
+    }
+
+    function onEffectValueChange(effectId: string, newDuration: string){
+      const parsedDuration = parseInt(newDuration);
+      if(isNaN(parsedDuration)) return;
+      editExistingEffect(effectId, {...effectList[effectId], duration: parsedDuration});
     }
 
     function createEffect(){
@@ -74,20 +81,16 @@ export default function EffectModal(props: Props) {
       setEffectsToApply({...temp});
     }
 
-    function editExistingEffect(){
-
-    }
-
     function applyEffectsToCharacters(){
-      console.log('charactersToEffect: ', charactersToEffect);
-      console.log('effectsToApply: ', effectsToApply);
+      // console.log('charactersToEffect: ', charactersToEffect);
+      // console.log('effectsToApply: ', effectsToApply);
+      // console.log('charas:  ', Object.keys(charactersToEffect));
+      applyEffects(effectsToApply,Object.keys(charactersToEffect));
     }
 
     //will delete effect from list
     function removeEffect(effectId: string){
       deleteEffect(effectId);
-      console.log('effect to remove: ', effectId);
-
     }
 
   return (
@@ -116,7 +119,7 @@ export default function EffectModal(props: Props) {
               {Object.keys(effectList)?.map((effectId)=>(<li key={effectId} className='effectListItem'>
                   <label htmlFor={effectId}>{effectList[effectId].name}<input type="checkbox" id={effectId} onChange={(e)=> changeEffectsToApply(e.target.checked, effectId, effectList[effectId])}/>
                   </label>
-                  <input type="text" placeholder={effectList[effectId].duration?.toString() || 'enter duration'}/>
+                  <input type="text" placeholder={effectList[effectId].duration?.toString() || 'enter duration'} className='effectDurationInput' onChange={(e)=>onEffectValueChange(effectId, e.target.value)}/>
                   <button onClick={()=>removeEffect(effectId)}>Remove</button>
               </li>))}
             </ul>

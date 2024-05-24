@@ -23,6 +23,10 @@ export default function App(): JSX.Element {
   useEffect(()=>{
     console.log('effectList: ', effectList);
   },[effectList]);
+  
+  useEffect(()=>{
+    console.log('initiativeQueue: ', initiativeQueue);
+  },[initiativeQueue]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -48,6 +52,7 @@ export default function App(): JSX.Element {
   function removeCharacterFromQueue(positionToRemove: number): void {
     initiativeQueue.splice(positionToRemove,1);
     setInitiativeQueue([...remapCharacterPositions(initiativeQueue)]);
+  
   }
 
   function changeQueuePosition(position: number, change: "+"| "-"){
@@ -107,12 +112,22 @@ export default function App(): JSX.Element {
     setEffectList({...newEffectList});
   }
 
-  function editExistingEffect(position: number, editedEffect: Effect){
-    
+  function editExistingEffect(effectId: string, editedEffect: Effect){
+    const temp = effectList;
+    temp[effectId] = editedEffect;
+    setEffectList({...temp});
   }
 
-  function applyEffects(effectsToSet: string[], characterPositionList: number[]){
-    console.log('newEffectToCreate: ', effectsToSet);
+  function applyEffects(effectsToApply: Record<string, Effect>, characterPositionList: string[]){
+    const tempInitiativeQueue = initiativeQueue;
+
+    for(let i =0; i<characterPositionList.length;i++){
+      const temp = parseInt(characterPositionList[i]);
+
+      tempInitiativeQueue[temp].effects = effectsToApply;
+    }
+
+    setInitiativeQueue([...tempInitiativeQueue]);
   }
 
   function deleteEffect(effectId: string){
@@ -148,7 +163,7 @@ export default function App(): JSX.Element {
           </div>
         <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
-        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects} deleteEffect={deleteEffect}/>
+        <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects} deleteEffect={deleteEffect} editExistingEffect={editExistingEffect}/>
     </div>
   )
 }

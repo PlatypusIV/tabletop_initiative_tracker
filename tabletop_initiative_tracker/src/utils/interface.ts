@@ -7,7 +7,7 @@ export interface Character {
     initiativeBonus?: number;
     hitpoints?: number;
     hitpointHistory?: number[];//use this when making hp history
-    effects?: Effect[];
+    effects?: Record<string,Effect>;
 }
 
 export interface Effect {
