@@ -4,6 +4,8 @@ import './Footer.css';
 
 export default function Footer() {
   return (
-    <footer >Footer</footer>
+    <footer >
+      <h3>Created by: Herbert-Ken</h3>
+    </footer>
   )
 }

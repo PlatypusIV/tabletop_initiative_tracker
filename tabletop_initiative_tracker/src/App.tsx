@@ -119,13 +119,18 @@ export default function App(): JSX.Element {
   }
 
   //TODO improve this
-  function applyEffects(effectsToApply: Record<string, Effect>, characterPositionList: string[]){
+  function applyEffects(effectIdList: string[], characterPositionList: string[]){
     const tempInitiativeQueue = initiativeQueue;
+    const effectsToApply: Record<string, Effect> = {};
+
+    effectIdList.forEach(id => {
+      effectsToApply[id] = effectList[id];
+    });
 
     for(let i =0; i<characterPositionList.length;i++){
       const temp = parseInt(characterPositionList[i]);
 
-      tempInitiativeQueue[temp].effects = effectsToApply;
+      tempInitiativeQueue[temp].effects = {...tempInitiativeQueue[temp].effects, ...effectsToApply};
     }
 
     setInitiativeQueue([...tempInitiativeQueue]);
