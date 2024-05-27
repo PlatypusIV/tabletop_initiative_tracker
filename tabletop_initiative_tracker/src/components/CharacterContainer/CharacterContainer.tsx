@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Character } from '../../utils/interface';
+import { Character, Effect } from '../../utils/interface';
 import './CharacterContainer.css';
 
 interface Props{
@@ -14,7 +14,6 @@ interface Props{
 export default function CharacterContainer(props:Props):JSX.Element {
   const {character, removeCharacter, openCharacterEditor, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
   const [currentHitpoints,setCurrentHitpoints] = useState('');
-  const [isEffectsViewOpen,setIsEffectsViewOpen] = useState(false);
   const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
 
   function handleHitpointChange(){
@@ -44,6 +43,31 @@ export default function CharacterContainer(props:Props):JSX.Element {
     setIsHitpointInputVisible(false);
   }
 
+  function removeEffectFromCharacter(effectId: string){
+    console.log();
+    try {
+      if(!character.effects) return;
+      delete character.effects[effectId];
+      editCharacter(character, character.position);  
+    } catch (error) {
+      console.log('error: ', error);
+    }
+
+  }
+
+  function renderEffectsList(effectList: Record<string, Effect> | undefined){
+    if(effectList){
+      return Object.keys(effectList).map(
+        (effectId)=>
+          {
+            return (<li>{`${effectList[effectId].name}: ${effectList[effectId].duration || 'N/A'}`} <button onClick={()=> removeEffectFromCharacter(effectId)}>X</button></li>)
+          }
+    )
+    }else{
+      return <></>
+    }
+  }
+
   return (
     <div className={character.position === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
         <div className='infoContainer'>
@@ -64,8 +88,7 @@ export default function CharacterContainer(props:Props):JSX.Element {
           <p>Initiative score: {character.initiativeScore}</p>
           </div>
           <div className='effectContainer'>
-            {!isEffectsViewOpen && (<div></div>)}
-            {isEffectsViewOpen && (<div></div>)}
+            {renderEffectsList(character.effects)}
           </div>
         <div className='editRemoveContainer'>
         <button onClick={()=>removeCharacter(character.position)}>Remove</button>

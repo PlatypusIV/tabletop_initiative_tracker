@@ -47,3 +47,16 @@
     color: black;
 }
 
+.effectContainer {
+    max-height: 36px;
+    overflow-y: scroll;
+    word-wrap: break-word;
+}
+
+.effectContainer ul {
+    list-style: none;
+    margin: 4px;
+    font-weight: bold;
+    font-size: 16px;
+}
+

@@ -118,6 +118,7 @@ export default function App(): JSX.Element {
     setEffectList({...temp});
   }
 
+  //TODO improve this
   function applyEffects(effectsToApply: Record<string, Effect>, characterPositionList: string[]){
     const tempInitiativeQueue = initiativeQueue;
 
