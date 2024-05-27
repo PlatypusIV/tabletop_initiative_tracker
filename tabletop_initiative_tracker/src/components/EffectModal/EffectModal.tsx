@@ -20,18 +20,10 @@ interface Props{
 export default function EffectModal(props: Props) {
     const {effectList, createNewEffect, characterList, applyEffects, deleteEffect, editExistingEffect} = props;
     const [name, setName] = useState('');
-    const [duration, setDuration] = useState<number | undefined>();
+    const [duration, setDuration] = useState<number>(0);
     const [damagePerRound, setDamagePerRound] = useState<number | undefined>();
     const [charactersToEffect, setCharactersToEffect] = useState<Record<number, boolean>>({});
     const [effectsToApply, setEffectsToApply] = useState<Record<string, boolean>>({});
-
-    useState(()=>{
-      console.log('charas effected: ', charactersToEffect);
-    },[charactersToEffect]);
-
-    useState(()=>{
-      console.log('effectsToApply: ', effectsToApply);
-    },[effectsToApply]);
 
     //update with reusable error handling
     function onFieldValueChange(key: string, newDuration: string){
@@ -64,7 +56,7 @@ export default function EffectModal(props: Props) {
 
     function clearEffectFields(){
       setName('');
-      setDuration(undefined);
+      setDuration(0);
       setDamagePerRound(undefined);
     }
 
@@ -82,6 +74,8 @@ export default function EffectModal(props: Props) {
 
     function applyEffectsToCharacters(){
       applyEffects(Object.keys(effectsToApply),Object.keys(charactersToEffect));
+      setCharactersToEffect({});
+      setEffectsToApply({});
     }
 
     function removeEffect(effectId: string){

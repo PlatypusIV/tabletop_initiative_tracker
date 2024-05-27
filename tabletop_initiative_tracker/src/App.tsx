@@ -34,6 +34,7 @@ export default function App(): JSX.Element {
       if(currentCharacterNumber >= initiativeQueue.length-1){
         temp = 0;
         setCurrentRoundNumber(currentRoundNumber+1);
+        progressEffects();
       }else{
         temp = currentCharacterNumber+1;
       }
@@ -124,7 +125,7 @@ export default function App(): JSX.Element {
     const effectsToApply: Record<string, Effect> = {};
 
     effectIdList.forEach(id => {
-      effectsToApply[id] = effectList[id];
+      effectsToApply[id] = {...effectList[id]};
     });
 
     for(let i =0; i<characterPositionList.length;i++){
@@ -141,6 +142,24 @@ export default function App(): JSX.Element {
     const temp = effectList;
     delete temp[effectId];
     setEffectList({...temp});
+  }
+
+  function progressEffects(){
+    const tempCharacterQueue = initiativeQueue;
+    for(let i = 0;i<tempCharacterQueue.length;i++){
+      if(tempCharacterQueue[i].effects){
+        const characterEffectList = tempCharacterQueue[i].effects as Record<string, Effect>;
+        const charaEffectKeys = Object.keys(tempCharacterQueue[i].effects as Record<string, Effect>);
+
+        charaEffectKeys.forEach(key => {
+          if(characterEffectList[key].duration && characterEffectList[key].duration >0){
+            characterEffectList[key] = {...characterEffectList[key], duration:characterEffectList[key].duration-1};
+            if(characterEffectList[key].duration<=0) delete characterEffectList[key];
+          }
+        });
+      }
+    }
+    setInitiativeQueue([...tempCharacterQueue]);
   }
 
   return (

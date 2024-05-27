@@ -57,3 +57,7 @@ create effect
 effect area on character container
 
 dice roll input
+
+update effects on round change
+
+mobile view
