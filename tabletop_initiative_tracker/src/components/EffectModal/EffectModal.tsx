@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './EffectModal.css';
 import Modal from 'react-modal';
 import { Character, Effect } from '../../utils/interface';
@@ -82,10 +82,17 @@ export default function EffectModal(props: Props) {
       deleteEffect(effectId);
     }
 
+    function onClose(){
+      props.closeModal();
+      setCharactersToEffect({});
+      setEffectsToApply({});
+      clearEffectFields();
+    }
+
   return (
     <Modal isOpen={props.isOpen} className='effectModal'>
       <div className='closeButtonContainer'>
-        <button onClick={()=>props.closeModal()}>Close modal</button>
+        <button onClick={onClose}>Close modal</button>
       </div>
       <div className='effectModalContent'>
         <div className='effectEditContainer'>
@@ -104,24 +111,26 @@ export default function EffectModal(props: Props) {
           <button onClick={createEffect}>{props.name=== '' ? 'Add new Effect' : 'Save effect'}</button>
         </div>
         <div className='existingEffectsContainer'>
+            <h3>Existing Effects</h3>
             <ul>
               {Object.keys(effectList)?.map((effectId)=>(<li key={effectId} className='effectListItem'>
-                  <label htmlFor={effectId}>{effectList[effectId].name}<input type="checkbox" id={effectId} onChange={(e)=> changeEffectsToApply(e.target.checked, effectId)}/>
+                  <label htmlFor={effectId}>{effectList[effectId].name}<input type="checkbox" id={effectId} onChange={(e)=> changeEffectsToApply(e.target.checked, effectId)} checked={effectId in effectsToApply}/>
                   </label>
                   <input type="text" placeholder={effectList[effectId].duration?.toString() || 'enter duration'} className='effectDurationInput' onChange={(e)=>onEffectValueChange(effectId, e.target.value)}/>
                   <button onClick={()=>removeEffect(effectId)}>Remove</button>
               </li>))}
             </ul>
         </div>
-        <div className='characterContainerContainer'>
+        <div className='targetableCharactersContainer'>
+            <h3>Targetable characters</h3>
             <ul>{characterList?.map((character)=>(<li key={character.position} className='characterListItem'>
               <label htmlFor="">{character.name}</label>
-                <input id={character.position.toString()} type='checkbox' name={character.name} value={character.position} onChange={(e)=>setAffectedCharacters(e.target.checked, character.position)}/>
+                <input id={character.position.toString()} type='checkbox' name={character.name} value={character.position} checked={character.position in charactersToEffect} onChange={(e)=>setAffectedCharacters(e.target.checked, character.position)}/>
               </li>))}
             </ul>
         </div>
       </div>
-      <button onClick={applyEffectsToCharacters}>Apply effect</button>
+      <button onClick={applyEffectsToCharacters} className='applyEffectsButton'>Apply effect</button>
     </Modal>
     )
 }

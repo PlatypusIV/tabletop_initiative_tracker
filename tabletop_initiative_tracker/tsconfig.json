@@ -7,7 +7,7 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -19,8 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "allowJs": false
+    "pretty": true,
+    "allowUnreachableCode": false
   },
-  "include": ["src"],
+  "include": ["src", "**/*.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

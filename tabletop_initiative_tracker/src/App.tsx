@@ -19,10 +19,7 @@ export default function App(): JSX.Element {
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
-  
-  useEffect(()=>{
-    console.log('effectList: ', effectList);
-  },[effectList]);
+  const [isWarningPromptOpen, setIsWarningPromptOpen] = useState(false);
   
   useEffect(()=>{
     console.log('initiativeQueue: ', initiativeQueue);
@@ -177,12 +174,12 @@ export default function App(): JSX.Element {
             <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>
               <div className='buttonArea'>
-              <button onClick={continueAlongInitiative}>Next</button>
-              <button onClick={()=>setIsCharacterEditModalOpen(true)}>Add character</button>
-              <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
-              
-              <button onClick={sortByInitiativeScore}>Sort by initiative</button>
-              <button onClick={resetInitiativeQueue}>Reset initiative</button>
+                <button onClick={continueAlongInitiative} className='nextInitiativeButton'>Next</button>
+                <button onClick={()=>setIsCharacterEditModalOpen(true)}>Add character</button>
+                <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
+                
+                <button onClick={sortByInitiativeScore}>Sort by initiative</button>
+                <button onClick={resetInitiativeQueue} className='resetInitiativeButton'>Reset initiative</button>
             </div>
             </div>
           </div>

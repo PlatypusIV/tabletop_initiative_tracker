@@ -5,3 +5,10 @@ footer {
     font-size: 26px;
     /* background-color: aquamarine; */
 }
+
+@media only screen and (max-width: 600px){
+    footer {
+        visibility: hidden;
+        height: 0px;
+    }   
+}

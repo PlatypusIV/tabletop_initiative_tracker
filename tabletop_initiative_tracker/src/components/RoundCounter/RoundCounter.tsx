@@ -1,4 +1,3 @@
-import React from 'react';
 import './RoundCounter.css';
 
 interface Props {

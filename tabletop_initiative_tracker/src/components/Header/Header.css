@@ -1,5 +1,5 @@
 header {
-    height: 100px;
+    max-height: 100px;
     width: 100%;
     text-align: center;
     justify-content: center;
@@ -10,4 +10,15 @@ header {
 .headerTitle {
     font-size: 36px;
     font-weight: 600;
+}
+
+@media only screen and (max-width: 600px){
+    header {
+        max-height: 40px;
+        align-items: center;
+    }   
+
+    .headerTitle {
+        font-size: 18px;
+    }
 }

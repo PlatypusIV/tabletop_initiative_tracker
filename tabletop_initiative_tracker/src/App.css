@@ -13,14 +13,12 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 8px;
     max-height: 800px;
 }
 
 .controlSection {
     width: 10%;
     height: 100%;
-    margin: 8px;
     border: aqua 8px solid;
     display: flex;
     flex-direction: column;
@@ -41,4 +39,29 @@
     margin: 4px;
 }
 
+.resetInitiativeButton {
+    background-color: red;
+    color: white;
+    border: 2px solid white;
+    border-radius: 10px;
+}
+
+.nextInitiativeButton {
+    background-color: green;
+    color: aliceblue;
+    font-weight: bold;
+    font-size: 26px;
+}
+
 /* Need to add all phone views too*/
+
+@media only screen and (max-width: 600px){
+    .content {
+        flex-direction: column;
+    }
+
+    .controlSection {
+        width: 100%;
+        height: 30%;
+    }
+}

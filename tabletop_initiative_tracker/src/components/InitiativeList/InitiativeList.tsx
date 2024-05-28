@@ -1,4 +1,3 @@
-import React from 'react';
 import CharacterContainer from '../CharacterContainer/CharacterContainer';
 import './InitiativeList.css';
 import { Character } from '../../utils/interface';

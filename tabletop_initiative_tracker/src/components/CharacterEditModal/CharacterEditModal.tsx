@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './CharacterEditModal.css';
 import { Character } from '../../utils/interface';
 import Modal from 'react-modal';
