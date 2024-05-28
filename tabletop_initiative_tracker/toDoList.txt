@@ -61,3 +61,5 @@ dice roll input
 update effects on round change
 
 mobile view
+
+warning popup
