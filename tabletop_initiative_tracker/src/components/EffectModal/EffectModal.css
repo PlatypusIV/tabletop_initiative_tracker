@@ -70,6 +70,15 @@ li {
     word-wrap: break-word;
 }
 
+.applyEffectsButton {
+    background-color: green;
+    color: aliceblue;
+    font-weight: bold;
+    font-size: 26px;
+    height: 90%;
+    margin-top: 4px;
+}
+
 @media only screen and (max-width: 600px){
     .effectModal {
         width: 98%;
