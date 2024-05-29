@@ -174,17 +174,17 @@ export default function App(): JSX.Element {
             <div className='controlSection'>
               <RoundCounter currentRound={currentRoundNumber}/>
               <div className='buttonArea'>
-              <div>
-                  <button onClick={resetInitiativeQueue} className='resetInitiativeButton'>Reset initiative</button>
-                </div>
-
-                <div className='extraButtons'>
-                  <button onClick={()=>setIsCharacterEditModalOpen(true)}>Add character</button>
-                  <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
-                  <button onClick={sortByInitiativeScore}>Sort by initiative</button>
-                </div>
                 <div className='nextButtonContainer'>
                   <button onClick={continueAlongInitiative} className='nextInitiativeButton'>Next</button>
+                </div>
+                <div>
+                    <button onClick={()=>setIsCharacterEditModalOpen(true)} className='addCharacterButton'>Add character</button>
+                </div>
+              
+                <div className='extraButtons'>
+                  <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
+                  <button onClick={sortByInitiativeScore}>Sort by initiative</button>
+                  <button onClick={resetInitiativeQueue} className='resetInitiativeButton'>Reset initiative</button>
                 </div>
             </div>
             </div>
