@@ -19,6 +19,7 @@ export default function App(): JSX.Element {
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
+  //add warning prompt for removing characters and resetting initative
   // const [isWarningPromptOpen, setIsWarningPromptOpen] = useState(false);
   
   useEffect(()=>{
