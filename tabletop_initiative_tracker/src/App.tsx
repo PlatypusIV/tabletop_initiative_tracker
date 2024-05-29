@@ -19,7 +19,7 @@ export default function App(): JSX.Element {
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
-  const [isWarningPromptOpen, setIsWarningPromptOpen] = useState(false);
+  // const [isWarningPromptOpen, setIsWarningPromptOpen] = useState(false);
   
   useEffect(()=>{
     console.log('initiativeQueue: ', initiativeQueue);
