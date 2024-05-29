@@ -44,15 +44,9 @@ export default function CharacterContainer(props:Props):JSX.Element {
   }
 
   function removeEffectFromCharacter(effectId: string){
-    console.log();
-    try {
       if(!character.effects) return;
       delete character.effects[effectId];
-      editCharacter(character, character.position);  
-    } catch (error) {
-      console.log('error: ', error);
-    }
-
+      editCharacter(character, character.position);
   }
 
   function renderEffectsList(effectList: Record<string, Effect> | undefined){

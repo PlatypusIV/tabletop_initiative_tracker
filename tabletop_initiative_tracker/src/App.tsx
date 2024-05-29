@@ -78,7 +78,6 @@ export default function App(): JSX.Element {
   }
 
   function openCharacterEditor(position: number){
-    console.log('Character to edit: ', initiativeQueue[position]);
     setCharacterBeingEdited(initiativeQueue[position]);
     setIsCharacterEditModalOpen(true);
   }
@@ -101,7 +100,6 @@ export default function App(): JSX.Element {
   }
 
   function createNewEffect(effectToCreate: Effect){
-    console.log('newEffectToCreate: ', effectToCreate);
     const newEffectList = effectList;
     newEffectList[uuidv4()] = effectToCreate;
     setEffectList({...newEffectList});
@@ -132,7 +130,6 @@ export default function App(): JSX.Element {
   }
 
   function deleteEffect(effectId: string){
-    console.log('newEffectToCreate: ', effectId);
     const temp = effectList;
     delete temp[effectId];
     setEffectList({...temp});
