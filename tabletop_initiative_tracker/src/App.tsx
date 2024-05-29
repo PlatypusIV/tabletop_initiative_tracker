@@ -21,10 +21,6 @@ export default function App(): JSX.Element {
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
   //add warning prompt for removing characters and resetting initative
   // const [isWarningPromptOpen, setIsWarningPromptOpen] = useState(false);
-  
-  useEffect(()=>{
-    console.log('initiativeQueue: ', initiativeQueue);
-  },[initiativeQueue]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
