@@ -11,5 +11,6 @@ export default defineConfig({
   },
   server:{
     host: true
-  }
+  },
+  base: '/tabletop_initiative_tracker/'
 })
