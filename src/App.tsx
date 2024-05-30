@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import reactLogo from './assets/react.svg';
 import './App.css';
 import Header from './components/Header/Header';
@@ -7,7 +7,7 @@ import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
-import { remapCharacterPositions } from './utils/utility';
+import { getCharactersFromStorage, remapCharacterPositions, setCharactersToStorage } from './utils/utility';
 import EffectModal from './components/EffectModal/EffectModal';
 import {v4 as uuidv4} from 'uuid';
 
@@ -21,6 +21,22 @@ export default function App(): JSX.Element {
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
   //add warning prompt for removing characters and resetting initative
   // const [isWarningPromptOpen, setIsWarningPromptOpen] = useState(false);
+
+
+  //add initiative queue key to env variables and separate functions from app file
+  useEffect(()=>{    
+    if(!initiativeQueue.length){
+        setInitiativeQueue(getCharactersFromStorage());
+    }
+  },[]);
+
+  
+
+  useEffect(()=>{
+      if(initiativeQueue.length){
+        setCharactersToStorage(initiativeQueue);
+      }
+  },[initiativeQueue]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -73,6 +89,7 @@ export default function App(): JSX.Element {
 
   function resetInitiativeQueue(){
     setInitiativeQueue([]);
+    setCharactersToStorage([]);
     setCurrentCharacterNumber(0);
     setCurrentRoundNumber(1);
   }

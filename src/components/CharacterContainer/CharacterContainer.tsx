@@ -14,7 +14,16 @@ interface Props{
 export default function CharacterContainer(props:Props):JSX.Element {
   const {character, removeCharacter, openCharacterEditor, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
   const [currentHitpoints,setCurrentHitpoints] = useState('');
+  const [currentInitiativeScore, setCurrentInitiativeScore] = useState('');
   const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
+  const [isInitiativeScoreInputVisible,setInitiativeScoreInputVisible] = useState(false);
+
+  function handleInitiativeScoreChange(){
+    const newInitiativeScore = parseInt(currentInitiativeScore);
+    if(isNaN(newInitiativeScore)) return;
+    editCharacter({...character, initiativeScore: newInitiativeScore}, character.position);
+    setInitiativeScoreInputVisible(false);
+  }
 
   function handleHitpointChange(){
     //check for - or +
@@ -79,7 +88,11 @@ export default function CharacterContainer(props:Props):JSX.Element {
           <p>Position: {character.position}</p>
           </div>
           <div>
-          <p>Initiative score: {character.initiativeScore}</p>
+            {!isInitiativeScoreInputVisible && (<p className='initiativeScoreText' onClick={()=>setInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
+            {isInitiativeScoreInputVisible && (<div>
+              <input className='initiativeScoreInput' id='initiativeScoreInput' defaultValue={character.initiativeScore}type='text' onChange={(e)=> setCurrentInitiativeScore(e.target.value)}/>
+              <button onClick={()=>handleInitiativeScoreChange()}>Set initiative</button>
+            </div>)}
           </div>
           <div className='effectContainer'>
             {renderEffectsList(character.effects)}

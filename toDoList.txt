@@ -63,3 +63,9 @@ update effects on round change
 mobile view
 
 warning popup
+
+edit InitiativeScore
+
+Screen size
+
+cache list
