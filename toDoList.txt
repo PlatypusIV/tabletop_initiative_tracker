@@ -28,11 +28,6 @@ ContolBox
 footer
 
 
-get css to work
-
-
-
-
 reset button
     reset confirmation prompt
 
@@ -69,3 +64,5 @@ edit InitiativeScore
 Screen size
 
 cache list
+
+dice rolling?????

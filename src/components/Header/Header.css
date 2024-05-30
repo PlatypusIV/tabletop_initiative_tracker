@@ -14,11 +14,11 @@ header {
 
 @media only screen and (max-width: 600px){
     header {
-        max-height: 40px;
+        max-height: 5%;
         align-items: center;
     }   
 
     .headerTitle {
-        font-size: 18px;
+        font-size: 14px;
     }
 }

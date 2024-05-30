@@ -74,8 +74,8 @@ export default function CharacterContainer(props:Props):JSX.Element {
   return (
     <div className={character.position === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
         <div className='infoContainer'>
-        <p className='characterContainerTitle'>Name: {character.name}</p>
-          <div>
+          <p className='characterContainerTitle'>Name: {character.name}</p>
+          <div className='hitpointEditingDiv'>
             <label>Hitpoints: </label>
             {!isHitpointInputVisible && (<p className='hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints}</p>)}
             {isHitpointInputVisible && (<div>
@@ -84,22 +84,24 @@ export default function CharacterContainer(props:Props):JSX.Element {
             </div>
             ) }
           </div>
-          <div>
-          <p>Position: {character.position}</p>
-          </div>
-          <div>
+          <div className='initiativeEditingDiv'>
+            <label>Initiative: </label>
             {!isInitiativeScoreInputVisible && (<p className='initiativeScoreText' onClick={()=>setInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
             {isInitiativeScoreInputVisible && (<div>
               <input className='initiativeScoreInput' id='initiativeScoreInput' defaultValue={character.initiativeScore}type='text' onChange={(e)=> setCurrentInitiativeScore(e.target.value)}/>
               <button onClick={()=>handleInitiativeScoreChange()}>Set initiative</button>
             </div>)}
           </div>
+          <div>
+          <p>Position: {character.position}</p>
+          </div>
+          
           <div className='effectContainer'>
             {renderEffectsList(character.effects)}
-          </div>
+        </div>
         <div className='editRemoveContainer'>
-        <button onClick={()=>removeCharacter(character.position)}>Remove</button>
-        <button onClick={()=> openCharacterEditor(character.position)}>Edit</button>
+          <button onClick={()=>removeCharacter(character.position)}>Remove</button>
+          <button onClick={()=> openCharacterEditor(character.position)}>Edit</button>
         </div>
         </div>
         <div className='positionContainer'>

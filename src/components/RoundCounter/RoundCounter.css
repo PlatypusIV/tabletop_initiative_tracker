@@ -5,3 +5,10 @@
     font-size: 36px;
     font-weight: 600;
 }
+
+@media only screen and (max-width: 600px){
+    .roundCounterTitle {
+        font-size: 26px;
+    }
+
+}

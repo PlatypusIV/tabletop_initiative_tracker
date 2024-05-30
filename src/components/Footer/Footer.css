@@ -10,5 +10,10 @@ footer {
     footer {
         visibility: hidden;
         height: 0px;
-    }   
+    }
+    footer h3 {
+        visibility: hidden;
+        height: 0px;
+        font-size: 0px;
+    }
 }
