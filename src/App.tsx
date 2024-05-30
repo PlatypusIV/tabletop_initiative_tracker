@@ -7,7 +7,7 @@ import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
-import { getCharactersFromStorage, remapCharacterPositions, setCharactersToStorage } from './utils/utility';
+import { getCharactersFromStorage, getEffectsFromStorage, remapCharacterPositions, setCharactersToStorage, setEffectsToStorage } from './utils/utility';
 import EffectModal from './components/EffectModal/EffectModal';
 import {v4 as uuidv4} from 'uuid';
 
@@ -28,15 +28,22 @@ export default function App(): JSX.Element {
     if(!initiativeQueue.length){
         setInitiativeQueue(getCharactersFromStorage());
     }
+    if(!Object.keys(effectList).length){
+      setEffectList(getEffectsFromStorage());
+    }
   },[]);
-
-  
 
   useEffect(()=>{
       if(initiativeQueue.length){
         setCharactersToStorage(initiativeQueue);
       }
   },[initiativeQueue]);
+
+  useEffect(()=>{
+    if(Object.keys(effectList).length){
+      setEffectsToStorage(effectList);
+    }
+},[effectList]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -63,7 +70,9 @@ export default function App(): JSX.Element {
   function removeCharacterFromQueue(positionToRemove: number): void {
     initiativeQueue.splice(positionToRemove,1);
     setInitiativeQueue([...remapCharacterPositions(initiativeQueue)]);
-  
+    if(initiativeQueue.length===0){
+      setCharactersToStorage([]);
+    }
   }
 
   function changeQueuePosition(position: number, change: "+"| "-"){
@@ -146,10 +155,13 @@ export default function App(): JSX.Element {
     setInitiativeQueue([...tempInitiativeQueue]);
   }
 
-  function deleteEffect(effectId: string){
+  function deleteEffect(effectId: string){ 
     const temp = effectList;
     delete temp[effectId];
     setEffectList({...temp});
+    if(Object.keys(temp).length ===0){
+      setEffectsToStorage({});
+    }
   }
 
   function progressEffects(){

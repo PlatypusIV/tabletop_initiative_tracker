@@ -1,3 +1,4 @@
 {
-    "initiative_queeu_storage_key": "INITIATIVE_QUEUE"
+    "initiative_queeu_storage_key": "INITIATIVE_QUEUE",
+    "effect_list_storage_key": "EFFECT_LIST"
 }
