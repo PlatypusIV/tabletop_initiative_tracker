@@ -7,7 +7,7 @@ import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
-import { getCharactersFromStorage, getEffectsFromStorage, remapCharacterPositions, setCharactersToStorage, setEffectsToStorage } from './utils/utility';
+import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getEffectsFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage, setEffectsToStorage } from './utils/utility';
 import EffectModal from './components/EffectModal/EffectModal';
 import {v4 as uuidv4} from 'uuid';
 
@@ -31,6 +31,10 @@ export default function App(): JSX.Element {
     if(!Object.keys(effectList).length){
       setEffectList(getEffectsFromStorage());
     }
+    const temp = getCurrentCharacterNumberFromStorage();
+    if(temp){
+      setCurrentCharacterNumber(temp);
+    }
   },[]);
 
   useEffect(()=>{
@@ -43,7 +47,11 @@ export default function App(): JSX.Element {
     if(Object.keys(effectList).length){
       setEffectsToStorage(effectList);
     }
-},[effectList]);
+  },[effectList]);
+
+useEffect(()=>{
+    setCurrentCharacterNumberToStorage(currentCharacterNumber);
+},[currentCharacterNumber]);
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -73,6 +81,10 @@ export default function App(): JSX.Element {
     if(initiativeQueue.length===0){
       setCharactersToStorage([]);
     }
+
+    if(positionToRemove=== currentCharacterNumber && currentCharacterNumber === initiativeQueue.length){
+      setCurrentCharacterNumber(initiativeQueue.length-1);
+    }
   }
 
   function changeQueuePosition(position: number, change: "+"| "-"){
@@ -99,6 +111,7 @@ export default function App(): JSX.Element {
   function resetInitiativeQueue(){
     setInitiativeQueue([]);
     setCharactersToStorage([]);
+    setCurrentCharacterNumberToStorage(0);
     setCurrentCharacterNumber(0);
     setCurrentRoundNumber(1);
   }
@@ -116,8 +129,8 @@ export default function App(): JSX.Element {
 
   function saveCharacterChanges(character: Character){
     const temp = initiativeQueue;
-      temp[characterBeingEdited.position] = character;
-      setInitiativeQueue(temp);
+    temp[characterBeingEdited.position] = character;
+    setInitiativeQueue([...temp]);
   }
 
   function sortByInitiativeScore(){

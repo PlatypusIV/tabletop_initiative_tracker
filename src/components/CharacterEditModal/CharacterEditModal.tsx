@@ -27,11 +27,11 @@ export default function CharacterEditModal(props: Props) {
   }
 
   function saveCharacter(){
-    if(!name)return;
+    if(!name && !props.characterToEdit.name)return;
     if(props.characterToEdit.name ===''){
       props.addCharacter({...props.characterToEdit,name, hitpoints, initiativeScore});
     }else{
-      props.saveCharacterChanges({...props.characterToEdit,name,hitpoints});
+      props.saveCharacterChanges({...props.characterToEdit,name: name ||props.characterToEdit.name ,hitpoints: hitpoints|| props.characterToEdit.hitpoints ,initiativeScore: initiativeScore || props.characterToEdit.initiativeScore});
     }
     
     props.closeModal();

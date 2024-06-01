@@ -21,6 +21,16 @@ export function setCharactersToStorage(initiativeQueue: Character[]): void {
   window.localStorage.setItem(settings.initiative_queeu_storage_key,JSON.stringify(initiativeQueue));
 }
 
+export function getCurrentCharacterNumberFromStorage(){
+  const storageCharacterNumber = window.localStorage.getItem(settings.current_character_number_storage_key);
+  if(!storageCharacterNumber) return;
+  return JSON.parse(storageCharacterNumber);
+}
+
+export function setCurrentCharacterNumberToStorage(currentCharacterNumber: number){
+  window.localStorage.setItem(settings.current_character_number_storage_key,JSON.stringify(currentCharacterNumber));
+}
+
 export function getEffectsFromStorage(): Record<string, Effect> {
   const storageEffectList = window.localStorage.getItem(settings.effect_list_storage_key);
   if(!storageEffectList) return {};
