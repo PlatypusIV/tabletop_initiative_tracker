@@ -40,3 +40,20 @@ export function getEffectsFromStorage(): Record<string, Effect> {
 export function setEffectsToStorage(effectList: Record<string, Effect>){
   window.localStorage.setItem(settings.effect_list_storage_key,JSON.stringify(effectList));
 }
+
+export function progressEffects(characterQueue: Character[], setCharacterQueue:(initiativeOrder: Character[])=> void){
+  for(let i = 0;i<characterQueue.length;i++){
+    if(characterQueue[i].effects){
+      const characterEffectList = characterQueue[i].effects as Record<string, Effect>;
+      const charaEffectKeys = Object.keys(characterQueue[i].effects as Record<string, Effect>);
+
+      charaEffectKeys.forEach(key => {
+        if(characterEffectList[key].duration && characterEffectList[key].duration >0){
+          characterEffectList[key] = {...characterEffectList[key], duration:characterEffectList[key].duration-1};
+          if(characterEffectList[key].duration<=0) delete characterEffectList[key];
+        }
+      });
+    }
+  }
+  setCharacterQueue([...characterQueue]);
+}
