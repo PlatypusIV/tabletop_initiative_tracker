@@ -6,6 +6,6 @@ interface Props {
 
 export default function RoundCounter(props:Props):JSX.Element {
   return (
-    <h1 className='roundCounterTitle'>{props.currentRound}</h1>
+    <h1 className='roundCounterTitle'>Round: {props.currentRound}</h1>
   )
 }
