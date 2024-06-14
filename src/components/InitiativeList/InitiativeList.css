@@ -7,6 +7,12 @@
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.initiativeList::-webkit-scrollbar{
+    display: none;
 }
 
 @media only screen and (max-width: 600px){
