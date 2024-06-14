@@ -10,6 +10,7 @@ import CharacterEditModal from './components/CharacterEditModal/CharacterEditMod
 import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getEffectsFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage, setEffectsToStorage } from './utils/utility';
 import EffectModal from './components/EffectModal/EffectModal';
 import {v4 as uuidv4} from 'uuid';
+import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
@@ -208,7 +209,12 @@ useEffect(()=>{
             currentlyActiveCharacter={currentCharacterNumber}
             /> 
             <div className='controlSection'>
+            <div style={{color:"white", display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
+
               <RoundCounter currentRound={currentRoundNumber}/>
+              {/* <DiceRollsContainer></DiceRollsContainer> */}
+              </div>
+
               <div className='buttonArea'>
                 <div className='nextButtonContainer'>
                   <button onClick={continueAlongInitiative} className='nextInitiativeButton'>Next</button>

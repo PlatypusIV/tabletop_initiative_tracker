@@ -11,21 +11,22 @@ interface Props{
     changeCharacterPosition: (position: number, change: "+"| "-") => void;
 }
 
+//openCharacterEditor, // add back later
 export default function CharacterContainer(props:Props):JSX.Element {
-  const {character, removeCharacter, openCharacterEditor, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
+  const {character, removeCharacter, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
   const [currentHitpoints,setCurrentHitpoints] = useState('');
   const [currentInitiativeScore, setCurrentInitiativeScore] = useState('');
   const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
   const [isInitiativeScoreInputVisible,setInitiativeScoreInputVisible] = useState(false);
 
-  function handleInitiativeScoreChange(){
+  function handleInitiativeScoreChange(): void {
     const newInitiativeScore = parseInt(currentInitiativeScore);
     if(isNaN(newInitiativeScore)) return;
     editCharacter({...character, initiativeScore: newInitiativeScore}, character.position);
     setInitiativeScoreInputVisible(false);
   }
 
-  function handleHitpointChange(){
+  function handleHitpointChange(): void {
     //check for - or +
     //then split by the numbers on each side
     //if there is no - or + check if value is number
@@ -52,13 +53,13 @@ export default function CharacterContainer(props:Props):JSX.Element {
     setIsHitpointInputVisible(false);
   }
 
-  function removeEffectFromCharacter(effectId: string){
+  function removeEffectFromCharacter(effectId: string): void {
       if(!character.effects) return;
       delete character.effects[effectId];
       editCharacter(character, character.position);
   }
 
-  function renderEffectsList(effectList: Record<string, Effect> | undefined){
+  function renderEffectsList(effectList: Record<string, Effect> | undefined): JSX.Element[] | JSX.Element {
     if(effectList){
       return Object.keys(effectList).map(
         (effectId)=>
@@ -101,13 +102,14 @@ export default function CharacterContainer(props:Props):JSX.Element {
         </div>
         <div className='editRemoveContainer'>
           <button onClick={()=>removeCharacter(character.position)}>Remove</button>
-          <button onClick={()=> openCharacterEditor(character.position)}>Edit</button>
+          {/*Need top figure out why edit breaks, but til then im removing it */}
+          {/* <button onClick={()=> openCharacterEditor(character.position)}>Edit</button> */}
         </div>
         </div>
-        <div className='positionContainer'>
-          <button onClick={()=>changeCharacterPosition(character.position, '-')}>Up</button>
-          <button  onClick={()=>changeCharacterPosition(character.position, '+')}>Down</button>
-        </div>
+          <div className='positionContainer'>
+            <button onClick={()=>changeCharacterPosition(character.position, '-')}>Up</button>
+            <button  onClick={()=>changeCharacterPosition(character.position, '+')}>Down</button>
+          </div>
         </div>
   )
 }

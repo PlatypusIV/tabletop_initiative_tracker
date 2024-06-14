@@ -2,7 +2,6 @@
     width: 85%;
     max-height: inherit;
     margin: 8px;
-    border: beige 8px solid;
     overflow-y: hidden;
     overflow-x: scroll;
     display: flex;
