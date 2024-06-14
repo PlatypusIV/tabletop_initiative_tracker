@@ -67,4 +67,8 @@ cache list
 
 dice rolling?????
 
-bgimg not showing on github
+make modals look better
+    close button on the top separate from the reset
+    close button with a X in in it
+    normal sized buttons
+    brown bg to match rest of site maybe?

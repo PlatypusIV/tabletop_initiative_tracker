@@ -46,22 +46,33 @@ export default function CharacterEditModal(props: Props) {
   
   return (
     <Modal isOpen={props.isOpen} className='characterEditModal'>
-      <div>
-        <button onClick={()=>props.closeModal()}>Close modal</button>
+      <div className='characterEditCloseContainer'>
+        <button onClick={()=>props.closeModal()} className='characterEditCloseButton'>X</button>
       </div>
-      <div>
-        <label htmlFor="nameInput">Name:</label>
-        <input id='nameInput' type='text' placeholder={props.characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)}/>
+      <div className='characterEditContentContainer'>
+        <table>
+          <tbody>
+            <tr>
+              <td><label htmlFor="nameInput">Name:</label></td>
+            
+            <td>
+              <input id='nameInput' type='text' placeholder={props.characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)}/>
+            </td>
+            </tr>
+            <tr>
+              <td><label htmlFor="hitpointInput">Hitpoints: </label></td>
+              <td><input type="number" name="hitpointInput" id="hitpointInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)}/></td>
+            </tr>
+            <tr>
+              <td><label htmlFor="initiativeScoreInput">Initiative score: </label></td>
+              <td><input type="number" name="initiativeScoreInput" id="initiativeScoreInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onInitiativeScoreChange(e.target.value)}/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      <button onClick={saveCharacter} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
       </div>
-      <div>
-        <label htmlFor="hitpointInput">Hitpoints: </label>
-        <input type="number" name="hitpointInput" id="hitpointInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)}/>
-      </div>
-      <div>
-        <label htmlFor="initiativeScoreInput">Initiative score: </label>
-        <input type="number" name="initiativeScoreInput" id="initiativeScoreInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onInitiativeScoreChange(e.target.value)}/>
-      </div>
-      <button onClick={saveCharacter}>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
+      
     </Modal>
   )
 }

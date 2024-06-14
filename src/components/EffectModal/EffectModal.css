@@ -12,6 +12,7 @@
     flex-direction: column;
     padding: 8px;
     z-index: 1;
+    border-radius: 10px;
 }
 
 .closeButtonContainer {
