@@ -10,7 +10,7 @@ import CharacterEditModal from './components/CharacterEditModal/CharacterEditMod
 import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getEffectsFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage, setEffectsToStorage } from './utils/utility';
 import EffectModal from './components/EffectModal/EffectModal';
 import {v4 as uuidv4} from 'uuid';
-import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
+// import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
