@@ -74,42 +74,63 @@ export default function CharacterContainer(props:Props):JSX.Element {
 
   return (
     <div className={character.position === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
-        <div className='infoContainer'>
-          <p className='characterContainerTitle'>Name: {character.name}</p>
-          <div className='hitpointEditingDiv'>
-            <label>Hitpoints: </label>
-            {!isHitpointInputVisible && (<p className='hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints}</p>)}
+        <div className='characterContainerTitleRow'>
+          <div className='removeButtonContainer'>
+            <button onClick={()=>removeCharacter(character.position)} className='characterContainerRemoveButton'>X</button>
+          </div>
+          <div className='characterNameContainer'>
+            <p>{character.name}</p>
+          </div>
+          <div className='positionContainer'>
+              <button onClick={()=>changeCharacterPosition(character.position, '-')}>Up</button>
+              <button  onClick={()=>changeCharacterPosition(character.position, '+')}>Down</button>
+          </div>
+        </div>
+        <div className='characterContent'>
+          <div className='characterInfoTableContainer'>
+          <table className='characterTable'>
+            <tbody>
+              <tr>
+                <td>Hitpoints:</td>
+                <td>{!isHitpointInputVisible && (<p className='hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints}</p>)}
             {isHitpointInputVisible && (<div>
               <input className='hitpointInput' id='hitpointInput' defaultValue={character.hitpoints}type='text' onChange={(e)=> setCurrentHitpoints(e.target.value)}/>
               <button onClick={()=>handleHitpointChange()}>Calculate</button>
             </div>
-            ) }
-          </div>
-          <div className='initiativeEditingDiv'>
-            <label>Initiative: </label>
-            {!isInitiativeScoreInputVisible && (<p className='initiativeScoreText' onClick={()=>setInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
+            ) }</td>
+              </tr>
+              <tr>
+                <td>Initiative:</td>
+                <td>{!isInitiativeScoreInputVisible && (<p className='initiativeScoreText' onClick={()=>setInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
             {isInitiativeScoreInputVisible && (<div>
               <input className='initiativeScoreInput' id='initiativeScoreInput' defaultValue={character.initiativeScore}type='text' onChange={(e)=> setCurrentInitiativeScore(e.target.value)}/>
               <button onClick={()=>handleInitiativeScoreChange()}>Set initiative</button>
-            </div>)}
+            </div>)}</td>
+              </tr>
+            </tbody>
+          </table>
           </div>
-          <div>
-          <p>Position: {character.position}</p>
-          </div>
-          
           <div className='effectContainer'>
+            <label>Effect List </label>
             {renderEffectsList(character.effects)}
-        </div>
-        <div className='editRemoveContainer'>
-          <button onClick={()=>removeCharacter(character.position)}>Remove</button>
-          {/*Need top figure out why edit breaks, but til then im removing it */}
-          {/* <button onClick={()=> openCharacterEditor(character.position)}>Edit</button> */}
-        </div>
-        </div>
-          <div className='positionContainer'>
-            <button onClick={()=>changeCharacterPosition(character.position, '-')}>Up</button>
-            <button  onClick={()=>changeCharacterPosition(character.position, '+')}>Down</button>
           </div>
+        </div>
         </div>
   )
 }
+
+
+/*
+
+        <div className='infoContainer'>
+            
+
+        
+        </div>
+          
+
+
+*/
+
+          /*Need top figure out why edit breaks, but til then im removing it */
+          /* <button onClick={()=> openCharacterEditor(character.position)}>Edit</button> */
