@@ -22,6 +22,7 @@
     align-items: center;
     padding: 2px;
     flex: 0.3;
+    border-bottom: 2px black solid;
 }
 .characterContainerTitleRow div {
     flex: 0.3;
@@ -40,7 +41,7 @@
 }
 
 .characterNameContainer {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     word-wrap: break-word;
     display: inherit;
@@ -90,7 +91,6 @@
 }
 
 .effectContainer {
-    border: 2px solid brown;
     max-height: 100px;
     width: 50%;
     margin-top: 4px;

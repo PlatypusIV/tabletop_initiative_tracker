@@ -118,19 +118,5 @@ export default function CharacterContainer(props:Props):JSX.Element {
         </div>
   )
 }
-
-
-/*
-
-        <div className='infoContainer'>
-            
-
-        
-        </div>
-          
-
-
-*/
-
-          /*Need top figure out why edit breaks, but til then im removing it */
-          /* <button onClick={()=> openCharacterEditor(character.position)}>Edit</button> */
+/*Need top figure out why edit breaks, but til then im removing it */
+/* <button onClick={()=> openCharacterEditor(character.position)}>Edit</button> */
