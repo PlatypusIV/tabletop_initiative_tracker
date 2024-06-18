@@ -222,7 +222,6 @@ useEffect(()=>{
                 <div>
                     <button onClick={()=>setIsCharacterEditModalOpen(true)} className='addCharacterButton'>Add character</button>
                 </div>
-              
                 <div className='extraButtons'>
                   <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
                   <button onClick={sortByInitiativeScore}>Sort by initiative</button>

@@ -131,4 +131,8 @@
     .characterContainer {
         max-width: none;
     }
+
+    .effectContainer {
+        max-height: 70px;
+    }
 }
