@@ -81,6 +81,8 @@
         justify-content:end;
         height: 95%;
         flex: 0.95;
+        position: absolute;
+        bottom: 0px;
     }
 
     .controlSection {
