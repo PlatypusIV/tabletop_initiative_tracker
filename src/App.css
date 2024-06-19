@@ -20,10 +20,17 @@
 .controlSection {
     width: 12%;
     height: 100%;
-    border: aqua 8px solid;
+    border: rgb(0, 0, 0) 8px solid;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-radius: 10px;
+    background-color:gray;
+}
+
+.roundAndDiceContainer {
+    display: inherit;
+    flex-direction: column;
 }
 
 .buttonArea {
@@ -41,6 +48,7 @@
     margin: 4px;
     padding: 2px;
     border-radius: 10px;
+    border: black solid 2px;
 }
 
 .buttonArea div {
@@ -92,9 +100,14 @@
         justify-content: space-between;
     }
 
+    .roundAndDiceContainer {
+        display: inherit;
+        flex-direction: row;
+    }
+
     .buttonArea {
         width: 100%;
-        max-height: 80%;
+        height: 60%;
         flex-direction: row;
     }
     .buttonArea div {

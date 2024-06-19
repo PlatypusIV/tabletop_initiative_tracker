@@ -209,7 +209,7 @@ useEffect(()=>{
             currentlyActiveCharacter={currentCharacterNumber}
             /> 
             <div className='controlSection'>
-            <div style={{color:"white", display:"flex", flexDirection:"column", justifyContent:"space-between"}}>
+            <div className='roundAndDiceContainer'>
 
               <RoundCounter currentRound={currentRoundNumber}/>
               {/* <DiceRollsContainer></DiceRollsContainer> */}
