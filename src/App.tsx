@@ -215,7 +215,7 @@ useEffect(()=>{
               {/* <DiceRollsContainer></DiceRollsContainer> */}
               </div>
 
-              <div className='buttonArea'>
+              <div className='buttonContainer'>
                 <div className='nextButtonContainer'>
                   <button onClick={continueAlongInitiative} className='nextInitiativeButton'>Next</button>
                 </div>

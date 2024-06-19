@@ -33,17 +33,17 @@
     flex-direction: column;
 }
 
-.buttonArea {
+.buttonContainer {
     border: 2px aliceblue solid;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50%;
+    height: 30%;
     bottom: 0;
 }
 
-.buttonArea button {
+.buttonContainer button {
     min-width: 90%;
     margin: 4px;
     padding: 2px;
@@ -51,7 +51,7 @@
     border: black solid 2px;
 }
 
-.buttonArea div {
+.buttonContainer div {
     width: 100%;
 }
 
@@ -105,12 +105,12 @@
         flex-direction: row;
     }
 
-    .buttonArea {
+    .buttonContainer {
         width: 100%;
         height: 60%;
         flex-direction: row;
     }
-    .buttonArea div {
+    .buttonContainer div {
         flex: 0.3;
         height: 100%;
     }
