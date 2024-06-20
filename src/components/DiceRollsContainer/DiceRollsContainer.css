@@ -1,0 +1,11 @@
+
+
+.diceInputContainer {
+    height: 30px;
+    width: 100%;
+    display: grid;
+}
+
+.diceRollingNumberInput {
+    width: 100%;
+}

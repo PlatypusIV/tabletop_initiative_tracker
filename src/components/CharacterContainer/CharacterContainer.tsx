@@ -64,7 +64,7 @@ export default function CharacterContainer(props:Props):JSX.Element {
       return Object.keys(effectList).map(
         (effectId)=>
           {
-            return (<li>{`${effectList[effectId].name}: ${effectList[effectId].duration || 'N/A'}`} <button onClick={()=> removeEffectFromCharacter(effectId)}>X</button></li>)
+            return (<li key={effectList[effectId].name}>{`${effectList[effectId].name}: ${effectList[effectId].duration || 'N/A'}`} <button onClick={()=> removeEffectFromCharacter(effectId)}>X</button></li>)
           }
     )
     }else{

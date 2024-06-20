@@ -31,6 +31,8 @@
 .roundAndDiceContainer {
     display: inherit;
     flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
 }
 
 .buttonContainer {
