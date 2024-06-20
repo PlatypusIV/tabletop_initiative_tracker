@@ -8,3 +8,6 @@ Todo list:
   Add soundboard
   Add separate themes for fantasy, modern and scifi
   make buttons bigger in character box
+
+  ----
+  allow adding macros

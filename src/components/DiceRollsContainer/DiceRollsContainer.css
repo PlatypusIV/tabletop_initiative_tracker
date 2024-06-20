@@ -1,11 +1,15 @@
 
 
 .diceInputContainer {
-    height: 30px;
     width: 100%;
     display: grid;
+    height: 30%;
 }
 
 .diceRollingNumberInput {
     width: 100%;
+}
+
+textarea {
+    resize: none;
 }
