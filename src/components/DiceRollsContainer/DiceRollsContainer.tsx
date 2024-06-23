@@ -4,47 +4,82 @@ import {useEffect, useState} from 'react';
 interface DiceRollLog {
   total: number;
   separateValues: number[];
+  originalFormula: string;
 }
 
 export default function DiceRollsContainer(): JSX.Element {
-  const [currentDice, setCurrentDice] = useState(20);
-  const [currentDiceCount, setCurrentDiceCount] = useState(0);
   const [diceRollsLog, setDiceRollsLog] = useState<DiceRollLog[]>([]);
   const [diceFormula, setDiceFormula] = useState<string>('');
 
-  function validateDiceInput(diceCountInput:string): void{
-    //separate by math numbers
-    //separate dice combos
+
+  useEffect(()=>{
+    console.log('diceFormula: ', diceFormula);
+  },[diceFormula]);
+
+
+  //clean this up
+  useEffect(()=>{
+    if(diceRollsLog.length > 10){
+      diceRollsLog.shift()
+      setDiceRollsLog([...diceRollsLog]);
+    }
+  },[diceRollsLog]);
+
+
+  //TODO: separate validation from rollDice
+  function rollDice(): void{
+    if(!diceFormula)return;
+
+    const tempDiceRoll: DiceRollLog = {total:0, separateValues:[], originalFormula: ''};
 
     const mathOperatorSeparator = /[+-]/g;
+    const mathOperators = diceFormula.match(/[-+]/g);
 
-    const diceCombos = [];
-    const mathOperators = [];
-  }
 
-  function rollDice(): void{
-    if(!currentDice)return;
-    if(!currentDiceCount)return;
+    const diceCombos = [...diceFormula.replace(' ','').toLowerCase().split(mathOperatorSeparator)];
 
-    const tempDiceRoll: DiceRollLog = {total:0, separateValues:[]};
-    for(let i = 0;i<currentDiceCount;i++){
-      console.log(`You rolled a ${Math.floor(Math.random()*currentDice+1)}`);
-      tempDiceRoll
+    const results:number[] = [];
+
+    for(let i = 0;i<diceCombos.length;i++){
+      const combo = diceCombos[i];
+      // if(/[^\d{1,3},d?,\d]/g.test(combo)) return;
+      if(/[d*]/g.test(combo)){
+        const elementsInCombo = combo.split('d');
+        const amountOfDiceToRoll = parseInt(elementsInCombo[0]);
+        const diceToRoll = parseInt(elementsInCombo[1]);
+        if(isNaN(amountOfDiceToRoll) || isNaN(diceToRoll) || amountOfDiceToRoll <1 || diceToRoll < 2) throw new Error('Incorrect input!');
+
+        let roll = 0;
+        for(let j = 0; j <amountOfDiceToRoll; j++){
+          roll += Math.floor(Math.random()*diceToRoll)+1;
+        }
+        console.log('roll: ', roll);
+        results.push(roll);
+      }else{
+        results.push(parseInt(combo));
+      }
     }
-    console.log(`You rolled a d${currentDice} ${currentDiceCount} times`);
 
-    // console.log(`You rolled a ${Math.floor(Math.random()*currentDice+1)}`);
+    tempDiceRoll.total = results[0];
+    mathOperators?.forEach((operator, i) => {
+      operator === '+' ? tempDiceRoll.total+= results[i+1] : tempDiceRoll.total-= results[i+1]
+    });
+    tempDiceRoll.separateValues= [...results];
+    tempDiceRoll.originalFormula = diceFormula;
+
+    console.log('diceRoll: ', JSON.stringify(tempDiceRoll));
+    setDiceRollsLog([...diceRollsLog, tempDiceRoll]);
   }
 
-  // function renderDiceLogs(){
-  //   diceRollsLog.map((diceRollLog, index)=>{return<li key={index}>{diceRollLog}</li>});
-  // }
+  function renderDiceLogs(){
+    return diceRollsLog.map((diceRollLog, index)=>{return<li key={index}>{diceRollLog.total}</li>});
+  }
 
   return (
     <div className="diceRollsContainer" >
       <div className='diceRollsLogContainer'>
         <ul>
-          
+          {renderDiceLogs()}
         </ul>
       </div>
       <div className='diceInputContainer'>
