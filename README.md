@@ -11,3 +11,4 @@ Todo list:
 
   ----
   allow adding macros
+  add tests
