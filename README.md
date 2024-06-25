@@ -12,3 +12,13 @@ Todo list:
   ----
   allow adding macros
   add tests
+  make a clear dice logs button
+  mobile view
+
+  ----
+  Effects modal visual improvements
+  Effects list proper button
+
+  Take the control section and make it a single component
+  Make dice roll log bigger
+  add tooltip to show original formula and roll results

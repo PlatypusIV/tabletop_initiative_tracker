@@ -11,6 +11,7 @@ export default function DiceRollsContainer(): JSX.Element {
   const [diceRollsLog, setDiceRollsLog] = useState<DiceRollLog[]>([]);
   const [diceFormula, setDiceFormula] = useState<string>('');
 
+  const mathOperatorSeparator = /[+-]/g;
 
   useEffect(()=>{
     console.log('diceFormula: ', diceFormula);
@@ -32,7 +33,6 @@ export default function DiceRollsContainer(): JSX.Element {
 
     const tempDiceRoll: DiceRollLog = {total:0, separateValues:[], originalFormula: ''};
 
-    const mathOperatorSeparator = /[+-]/g;
     const mathOperators = diceFormula.match(/[-+]/g);
 
 
@@ -53,7 +53,6 @@ export default function DiceRollsContainer(): JSX.Element {
         for(let j = 0; j <amountOfDiceToRoll; j++){
           roll += Math.floor(Math.random()*diceToRoll)+1;
         }
-        console.log('roll: ', roll);
         results.push(roll);
       }else{
         results.push(parseInt(combo));
@@ -67,45 +66,32 @@ export default function DiceRollsContainer(): JSX.Element {
     tempDiceRoll.separateValues= [...results];
     tempDiceRoll.originalFormula = diceFormula;
 
-    console.log('diceRoll: ', JSON.stringify(tempDiceRoll));
-    setDiceRollsLog([...diceRollsLog, tempDiceRoll]);
+    const tempRollLogs = diceRollsLog;
+    if(tempRollLogs.length >= 6){
+      tempRollLogs.shift();
+    }
+    setDiceRollsLog([...tempRollLogs, tempDiceRoll]);
+  }
+
+  function cleanLogs(){
+    setDiceRollsLog([]);
   }
 
   function renderDiceLogs(){
-    return diceRollsLog.map((diceRollLog, index)=>{return<li key={index}>{diceRollLog.total}</li>});
+    return diceRollsLog.map((diceRollLog, index)=>{return<li key={index} className='diceRollListElement'><p>Result: {diceRollLog.total}</p></li>});
   }
 
   return (
     <div className="diceRollsContainer" >
       <div className='diceRollsLogContainer'>
-        <ul>
+        <ol reversed>
           {renderDiceLogs()}
-        </ul>
+        </ol>
       </div>
       <div className='diceInputContainer'>
-        <textarea name="diceRollsInput" id="diceRollsInput" onChange={(e)=>setDiceFormula(e.target.value)} />
-        <button onClick={rollDice}>Roll</button>
-        {/* <table>
-          <tbody>
-            <tr>
-              <td><input type="number" className='diceRollingNumberInput' onChange={(e)=>validateDiceInput(e.target.value)}/></td>
-              <td><label>D</label></td>
-              <td>
-                <select defaultValue="20" id='diceSelectorInput' name='dice' onChange={(e)=>setCurrentDice(parseInt(e.target.value))}>
-                    <option value="20">20</option>
-                    <option value="12">12</option>
-                    <option value="10">10</option>
-                    <option value="8">8</option>
-                    <option value="6">6</option>
-                    <option value="4">4</option>
-                    <option value="2">2</option>
-                    <option value="100">100</option>
-                    </select>
-                    </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table> */}
+      <button onClick={cleanLogs} className='diceRollsClearLogsButton'>Clear logs</button>
+      <textarea name="diceRollsInput" id="diceRollsInput" onChange={(e)=>setDiceFormula(e.target.value)} className='diceRollingNumberInput'/>
+        <button onClick={rollDice} className='diceRollsRollButton'>Roll</button>
       </div>
     </div>
   )
