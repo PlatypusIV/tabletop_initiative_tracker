@@ -117,6 +117,12 @@ useEffect(()=>{
     setCurrentRoundNumber(1);
   }
 
+  function resetRound(){
+    setCurrentRoundNumber(1);
+    setCurrentCharacterNumber(0);
+    setCurrentCharacterNumberToStorage(0);
+  }
+
   function openCharacterEditor(position: number){
     setCharacterBeingEdited(initiativeQueue[position]);
     setIsCharacterEditModalOpen(true);
@@ -226,6 +232,7 @@ useEffect(()=>{
                   <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
                   <button onClick={sortByInitiativeScore}>Sort by initiative</button>
                   <button onClick={resetInitiativeQueue} className='resetInitiativeButton'>Reset initiative</button>
+                  <button onClick={resetRound} className='resetInitiativeButton'>Reset round</button>
                 </div>
             </div>
             </div>
