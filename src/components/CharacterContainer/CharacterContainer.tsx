@@ -13,7 +13,7 @@ interface Props{
 
 //openCharacterEditor, // add back later
 export default function CharacterContainer(props:Props):JSX.Element {
-  const {character, removeCharacter, changeCharacterPosition, currentlyActiveCharacter, editCharacter} = props;
+  const {character, removeCharacter, changeCharacterPosition, currentlyActiveCharacter, editCharacter, openCharacterEditor} = props;
   const [currentHitpoints,setCurrentHitpoints] = useState('');
   const [currentInitiativeScore, setCurrentInitiativeScore] = useState('');
   const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
@@ -81,6 +81,9 @@ export default function CharacterContainer(props:Props):JSX.Element {
           <div className='characterNameContainer'>
             <p>{character.name}</p>
           </div>
+          <div className='characterEditContainer'>
+            <button onClick={()=> openCharacterEditor(character.position)}>Edit</button>
+          </div>
           <div className='positionContainer'>
               <button onClick={()=>changeCharacterPosition(character.position, '-')}>Up</button>
               <button  onClick={()=>changeCharacterPosition(character.position, '+')}>Down</button>
@@ -118,5 +121,3 @@ export default function CharacterContainer(props:Props):JSX.Element {
         </div>
   )
 }
-/*Need top figure out why edit breaks, but til then im removing it */
-/* <button onClick={()=> openCharacterEditor(character.position)}>Edit</button> */

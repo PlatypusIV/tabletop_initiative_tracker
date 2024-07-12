@@ -51,6 +51,21 @@
     display: inherit;
 }
 
+.characterEditContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: right;
+    flex: 0.1;
+    max-width: 50px;
+}
+
+.characterEditContainer button {
+    margin-left: 2px;
+    height: 30px;
+    width: 100%;
+}
+
 .positionContainer {
     display: flex;
     flex-direction: row;
