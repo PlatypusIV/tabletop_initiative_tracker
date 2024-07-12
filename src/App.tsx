@@ -53,6 +53,12 @@ useEffect(()=>{
     setCurrentCharacterNumberToStorage(currentCharacterNumber);
 },[currentCharacterNumber]);
 
+useEffect(()=>{
+  if(!isCharacterEditModalOpen){
+    setCharacterBeingEdited({name:'', position:0,initiativeScore:0, hitpoints: 0});
+  }
+}, [isCharacterEditModalOpen]);
+
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
       let temp;
