@@ -1,0 +1,56 @@
+.warningModal {
+    height: 20%;
+    width: 30%;
+    background-color: rgb(37, 37, 37);
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    border-radius: 10px;
+    justify-content: space-between;
+    text-align: center;
+    position: absolute;
+    top: 25%;
+    left: 40%;
+}
+
+.warningModalInformation {
+    margin-top: 8px;
+    color: antiquewhite;
+}
+
+.warningModalButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 8px;
+}
+
+.warningModalCancelButton {
+    border-radius: 10px;
+    border: 4px black;
+    width: 30%;
+    min-height: 20px;
+}
+
+.warningModalConfirmButton {
+    background-color: darkred;
+    color: aliceblue;
+    font-weight: bold;
+    border-radius: 10px;
+    border: 4px black;
+    width: 30%;
+    min-height: 20px;
+}
+
+@media only screen and (max-width: 600px){
+    
+    .warningModal {
+        width: 100%;
+        height: 30%;
+        top: 10%;
+        left: 0;
+        margin: 0;
+    }
+
+}

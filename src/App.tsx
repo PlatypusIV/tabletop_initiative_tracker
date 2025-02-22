@@ -10,6 +10,7 @@ import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getEffe
 import EffectModal from './components/EffectModal/EffectModal';
 import {v4 as uuidv4} from 'uuid';
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
+import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
@@ -19,8 +20,7 @@ export default function App(): JSX.Element {
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
-  //add warning prompt for removing characters and resetting initative
-  // const [isWarningPromptOpen, setIsWarningPromptOpen] = useState(false);
+  const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
 
 
   //add initiative queue key to env variables and separate functions from app file
@@ -114,12 +114,15 @@ useEffect(()=>{
     setInitiativeQueue([...changedInitiativeQueue]);
   }
 
-  function resetInitiativeQueue(){
-    setInitiativeQueue([]);
-    setCharactersToStorage([]);
-    setCurrentCharacterNumberToStorage(0);
-    setCurrentCharacterNumber(0);
-    setCurrentRoundNumber(1);
+  function clearInitiativeQueue(confirmation:boolean) {
+    if(confirmation){
+      setInitiativeQueue([]);
+      setCharactersToStorage([]);
+      setCurrentCharacterNumberToStorage(0);
+      setCurrentCharacterNumber(0);
+      setCurrentRoundNumber(1);
+    }
+    setIsWarningPromptOpen(false);
   }
 
   function resetRound(){
@@ -223,7 +226,7 @@ useEffect(()=>{
             <div className='roundAndDiceContainer'>
 
               <RoundCounter currentRound={currentRoundNumber}/>
-              <DiceRollsContainer></DiceRollsContainer>
+              <DiceRollsContainer/>
               </div>
 
               <div className='buttonContainer'>
@@ -236,8 +239,8 @@ useEffect(()=>{
                 <div className='extraButtons'>
                   <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button>
                   <button onClick={sortByInitiativeScore}>Sort by initiative</button>
-                  <button onClick={resetInitiativeQueue} className='resetInitiativeButton'>Reset initiative</button>
-                  <button onClick={resetRound} className='resetInitiativeButton'>Reset round</button>
+                  <button onClick={resetRound} className='resetRondButton'>Reset round</button>
+                  <button onClick={()=>setIsWarningPromptOpen(true)} className='clearInitiativeButton'>Clear all</button>
                 </div>
             </div>
             </div>
@@ -245,6 +248,7 @@ useEffect(()=>{
         <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
         <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects} deleteEffect={deleteEffect} editExistingEffect={editExistingEffect}/>
+        <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
     </div>
   )
 }
