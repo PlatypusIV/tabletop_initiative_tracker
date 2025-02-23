@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Character, Effect } from '../../utils/interface';
 import './CharacterContainer.css';
 
-interface Props{
+interface Props {
     currentlyActiveCharacter: number;
     character: Character;
     removeCharacter: (position: number) => void;
@@ -14,16 +14,18 @@ interface Props{
 //openCharacterEditor, // add back later
 export default function CharacterContainer(props:Props):JSX.Element {
   const {character, removeCharacter, changeCharacterPosition, currentlyActiveCharacter, editCharacter, openCharacterEditor} = props;
-  const [currentHitpoints,setCurrentHitpoints] = useState('');
-  const [currentInitiativeScore, setCurrentInitiativeScore] = useState('');
+  const [currentHitpoints,setCurrentHitpoints] = useState<string>('');
+  const [currentInitiativeScore, setCurrentInitiativeScore] = useState<string>('');
+  const [currentDefense, setCurrentDefense] = useState<string>('');
   const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
-  const [isInitiativeScoreInputVisible,setInitiativeScoreInputVisible] = useState(false);
+  const [isInitiativeScoreInputVisible,setIsInitiativeScoreInputVisible] = useState<boolean>(false);
+  const [isDefenseInputVisible,setIsDefenseInputVisible] = useState<boolean>(false);
 
   function handleInitiativeScoreChange(): void {
     const newInitiativeScore = parseInt(currentInitiativeScore);
     if(isNaN(newInitiativeScore)) return;
     editCharacter({...character, initiativeScore: newInitiativeScore}, character.position);
-    setInitiativeScoreInputVisible(false);
+    setIsInitiativeScoreInputVisible(false);
   }
 
   function handleHitpointChange(): void {
@@ -51,6 +53,15 @@ export default function CharacterContainer(props:Props):JSX.Element {
 
     editCharacter({...character, hitpoints: newHitpointValue}, character.position);
     setIsHitpointInputVisible(false);
+  }
+
+  function handleDefenseChange(): void {
+    if(currentDefense === undefined || currentDefense === null || currentDefense ==='') {
+      setIsDefenseInputVisible(false);
+      return;
+    }
+    editCharacter({...character, defense: currentDefense}, character.position);
+    setIsDefenseInputVisible(false);
   }
 
   function removeEffectFromCharacter(effectId: string): void {
@@ -104,10 +115,19 @@ export default function CharacterContainer(props:Props):JSX.Element {
               </tr>
               <tr>
                 <td>Initiative:</td>
-                <td>{!isInitiativeScoreInputVisible && (<p className='initiativeScoreText' onClick={()=>setInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
+                <td>{!isInitiativeScoreInputVisible && (<p className='initiativeScoreText' onClick={()=>setIsInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
             {isInitiativeScoreInputVisible && (<div>
               <input className='initiativeScoreInput' id='initiativeScoreInput' defaultValue={character.initiativeScore}type='text' onChange={(e)=> setCurrentInitiativeScore(e.target.value)}/>
               <button onClick={()=>handleInitiativeScoreChange()}>Set initiative</button>
+            </div>)}</td>
+              </tr>
+              
+              <tr>
+                <td>Defense:</td>
+                <td>{!isDefenseInputVisible && (<p className='defenseText' onClick={()=>setIsDefenseInputVisible(true)}>{character.defense}</p>)}
+            {isDefenseInputVisible && (<div>
+              <input className='defenseInput' id='defenseInput' defaultValue={character.defense}type='text' onChange={(e)=> setCurrentDefense(e.target.value)}/>
+              <button onClick={handleDefenseChange}>Set defense</button>
             </div>)}</td>
               </tr>
             </tbody>

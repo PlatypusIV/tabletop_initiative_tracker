@@ -15,6 +15,7 @@ export default function CharacterEditModal(props: Props) {
   const [name,setName] = useState<string>('');
   const [hitpoints,setHitpoints] = useState(0);
   const [initiativeScore,setInitiativeScore] = useState(0);
+  const [defense,setDefense] = useState<string>('ac: 0, ff: 0, t: 0');
 
   function onHitpointChange(newHitpoints:string){
     if(isNaN(parseInt(newHitpoints)))return;
@@ -26,12 +27,17 @@ export default function CharacterEditModal(props: Props) {
     setInitiativeScore(parseInt(newInitiativeScore));
   }
 
+  function onDefenseChange(newDefense: string) {
+    if(defense === null && defense === undefined) return;
+    setDefense(newDefense);
+  }
+
   function saveCharacter(){
     if(!name && !props.characterToEdit.name)return;
     if(props.characterToEdit.name ===''){
-      props.addCharacter({...props.characterToEdit,name, hitpoints, initiativeScore});
+      props.addCharacter({...props.characterToEdit,name, hitpoints, initiativeScore, defense});
     }else{
-      props.saveCharacterChanges({...props.characterToEdit,name: name ||props.characterToEdit.name ,hitpoints: hitpoints|| props.characterToEdit.hitpoints ,initiativeScore: initiativeScore || props.characterToEdit.initiativeScore});
+      props.saveCharacterChanges({...props.characterToEdit,name: name ||props.characterToEdit.name ,hitpoints: hitpoints|| props.characterToEdit.hitpoints ,initiativeScore: initiativeScore || props.characterToEdit.initiativeScore, defense: defense || props.characterToEdit.defense});
     }
     
     props.closeModal();
@@ -66,6 +72,11 @@ export default function CharacterEditModal(props: Props) {
             <tr>
               <td><label htmlFor="initiativeScoreInput">Initiative score: </label></td>
               <td><input type="number" name="initiativeScoreInput" id="initiativeScoreInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onInitiativeScoreChange(e.target.value)}/>
+              </td>
+            </tr>
+            <tr>
+              <td><label htmlFor="defenseInput">Defense: </label></td>
+              <td><input type="text" name="defenseInput" id="defenseInput" placeholder={props.characterToEdit.defense?.toString() || 'ac: 0, ff:0, t:0'} onChange={(e)=>onDefenseChange(e.target.value)}/>
               </td>
             </tr>
           </tbody>

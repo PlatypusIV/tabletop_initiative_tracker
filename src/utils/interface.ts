@@ -8,6 +8,7 @@ export interface Character {
     hitpoints?: number;
     hitpointHistory?: number[];//use this when making hp history
     effects?: Record<string,Effect>;
+    defense?: string;
 }
 
 export interface Effect {

@@ -100,13 +100,13 @@
 
 .hitpointText {
     cursor: pointer;
-    width: 60px;
+    min-width: 70px;
     background-color: aliceblue;
     color: black;
 }
 
 .hitpointInput {
-    width: 60px;
+    min-width: 70px;
 }
 
 .effectContainer {
@@ -143,17 +143,40 @@
 
 .initiativeScoreText {
     cursor: pointer;
-    width: 60px;
+    min-width: 70px;
     background-color: aliceblue;
     color: black;
 }
 
+
+
 .initiativeScoreInput {
-    width: 60px;
+    min-width: 70px;
+}
+
+.defenseText {
+    cursor: pointer;
+    min-width: 70px;
+    background-color: aliceblue;
+    color: black;
+}
+
+.defenseInput {
+    min-width: 70px;
 }
 
 .characterInfoTableContainer {
     height: 100%;
+}
+
+@media only screen and (max-width: 1200px){
+    .characterContainer {
+        max-width: 50%;
+    }
+
+    .effectContainer {
+        max-height: 80px;
+    }
 }
 
 @media only screen and (max-width: 600px){
