@@ -1,5 +1,6 @@
 {
-    "initiative_queeu_storage_key": "INITIATIVE_QUEUE",
-    "effect_list_storage_key": "EFFECT_LIST",
-    "current_character_number_storage_key": "CURRENT_CHARACTER_NUMBER"
+  "initiative_queeu_storage_key": "INITIATIVE_QUEUE",
+  "effect_list_storage_key": "EFFECT_LIST",
+  "current_character_number_storage_key": "CURRENT_CHARACTER_NUMBER",
+  "background_image_count": 6
 }

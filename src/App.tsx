@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import settings from './/utils/settings.json';
 import './App.css';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -21,8 +22,12 @@ export default function App(): JSX.Element {
   const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
   const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
+  const [currentBackgroundNumber, setCurrentBackgroundNumber] = useState(1);
 
 
+  useLayoutEffect(()=>{
+    setBackground();
+  },[]);
   //add initiative queue key to env variables and separate functions from app file
   useEffect(()=>{    
     if(!initiativeQueue.length){
@@ -58,6 +63,10 @@ useEffect(()=>{
     setCharacterBeingEdited({name:'', position:0,initiativeScore:0, hitpoints: 0});
   }
 }, [isCharacterEditModalOpen]);
+
+  function setBackground(){
+    setCurrentBackgroundNumber(Math.floor(Math.random() * settings.background_image_count)+1)
+  }
 
   function continueAlongInitiative(): void {
     if(initiativeQueue.length){
@@ -211,7 +220,7 @@ useEffect(()=>{
   }
 
   return (
-    <div className='app'>
+    <div className={`app background${currentBackgroundNumber}`}>
         <Header />
         <div className='content'>
           <InitiativeList 
