@@ -12,6 +12,7 @@ import EffectModal from './components/EffectModal/EffectModal';
 import {v4 as uuidv4} from 'uuid';
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
+import Loader from './components/Loader/Loader';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
@@ -23,6 +24,7 @@ export default function App(): JSX.Element {
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
   const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
   const [currentBackgroundNumber, setCurrentBackgroundNumber] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   useLayoutEffect(()=>{
@@ -65,7 +67,8 @@ useEffect(()=>{
 }, [isCharacterEditModalOpen]);
 
   function setBackground(){
-    setCurrentBackgroundNumber(Math.floor(Math.random() * settings.background_image_count)+1)
+    setCurrentBackgroundNumber(Math.floor(Math.random() * settings.background_image_count)+1);
+    setIsLoading(false);
   }
 
   function continueAlongInitiative(): void {
@@ -220,7 +223,9 @@ useEffect(()=>{
   }
 
   return (
-    <div className={`app background${currentBackgroundNumber}`}>
+    <div className='appWrapper'>
+    {isLoading && <Loader/>}
+      {!isLoading && <div className={`app background${currentBackgroundNumber}`}>
         <Header />
         <div className='content'>
           <InitiativeList 
@@ -258,6 +263,7 @@ useEffect(()=>{
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
         <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects} deleteEffect={deleteEffect} editExistingEffect={editExistingEffect}/>
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
+    </div>}
     </div>
   )
 }

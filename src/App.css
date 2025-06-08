@@ -1,3 +1,10 @@
+.appWrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
 .app {
   color: antiquewhite;
   height: 100vh;
@@ -5,30 +12,20 @@
   position: absolute;
   display: flex;
   flex-direction: column;
+  background-position: right bottom;
+  background-size: 100% 100%;
 }
 
 .background1 {
-  background-image: url("/bg1.png");
+  background-image: url("/bg1.jpg");
 }
 
 .background2 {
-  background-image: url("/bg2.png");
+  background-image: url("/bg2.jpg");
 }
 
 .background3 {
-  background-image: url("/bg3.png");
-}
-
-.background4 {
-  background-image: url("/bg4.png");
-}
-
-.background5 {
-  background-image: url("/bg5.png");
-}
-
-.background6 {
-  background-image: url("/bg6.png");
+  background-image: url("/bg3.jpg");
 }
 
 .content {
