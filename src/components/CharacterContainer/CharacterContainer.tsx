@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import  ArrowDown from "../../assets/arrow-downward.svg";
-import  ArrowUp from "../../assets/arrow-upward.svg";
 import { Character, Effect } from '../../utils/interface';
 import './CharacterContainer.css';
 
