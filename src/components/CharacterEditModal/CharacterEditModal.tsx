@@ -40,6 +40,17 @@ export default function CharacterEditModal(props: Props) {
       props.saveCharacterChanges({...props.characterToEdit,name: name ||props.characterToEdit.name ,hitpoints: hitpoints|| props.characterToEdit.hitpoints ,initiativeScore: initiativeScore || props.characterToEdit.initiativeScore, defense: defense || props.characterToEdit.defense});
     }
     
+    clearModal();
+  }
+
+  function saveCharacterAndClose(){
+    if(!name && !props.characterToEdit.name)return;
+    if(props.characterToEdit.name ===''){
+      props.addCharacter({...props.characterToEdit,name, hitpoints, initiativeScore, defense});
+    }else{
+      props.saveCharacterChanges({...props.characterToEdit,name: name ||props.characterToEdit.name ,hitpoints: hitpoints|| props.characterToEdit.hitpoints ,initiativeScore: initiativeScore || props.characterToEdit.initiativeScore, defense: defense || props.characterToEdit.defense});
+    }
+    
     props.closeModal();
     clearModal();
   }
@@ -81,7 +92,8 @@ export default function CharacterEditModal(props: Props) {
             </tr>
           </tbody>
         </table>
-      <button onClick={saveCharacter} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Add new Character' : 'Save changes'}</button>
+      <button onClick={saveCharacter} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Add next Character' : 'Save changes'}</button>
+      <button onClick={saveCharacterAndClose} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Add new Character and save changes' : 'Save changes and close'}</button>
       </div>
       
     </Modal>
