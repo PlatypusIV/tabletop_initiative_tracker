@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import  ArrowDown from "../../assets/arrow-downward.svg";
+import  ArrowUp from "../../assets/arrow-upward.svg";
 import { Character, Effect } from '../../utils/interface';
 import './CharacterContainer.css';
 
@@ -127,12 +129,10 @@ export default function CharacterContainer(props:Props):JSX.Element {
           <div className='characterNameContainer'>
             <p>{character.name}</p>
           </div>
-          <div className='characterEditContainer'>
-            <button onClick={()=> openCharacterEditor(character.position)}>Edit</button>
-          </div>
           <div className='positionContainer'>
-              <button onClick={()=>changeCharacterPosition(character.position, '-')}>Up</button>
-              <button  onClick={()=>changeCharacterPosition(character.position, '+')}>Down</button>
+              <button className='characterDirectEditButton' onClick={()=> openCharacterEditor(character.position)}>Edit</button>
+              <button className='positionUpButton' onClick={()=>changeCharacterPosition(character.position, '-')} />
+              <button className='positionDownButton' onClick={()=>changeCharacterPosition(character.position, '+')} />
           </div>
         </div>
         <div className='characterContent'>
