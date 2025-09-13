@@ -20,6 +20,9 @@ export default function CharacterContainer(props:Props):JSX.Element {
   const [isHitpointInputVisible,setIsHitpointInputVisible] = useState(false);
   const [isInitiativeScoreInputVisible,setIsInitiativeScoreInputVisible] = useState<boolean>(false);
   const [isDefenseInputVisible,setIsDefenseInputVisible] = useState<boolean>(false);
+  const [characterEffectName, setCharacterEffectName] = useState<string>('');
+  const [characterEffectDescription, setCharacterEffectDescription] = useState<string>('');
+  const [characterEffectRounds, setCharacterEffectRounds] = useState<number>(0);
 
   function handleInitiativeScoreChange(): void {
     const newInitiativeScore = parseInt(currentInitiativeScore);
@@ -75,12 +78,44 @@ export default function CharacterContainer(props:Props):JSX.Element {
       return Object.keys(effectList).map(
         (effectId)=>
           {
-            return (<li key={effectList[effectId].name}>{`${effectList[effectId].name}: ${effectList[effectId].duration || 'N/A'}`} <button onClick={()=> removeEffectFromCharacter(effectId)} className='effectListRemoveButton'>X</button></li>)
+            return (<li key={effectList[effectId].name}>{`${effectList[effectId].name}: ${effectList[effectId].description || 'N/A'}: ${effectList[effectId].duration || 'N/A'}`} <button onClick={()=> removeEffectFromCharacter(effectId)} className='effectListRemoveButton'>X</button></li>)
           }
     )
     }else{
       return <></>
     }
+  }
+
+  function addEffectToCharacter(){
+    try {
+      if(!characterEffectName) return;
+      const tempCharaEffects: Record<string, Effect> = character.effects || {};
+      tempCharaEffects[characterEffectName] = {name:characterEffectName, duration: characterEffectRounds, description: characterEffectDescription || undefined};
+      character.effects = {...tempCharaEffects};
+      editCharacter(character, character.position);
+      clearCharacterEffectFields();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  //TODO: fix this naming
+  function validateNumber(value: string){
+    try {
+      if(isNaN(parseInt(value)) && value!==''){
+        window.alert("Incorrect input!");
+      }else {
+        setCharacterEffectRounds(parseInt(value));
+      }
+    } catch (_) {
+      window.alert("Unforeseen error!");
+    }
+  }
+
+  function clearCharacterEffectFields(){
+    setCharacterEffectName('');
+    setCharacterEffectDescription('');
+    setCharacterEffectRounds(0);
   }
 
   return (
@@ -135,6 +170,12 @@ export default function CharacterContainer(props:Props):JSX.Element {
           </div>
           <div className='effectContainer'>
             <label>Effect List </label>
+            <div className="createEffectContainer">
+              <input type="text" className='createEffectNameInput' placeholder='Name' value={characterEffectName} onChange={(e)=>{setCharacterEffectName(e.target.value)}}/>
+              <input type="text" className='createEffectDescriptionInput' placeholder='Effect' value={characterEffectDescription} onChange={(e)=>{setCharacterEffectDescription(e.target.value)}}/>
+              <input type="text" className='createEffectRoundInput' placeholder='Rounds' value={characterEffectRounds || 0} onChange={(e)=>{validateNumber(e.target.value)}}/> 
+              <button className='createEffectAddButton' onClick={addEffectToCharacter}>+</button>
+              </div>
             {renderEffectsList(character.effects)}
           </div>
         </div>

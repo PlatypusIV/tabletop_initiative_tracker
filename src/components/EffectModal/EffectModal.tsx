@@ -21,7 +21,7 @@ export default function EffectModal(props: Props) {
     const {effectList, createNewEffect, characterList, applyEffects, deleteEffect, editExistingEffect} = props;
     const [name, setName] = useState('');
     const [duration, setDuration] = useState<number>(0);
-    const [damagePerRound, setDamagePerRound] = useState<number | undefined>();
+    // const [damagePerRound, setDamagePerRound] = useState<number | undefined>();
     const [charactersToEffect, setCharactersToEffect] = useState<Record<number, boolean>>({});
     const [effectsToApply, setEffectsToApply] = useState<Record<string, boolean>>({});
 
@@ -34,7 +34,7 @@ export default function EffectModal(props: Props) {
             setDuration(newValueParsed);
             break;
           case 'damagePerRound':
-            setDamagePerRound(newValueParsed);
+            // setDamagePerRound(newValueParsed);
             break;
           default:
             break;
@@ -50,14 +50,14 @@ export default function EffectModal(props: Props) {
 
     function createEffect(){
       if(!name)return;
-      createNewEffect({name, duration, damagePerRound});
+      createNewEffect({name, duration});
       clearEffectFields();
     }
 
     function clearEffectFields(){
       setName('');
       setDuration(0);
-      setDamagePerRound(undefined);
+      // setDamagePerRound(undefined);
     }
 
     function setAffectedCharacters(isAffected: boolean, position: number){

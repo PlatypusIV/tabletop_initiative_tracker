@@ -1,29 +1,28 @@
 .initiativeList {
-    width: 85%;
-    max-height: inherit;
-    margin: 8px;
-    overflow-y: hidden;
-    overflow-x: scroll;
+  width: 85%;
+  max-height: inherit;
+  margin: 8px;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  -ms-overflow-style: none;
+}
+
+.initiativeList::-webkit-scrollbar {
+  display: none;
+}
+
+@media only screen and (max-width: 600px) {
+  .initiativeList {
+    width: 100%;
+    margin: 2px;
+    height: 70%;
+    overflow-y: scroll;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-}
-
-.initiativeList::-webkit-scrollbar{
-    display: none;
-}
-
-@media only screen and (max-width: 600px){
-    .initiativeList {
-        width: 100%;
-        margin: 2px;
-        height: 70%;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-    }
+    flex-wrap: nowrap;
+  }
 }
