@@ -60,13 +60,18 @@ export default function CharacterEditModal(props: Props) {
     setHitpoints(0);
     setInitiativeScore(0);
   }
+
+  function onSearchSavedCharacterInputChange(searchTerm:string){
+    console.log(searchTerm);
+  }
   
   return (
     <Modal isOpen={props.isOpen} className='characterEditModal'>
       <div className='characterEditCloseContainer'>
         <button onClick={()=>props.closeModal()} className='characterEditCloseButton'>X</button>
       </div>
-      <div className='characterEditContentContainer'>
+      <div className='characterAdditionContainer'>
+<div className='characterEditContentContainer'>
         <table>
           <tbody>
             <tr>
@@ -95,6 +100,18 @@ export default function CharacterEditModal(props: Props) {
       <button onClick={saveCharacter} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Add character' : 'Save changes'}</button>
       <button onClick={saveCharacterAndClose} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Save and exit' : 'Save changes and close'}</button>
       </div>
+
+      <div className='characterLoadContainer'>
+          <label htmlFor="savedCharacterSearch">Search by name:</label>
+          <input type="text" id="savedCharacterSearch" onChange={(e)=>onSearchSavedCharacterInputChange(e.target.value)}></input>
+          <div className='savedCharacteTableContainer'>
+          <table className='savedCharacterTable'>
+
+          </table>
+        </div>
+      </div>
+      </div>
+      
       
     </Modal>
   )
