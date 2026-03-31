@@ -40,3 +40,29 @@ export function getEffectsFromStorage(): Record<string, Effect> {
 export function setEffectsToStorage(effectList: Record<string, Effect>){
   window.localStorage.setItem(settings.effect_list_storage_key,JSON.stringify(effectList));
 }
+
+//TODO Logic for saving a list/array of characters to storage that can then be added back in later
+export function setSavedCharacterToStorage(characterToSave: Character): void {
+  //wrap into try catch, then add errorHandling
+  let savedCharacters = getAllSavedCharactersFromStorage();
+
+  const existingCharacterIndex = savedCharacters.findIndex(chara => chara.name.toLocaleLowerCase() === characterToSave.name.toLocaleLowerCase());
+  //if exists, overwrite, else add to list
+  if(existingCharacterIndex>-1){
+    savedCharacters[existingCharacterIndex] = characterToSave;
+  }else{
+    savedCharacters.push(characterToSave);
+  }
+
+  window.localStorage.setItem(settings.saved_character_collection_storage_key, JSON.stringify(savedCharacters));
+
+  //save character to list of stored characters, if character with same name doesnt exist
+}
+
+export function getAllSavedCharactersFromStorage(): Character[]{
+  const characterListString = window.localStorage.getItem(settings.saved_character_collection_storage_key);
+  if(!characterListString) return [];
+  const characterList = JSON.parse(characterListString);
+  return characterList as Character[];
+}
+
