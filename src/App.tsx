@@ -18,7 +18,6 @@ export default function App(): JSX.Element {
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
-  // const [isEffectModalOpen, setIsEffectModalOpen] = useState<boolean>(false);
   const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
   const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
   const [currentBackgroundNumber, setCurrentBackgroundNumber] = useState(1);
@@ -163,45 +162,6 @@ useEffect(()=>{
     setInitiativeQueue([...remapCharacterPositions(temp)]);
   }
 
-  // function createNewEffect(effectToCreate: Effect){
-  //   const newEffectList = effectList;
-  //   newEffectList[uuidv4()] = effectToCreate;
-  //   setEffectList({...newEffectList});
-  // }
-
-  // function editExistingEffect(effectId: string, editedEffect: Effect){
-  //   const temp = effectList;
-  //   temp[effectId] = editedEffect;
-  //   setEffectList({...temp});
-  // }
-
-  //TODO improve this
-  // function applyEffects(effectIdList: string[], characterPositionList: string[]){
-  //   const tempInitiativeQueue = initiativeQueue;
-  //   const effectsToApply: Record<string, Effect> = {};
-
-  //   effectIdList.forEach(id => {
-  //     effectsToApply[id] = {...effectList[id]};
-  //   });
-
-  //   for(let i =0; i<characterPositionList.length;i++){
-  //     const temp = parseInt(characterPositionList[i]);
-
-  //     tempInitiativeQueue[temp].effects = {...tempInitiativeQueue[temp].effects, ...effectsToApply};
-  //   }
-
-  //   setInitiativeQueue([...tempInitiativeQueue]);
-  // }
-
-  // function deleteEffect(effectId: string){ 
-  //   const temp = effectList;
-  //   delete temp[effectId];
-  //   setEffectList({...temp});
-  //   if(Object.keys(temp).length ===0){
-  //     setEffectsToStorage({});
-  //   }
-  // }
-
   function progressEffects(){
     const tempCharacterQueue = initiativeQueue;
     for(let i = 0;i<tempCharacterQueue.length;i++){
@@ -249,7 +209,6 @@ useEffect(()=>{
                     <button onClick={()=>setIsCharacterEditModalOpen(true)} className='addCharacterButton'>Add character</button>
                 </div>
                 <div className='extraButtons'>
-                  {/* <button onClick={()=>setIsEffectModalOpen(true)}>Open effects</button> */}
                   <button onClick={sortByInitiativeScore}>Sort by initiative</button>
                   <button onClick={resetRound} className='resetRondButton'>Reset round</button>
                   <button onClick={()=>setIsWarningPromptOpen(true)} className='clearInitiativeButton'>Clear all</button>
@@ -259,7 +218,6 @@ useEffect(()=>{
           </div>
         <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
-        {/* <EffectModal isOpen={isEffectModalOpen} closeModal={()=> setIsEffectModalOpen(false)} createNewEffect={createNewEffect} effectList={effectList} characterList={initiativeQueue} applyEffects={applyEffects} deleteEffect={deleteEffect} editExistingEffect={editExistingEffect}/> */}
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
     </div>}
     </div>
