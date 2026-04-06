@@ -8,8 +8,6 @@ import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
 import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getEffectsFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage, setEffectsToStorage } from './utils/utility';
-// import EffectModal from './components/EffectModal/EffectModal';
-// import {v4 as uuidv4} from 'uuid';
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import Loader from './components/Loader/Loader';
