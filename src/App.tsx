@@ -33,7 +33,6 @@ export default function App(): JSX.Element {
   },[]);
   //add initiative queue key to env variables and separate functions from app file
   useEffect(()=>{ 
-    console.log("Store initiative queue " + storeInitiativeQueue); 
     if(!storeInitiativeQueue.length){
         dispatch(editInitiativeQueue(getCharactersFromStorage()));
     }
@@ -47,8 +46,6 @@ export default function App(): JSX.Element {
   },[]);
 
   useEffect(()=>{
-    console.log("Store initiative queue " + JSON.stringify(storeInitiativeQueue)); 
-
       if(storeInitiativeQueue.length){
         setCharactersToStorage([...storeInitiativeQueue]);
       }
