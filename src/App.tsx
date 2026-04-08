@@ -7,14 +7,13 @@ import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
-import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getEffectsFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage, setEffectsToStorage } from './utils/utility';
+import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage } from './utils/utility';
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import Loader from './components/Loader/Loader';
 
 export default function App(): JSX.Element {
   const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
-  const [effectList, setEffectList] = useState<Record<string,Effect>>({});
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
@@ -32,9 +31,6 @@ export default function App(): JSX.Element {
     if(!initiativeQueue.length){
         setInitiativeQueue(getCharactersFromStorage());
     }
-    if(!Object.keys(effectList).length){
-      setEffectList(getEffectsFromStorage());
-    }
     const temp = getCurrentCharacterNumberFromStorage();
     if(temp){
       setCurrentCharacterNumber(temp);
@@ -46,12 +42,6 @@ export default function App(): JSX.Element {
         setCharactersToStorage(initiativeQueue);
       }
   },[initiativeQueue]);
-
-  useEffect(()=>{
-    if(Object.keys(effectList).length){
-      setEffectsToStorage(effectList);
-    }
-  },[effectList]);
 
 useEffect(()=>{
     setCurrentCharacterNumberToStorage(currentCharacterNumber);
