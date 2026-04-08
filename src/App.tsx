@@ -11,9 +11,14 @@ import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getEffe
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import Loader from './components/Loader/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './state/store';
+import { clearInitiativeQueueStore, editInitiativeQueue } from './state/initiativeQueueSlice';
 
 export default function App(): JSX.Element {
-  const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
+  const storeInitiativeQueue = useSelector((state: RootState)=> state.initiativeQueue.initiativeQueue);
+  const dispatch = useDispatch();
+  // const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
   const [effectList, setEffectList] = useState<Record<string,Effect>>({});
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
@@ -28,9 +33,11 @@ export default function App(): JSX.Element {
     setBackground();
   },[]);
   //add initiative queue key to env variables and separate functions from app file
-  useEffect(()=>{    
-    if(!initiativeQueue.length){
-        setInitiativeQueue(getCharactersFromStorage());
+  useEffect(()=>{ 
+    console.log("Store initiative queue " + storeInitiativeQueue); 
+    if(!storeInitiativeQueue.length){
+        // setInitiativeQueue(getCharactersFromStorage());
+        dispatch(editInitiativeQueue(getCharactersFromStorage()));
     }
     if(!Object.keys(effectList).length){
       setEffectList(getEffectsFromStorage());
@@ -42,10 +49,15 @@ export default function App(): JSX.Element {
   },[]);
 
   useEffect(()=>{
-      if(initiativeQueue.length){
-        setCharactersToStorage(initiativeQueue);
+    console.log("Store initiative queue " + JSON.stringify(storeInitiativeQueue)); 
+
+      if(storeInitiativeQueue.length){
+        setCharactersToStorage([...storeInitiativeQueue]);
       }
-  },[initiativeQueue]);
+      // if(initiativeQueue.length){
+      //   setCharactersToStorage(initiativeQueue);
+      // }
+  },[storeInitiativeQueue]);
 
   useEffect(()=>{
     if(Object.keys(effectList).length){
@@ -69,9 +81,9 @@ useEffect(()=>{
   }
 
   function continueAlongInitiative(): void {
-    if(initiativeQueue.length){
+    if(storeInitiativeQueue.length){
       let temp;
-      if(currentCharacterNumber >= initiativeQueue.length-1){
+      if(currentCharacterNumber >= storeInitiativeQueue.length-1){
         temp = 0;
         setCurrentRoundNumber(currentRoundNumber+1);
         progressEffects();
@@ -83,27 +95,34 @@ useEffect(()=>{
   }
 
   function addNewCharacterToQueue(character:Character): void {
-    const temp = initiativeQueue;
-    character.position=initiativeQueue.length;
+    const temp = [...storeInitiativeQueue];
+    character.position=storeInitiativeQueue.length;
     temp.push(character);
-    setInitiativeQueue([...temp]);
+    // setInitiativeQueue([...temp]);
+    dispatch(editInitiativeQueue([...temp]));
   }
 
   //this is not the best, but il make it better after the mvp is out
   function removeCharacterFromQueue(positionToRemove: number): void {
-    initiativeQueue.splice(positionToRemove,1);
-    setInitiativeQueue([...remapCharacterPositions(initiativeQueue)]);
-    if(initiativeQueue.length===0){
+    
+    // initiativeQueue.splice(positionToRemove,1);
+    // setInitiativeQueue([...remapCharacterPositions(initiativeQueue)]);
+
+    const temp = [...storeInitiativeQueue];
+    temp.splice(positionToRemove,1);
+    dispatch(editInitiativeQueue([...remapCharacterPositions(temp)]));
+
+    if(storeInitiativeQueue.length===0){
       setCharactersToStorage([]);
     }
 
-    if(positionToRemove=== currentCharacterNumber && currentCharacterNumber === initiativeQueue.length){
-      setCurrentCharacterNumber(initiativeQueue.length-1);
+    if(positionToRemove=== currentCharacterNumber && currentCharacterNumber === storeInitiativeQueue.length){
+      setCurrentCharacterNumber(storeInitiativeQueue.length-1);
     }
   }
 
   function changeQueuePosition(position: number, change: "+"| "-"){
-    const temp = initiativeQueue;
+    const temp = [...storeInitiativeQueue];
     const characterToMove = temp[position];
     if(change=== "-"){
       if(position-1<0)return;
@@ -111,7 +130,7 @@ useEffect(()=>{
       temp.splice(position-1,0,characterToMove);
 
     }else{
-      if(position+1>initiativeQueue.length)return;
+      if(position+1>storeInitiativeQueue.length)return;
       temp.splice(position,1);
       temp.splice(position+1,0,characterToMove);
     }
@@ -120,12 +139,17 @@ useEffect(()=>{
       ...char,
       position: index,
     }});
-    setInitiativeQueue([...changedInitiativeQueue]);
+    // setInitiativeQueue([...changedInitiativeQueue]);
+    dispatch(editInitiativeQueue([...changedInitiativeQueue]));
   }
 
   function clearInitiativeQueue(confirmation:boolean) {
     if(confirmation){
-      setInitiativeQueue([]);
+
+      dispatch(clearInitiativeQueueStore());
+
+
+      // setInitiativeQueue([]);
       setCharactersToStorage([]);
       setCurrentCharacterNumberToStorage(0);
       setCurrentCharacterNumber(0);
@@ -141,29 +165,32 @@ useEffect(()=>{
   }
 
   function openCharacterEditor(position: number){
-    setCharacterBeingEdited(initiativeQueue[position]);
+    setCharacterBeingEdited(storeInitiativeQueue[position]);
     setIsCharacterEditModalOpen(true);
   }
 
   function editCharacterStats(character: Character, position: number){
-    const temp = initiativeQueue;
+    const temp = [...storeInitiativeQueue];
     temp[position] = character;
-    setInitiativeQueue([...temp]);
+    // setInitiativeQueue([...temp]);
+    dispatch(editInitiativeQueue([...temp]))
   }
 
   function saveCharacterChanges(character: Character){
-    const temp = initiativeQueue;
+    const temp = [...storeInitiativeQueue];
     temp[characterBeingEdited.position] = character;
-    setInitiativeQueue([...temp]);
+    // setInitiativeQueue([...temp]);
+    dispatch(editInitiativeQueue([...temp]))
   }
 
   function sortByInitiativeScore(){
-    const temp = initiativeQueue.sort((a,b)=>(b.initiativeScore || 0) - (a.initiativeScore || 0));
-    setInitiativeQueue([...remapCharacterPositions(temp)]);
+    const temp = [...storeInitiativeQueue].sort((a,b)=>(b.initiativeScore || 0) - (a.initiativeScore || 0));
+    // setInitiativeQueue([...remapCharacterPositions(temp)]);
+    dispatch(editInitiativeQueue([...remapCharacterPositions(temp)]));
   }
 
   function progressEffects(){
-    const tempCharacterQueue = initiativeQueue;
+    const tempCharacterQueue = [...storeInitiativeQueue];
     for(let i = 0;i<tempCharacterQueue.length;i++){
       if(tempCharacterQueue[i].effects){
         const characterEffectList = tempCharacterQueue[i].effects as Record<string, Effect>;
@@ -177,7 +204,8 @@ useEffect(()=>{
         });
       }
     }
-    setInitiativeQueue([...tempCharacterQueue]);
+    // setInitiativeQueue([...tempCharacterQueue]);
+    dispatch(editInitiativeQueue([...tempCharacterQueue]));
   }
 
   return (
@@ -187,7 +215,7 @@ useEffect(()=>{
         <Header />
         <div className='content'>
           <InitiativeList 
-          initiativeQueue={initiativeQueue}
+          initiativeQueue={storeInitiativeQueue}
            removeCharacter={removeCharacterFromQueue}
             editCharacter={editCharacterStats}
             openCharacterEditor={openCharacterEditor}

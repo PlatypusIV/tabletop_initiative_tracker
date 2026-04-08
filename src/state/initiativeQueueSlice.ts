@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Character } from "../utils/interface";
 
 interface InitiativeQueueState {
@@ -13,13 +13,21 @@ const initiativeQueueSlice = createSlice({
   name: "initiativeQueue",
   initialState: initialInitiativeQueueState,
   reducers: {
-    clearInitiativeQueue: (state) => {
+    clearInitiativeQueueStore: (state) => {
       state.initiativeQueue = [];
     },
-    removeCharacterFromQueue: (state, action) => {},
+    editInitiativeQueue: (state, action: PayloadAction<Character[]>) => {
+      state.initiativeQueue = action.payload;
+    },
     //this is changeQueuePosition in app.tsx
     changeQueueOrder: (state, action) => {},
   },
 });
+
+export const {
+  clearInitiativeQueueStore,
+  changeQueueOrder,
+  editInitiativeQueue,
+} = initiativeQueueSlice.actions;
 
 export default initiativeQueueSlice.reducer;
