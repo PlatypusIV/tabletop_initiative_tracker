@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import settings from './/utils/settings.json';
+import settings from './utils/settings.json';
 import './App.css';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -18,7 +18,6 @@ import { clearInitiativeQueueStore, editInitiativeQueue } from './state/initiati
 export default function App(): JSX.Element {
   const storeInitiativeQueue = useSelector((state: RootState)=> state.initiativeQueue.initiativeQueue);
   const dispatch = useDispatch();
-  // const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
   const [effectList, setEffectList] = useState<Record<string,Effect>>({});
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
@@ -36,7 +35,6 @@ export default function App(): JSX.Element {
   useEffect(()=>{ 
     console.log("Store initiative queue " + storeInitiativeQueue); 
     if(!storeInitiativeQueue.length){
-        // setInitiativeQueue(getCharactersFromStorage());
         dispatch(editInitiativeQueue(getCharactersFromStorage()));
     }
     if(!Object.keys(effectList).length){
@@ -54,9 +52,6 @@ export default function App(): JSX.Element {
       if(storeInitiativeQueue.length){
         setCharactersToStorage([...storeInitiativeQueue]);
       }
-      // if(initiativeQueue.length){
-      //   setCharactersToStorage(initiativeQueue);
-      // }
   },[storeInitiativeQueue]);
 
   useEffect(()=>{
@@ -98,16 +93,11 @@ useEffect(()=>{
     const temp = [...storeInitiativeQueue];
     character.position=storeInitiativeQueue.length;
     temp.push(character);
-    // setInitiativeQueue([...temp]);
     dispatch(editInitiativeQueue([...temp]));
   }
 
   //this is not the best, but il make it better after the mvp is out
   function removeCharacterFromQueue(positionToRemove: number): void {
-    
-    // initiativeQueue.splice(positionToRemove,1);
-    // setInitiativeQueue([...remapCharacterPositions(initiativeQueue)]);
-
     const temp = [...storeInitiativeQueue];
     temp.splice(positionToRemove,1);
     dispatch(editInitiativeQueue([...remapCharacterPositions(temp)]));
@@ -139,7 +129,6 @@ useEffect(()=>{
       ...char,
       position: index,
     }});
-    // setInitiativeQueue([...changedInitiativeQueue]);
     dispatch(editInitiativeQueue([...changedInitiativeQueue]));
   }
 
@@ -148,8 +137,6 @@ useEffect(()=>{
 
       dispatch(clearInitiativeQueueStore());
 
-
-      // setInitiativeQueue([]);
       setCharactersToStorage([]);
       setCurrentCharacterNumberToStorage(0);
       setCurrentCharacterNumber(0);
@@ -172,20 +159,17 @@ useEffect(()=>{
   function editCharacterStats(character: Character, position: number){
     const temp = [...storeInitiativeQueue];
     temp[position] = character;
-    // setInitiativeQueue([...temp]);
     dispatch(editInitiativeQueue([...temp]))
   }
 
   function saveCharacterChanges(character: Character){
     const temp = [...storeInitiativeQueue];
     temp[characterBeingEdited.position] = character;
-    // setInitiativeQueue([...temp]);
     dispatch(editInitiativeQueue([...temp]))
   }
 
   function sortByInitiativeScore(){
     const temp = [...storeInitiativeQueue].sort((a,b)=>(b.initiativeScore || 0) - (a.initiativeScore || 0));
-    // setInitiativeQueue([...remapCharacterPositions(temp)]);
     dispatch(editInitiativeQueue([...remapCharacterPositions(temp)]));
   }
 
@@ -204,7 +188,6 @@ useEffect(()=>{
         });
       }
     }
-    // setInitiativeQueue([...tempCharacterQueue]);
     dispatch(editInitiativeQueue([...tempCharacterQueue]));
   }
 
