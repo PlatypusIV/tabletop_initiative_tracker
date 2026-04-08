@@ -12,16 +12,19 @@ import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContain
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import Loader from './components/Loader/Loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from './state/store';
-import { clearInitiativeQueueStore, editInitiativeQueue } from './state/initiativeQueueSlice';
+import { RootState,
+  clearInitiativeQueueStore,
+  editInitiativeQueue,
+  editSelectedCharacter,  } from './state/store';
+
 
 export default function App(): JSX.Element {
-  const storeInitiativeQueue = useSelector((state: RootState)=> state.initiativeQueue.initiativeQueue);
   const dispatch = useDispatch();
+  const storeInitiativeQueue = useSelector((state: RootState)=> state.initiativeQueue.initiativeQueue);
+  const storeCharacterBeingEdited = useSelector((state: RootState)=>state.characterBeingEdited.characterBeingEdited);
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
-  const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
   const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
   const [currentBackgroundNumber, setCurrentBackgroundNumber] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,7 +56,7 @@ useEffect(()=>{
 
 useEffect(()=>{
   if(!isCharacterEditModalOpen){
-    setCharacterBeingEdited({name:'', position:0,initiativeScore:0, hitpoints: 0});
+    dispatch(editSelectedCharacter({name:'', position:0,initiativeScore:0, hitpoints: 0}));
   }
 }, [isCharacterEditModalOpen]);
 
@@ -139,7 +142,7 @@ useEffect(()=>{
   }
 
   function openCharacterEditor(position: number){
-    setCharacterBeingEdited(storeInitiativeQueue[position]);
+    dispatch(editSelectedCharacter({...storeInitiativeQueue[position]}));
     setIsCharacterEditModalOpen(true);
   }
 
@@ -151,7 +154,7 @@ useEffect(()=>{
 
   function saveCharacterChanges(character: Character){
     const temp = [...storeInitiativeQueue];
-    temp[characterBeingEdited.position] = character;
+    temp[storeCharacterBeingEdited.position] = character;
     dispatch(editInitiativeQueue([...temp]))
   }
 
@@ -215,7 +218,7 @@ useEffect(()=>{
             </div>
           </div>
         <Footer />
-        <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
+        <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
     </div>}
     </div>

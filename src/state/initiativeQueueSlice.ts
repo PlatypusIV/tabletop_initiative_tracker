@@ -5,9 +5,13 @@ interface InitiativeQueueState {
   initiativeQueue: Character[];
 }
 
+
+
 const initialInitiativeQueueState: InitiativeQueueState = {
   initiativeQueue: [],
 };
+
+
 
 const initiativeQueueSlice = createSlice({
   name: "initiativeQueue",
@@ -19,15 +23,10 @@ const initiativeQueueSlice = createSlice({
     editInitiativeQueue: (state, action: PayloadAction<Character[]>) => {
       state.initiativeQueue = action.payload;
     },
-    //this is changeQueuePosition in app.tsx
-    changeQueueOrder: (state, action) => {},
   },
 });
 
-export const {
-  clearInitiativeQueueStore,
-  changeQueueOrder,
-  editInitiativeQueue,
-} = initiativeQueueSlice.actions;
+export const { clearInitiativeQueueStore, editInitiativeQueue } =
+  initiativeQueueSlice.actions;
 
 export default initiativeQueueSlice.reducer;
