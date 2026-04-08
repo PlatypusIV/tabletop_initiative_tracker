@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import settings from './/utils/settings.json';
+import settings from './utils/settings.json';
 import './App.css';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
@@ -11,13 +11,20 @@ import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, remapCh
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import Loader from './components/Loader/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState,
+  clearInitiativeQueueStore,
+  editInitiativeQueue,
+  editSelectedCharacter,  } from './state/store';
+
 
 export default function App(): JSX.Element {
-  const [initiativeQueue, setInitiativeQueue] = useState<Character[]>([]);
+  const dispatch = useDispatch();
+  const storeInitiativeQueue = useSelector((state: RootState)=> state.initiativeQueue.initiativeQueue);
+  const storeCharacterBeingEdited = useSelector((state: RootState)=>state.characterBeingEdited.characterBeingEdited);
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
-  const [characterBeingEdited,setCharacterBeingEdited] = useState<Character>({name:'', position:0,initiativeScore:0, hitpoints: 0});
   const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
   const [currentBackgroundNumber, setCurrentBackgroundNumber] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,9 +34,9 @@ export default function App(): JSX.Element {
     setBackground();
   },[]);
   //add initiative queue key to env variables and separate functions from app file
-  useEffect(()=>{    
-    if(!initiativeQueue.length){
-        setInitiativeQueue(getCharactersFromStorage());
+  useEffect(()=>{ 
+    if(!storeInitiativeQueue.length){
+        dispatch(editInitiativeQueue(getCharactersFromStorage()));
     }
     const temp = getCurrentCharacterNumberFromStorage();
     if(temp){
@@ -38,10 +45,10 @@ export default function App(): JSX.Element {
   },[]);
 
   useEffect(()=>{
-      if(initiativeQueue.length){
-        setCharactersToStorage(initiativeQueue);
+      if(storeInitiativeQueue.length){
+        setCharactersToStorage([...storeInitiativeQueue]);
       }
-  },[initiativeQueue]);
+  },[storeInitiativeQueue]);
 
 useEffect(()=>{
     setCurrentCharacterNumberToStorage(currentCharacterNumber);
@@ -49,7 +56,7 @@ useEffect(()=>{
 
 useEffect(()=>{
   if(!isCharacterEditModalOpen){
-    setCharacterBeingEdited({name:'', position:0,initiativeScore:0, hitpoints: 0});
+    dispatch(editSelectedCharacter({name:'', position:0,initiativeScore:0, hitpoints: 0}));
   }
 }, [isCharacterEditModalOpen]);
 
@@ -59,9 +66,9 @@ useEffect(()=>{
   }
 
   function continueAlongInitiative(): void {
-    if(initiativeQueue.length){
+    if(storeInitiativeQueue.length){
       let temp;
-      if(currentCharacterNumber >= initiativeQueue.length-1){
+      if(currentCharacterNumber >= storeInitiativeQueue.length-1){
         temp = 0;
         setCurrentRoundNumber(currentRoundNumber+1);
         progressEffects();
@@ -73,27 +80,29 @@ useEffect(()=>{
   }
 
   function addNewCharacterToQueue(character:Character): void {
-    const temp = initiativeQueue;
-    character.position=initiativeQueue.length;
+    const temp = [...storeInitiativeQueue];
+    character.position=storeInitiativeQueue.length;
     temp.push(character);
-    setInitiativeQueue([...temp]);
+    dispatch(editInitiativeQueue([...temp]));
   }
 
   //this is not the best, but il make it better after the mvp is out
   function removeCharacterFromQueue(positionToRemove: number): void {
-    initiativeQueue.splice(positionToRemove,1);
-    setInitiativeQueue([...remapCharacterPositions(initiativeQueue)]);
-    if(initiativeQueue.length===0){
+    const temp = [...storeInitiativeQueue];
+    temp.splice(positionToRemove,1);
+    dispatch(editInitiativeQueue([...remapCharacterPositions(temp)]));
+
+    if(storeInitiativeQueue.length===0){
       setCharactersToStorage([]);
     }
 
-    if(positionToRemove=== currentCharacterNumber && currentCharacterNumber === initiativeQueue.length){
-      setCurrentCharacterNumber(initiativeQueue.length-1);
+    if(positionToRemove=== currentCharacterNumber && currentCharacterNumber === storeInitiativeQueue.length){
+      setCurrentCharacterNumber(storeInitiativeQueue.length-1);
     }
   }
 
   function changeQueuePosition(position: number, change: "+"| "-"){
-    const temp = initiativeQueue;
+    const temp = [...storeInitiativeQueue];
     const characterToMove = temp[position];
     if(change=== "-"){
       if(position-1<0)return;
@@ -101,7 +110,7 @@ useEffect(()=>{
       temp.splice(position-1,0,characterToMove);
 
     }else{
-      if(position+1>initiativeQueue.length)return;
+      if(position+1>storeInitiativeQueue.length)return;
       temp.splice(position,1);
       temp.splice(position+1,0,characterToMove);
     }
@@ -110,12 +119,14 @@ useEffect(()=>{
       ...char,
       position: index,
     }});
-    setInitiativeQueue([...changedInitiativeQueue]);
+    dispatch(editInitiativeQueue([...changedInitiativeQueue]));
   }
 
   function clearInitiativeQueue(confirmation:boolean) {
     if(confirmation){
-      setInitiativeQueue([]);
+
+      dispatch(clearInitiativeQueueStore());
+
       setCharactersToStorage([]);
       setCurrentCharacterNumberToStorage(0);
       setCurrentCharacterNumber(0);
@@ -131,29 +142,29 @@ useEffect(()=>{
   }
 
   function openCharacterEditor(position: number){
-    setCharacterBeingEdited(initiativeQueue[position]);
+    dispatch(editSelectedCharacter({...storeInitiativeQueue[position]}));
     setIsCharacterEditModalOpen(true);
   }
 
   function editCharacterStats(character: Character, position: number){
-    const temp = initiativeQueue;
+    const temp = [...storeInitiativeQueue];
     temp[position] = character;
-    setInitiativeQueue([...temp]);
+    dispatch(editInitiativeQueue([...temp]))
   }
 
   function saveCharacterChanges(character: Character){
-    const temp = initiativeQueue;
-    temp[characterBeingEdited.position] = character;
-    setInitiativeQueue([...temp]);
+    const temp = [...storeInitiativeQueue];
+    temp[storeCharacterBeingEdited.position] = character;
+    dispatch(editInitiativeQueue([...temp]))
   }
 
   function sortByInitiativeScore(){
-    const temp = initiativeQueue.sort((a,b)=>(b.initiativeScore || 0) - (a.initiativeScore || 0));
-    setInitiativeQueue([...remapCharacterPositions(temp)]);
+    const temp = [...storeInitiativeQueue].sort((a,b)=>(b.initiativeScore || 0) - (a.initiativeScore || 0));
+    dispatch(editInitiativeQueue([...remapCharacterPositions(temp)]));
   }
 
   function progressEffects(){
-    const tempCharacterQueue = initiativeQueue;
+    const tempCharacterQueue = [...storeInitiativeQueue];
     for(let i = 0;i<tempCharacterQueue.length;i++){
       if(tempCharacterQueue[i].effects){
         const characterEffectList = tempCharacterQueue[i].effects as Record<string, Effect>;
@@ -167,7 +178,7 @@ useEffect(()=>{
         });
       }
     }
-    setInitiativeQueue([...tempCharacterQueue]);
+    dispatch(editInitiativeQueue([...tempCharacterQueue]));
   }
 
   return (
@@ -177,7 +188,7 @@ useEffect(()=>{
         <Header />
         <div className='content'>
           <InitiativeList 
-          initiativeQueue={initiativeQueue}
+          initiativeQueue={storeInitiativeQueue}
            removeCharacter={removeCharacterFromQueue}
             editCharacter={editCharacterStats}
             openCharacterEditor={openCharacterEditor}
@@ -207,7 +218,7 @@ useEffect(()=>{
             </div>
           </div>
         <Footer />
-        <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} characterToEdit={characterBeingEdited} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
+        <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
     </div>}
     </div>

@@ -44,6 +44,10 @@ A lightweight React app for tracking initiative and effects during Dungeons & Dr
 
 ## Update Log
 
+### v1.1.0
+
+- Added Redux Toolkit
+
 ### v1.0.0
 
 - Initial release.
