@@ -16,7 +16,8 @@ import { RootState,
   clearInitiativeQueueStore,
   editInitiativeQueue,
   editSelectedCharacter,
-  setSavedCharacterCollection,  } from './state/store';
+  setSavedCharacterCollection
+ } from './state/store';
 
 
 export default function App(): JSX.Element {
@@ -55,6 +56,7 @@ export default function App(): JSX.Element {
       if(storeInitiativeQueue.length){
         setCharactersToStorage([...storeInitiativeQueue]);
       }
+
   },[storeInitiativeQueue]);
 
 useEffect(()=>{
@@ -99,7 +101,8 @@ useEffect(()=>{
     temp.splice(positionToRemove,1);
     dispatch(editInitiativeQueue([...remapCharacterPositions(temp)]));
 
-    if(storeInitiativeQueue.length===0){
+    if(!temp.length){
+      dispatch(clearInitiativeQueueStore());
       setCharactersToStorage([]);
     }
 
