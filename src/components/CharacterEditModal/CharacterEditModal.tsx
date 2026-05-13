@@ -2,16 +2,19 @@ import { useState } from 'react';
 import './CharacterEditModal.css';
 import { Character } from '../../utils/interface';
 import Modal from 'react-modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, clearCharacterEdit } from '../../state/store';
 
 interface Props {
     isOpen: boolean;
-    characterToEdit: Character;
     closeModal: ()=> void;
     saveCharacterChanges: (character:Character)=> void;
     addCharacter: (character: Character)=> void;
 }
 
 export default function CharacterEditModal(props: Props) {
+  const dispatch = useDispatch();
+  const characterToEdit = useSelector((state: RootState)=> state.characterBeingEdited.characterBeingEdited);
   const [name,setName] = useState<string>('');
   const [hitpoints,setHitpoints] = useState(0);
   const [initiativeScore,setInitiativeScore] = useState(0);
@@ -33,22 +36,22 @@ export default function CharacterEditModal(props: Props) {
   }
 
   function saveCharacter(){
-    if(!name && !props.characterToEdit.name)return;
-    if(props.characterToEdit.name ===''){
-      props.addCharacter({...props.characterToEdit,name, hitpoints, initiativeScore, defense});
-      clearModal();
+    if(!name && !characterToEdit.name)return;
+    if(characterToEdit.name ===''){
+      props.addCharacter({...characterToEdit,name, hitpoints, initiativeScore, defense});
     }else{
-      props.saveCharacterChanges({...props.characterToEdit,name: name ||props.characterToEdit.name ,hitpoints: hitpoints|| props.characterToEdit.hitpoints ,initiativeScore: initiativeScore || props.characterToEdit.initiativeScore, defense: defense || props.characterToEdit.defense});
+      props.saveCharacterChanges({...characterToEdit,name: name ||characterToEdit.name ,hitpoints: hitpoints|| characterToEdit.hitpoints ,initiativeScore: initiativeScore || characterToEdit.initiativeScore, defense: defense || characterToEdit.defense});
     }
+    clearModal();
     
   }
 
   function saveCharacterAndClose(){
-    if(!name && !props.characterToEdit.name)return;
-    if(props.characterToEdit.name ===''){
-      props.addCharacter({...props.characterToEdit,name, hitpoints, initiativeScore, defense});
+    if(!name && !characterToEdit.name)return;
+    if(characterToEdit.name ===''){
+      props.addCharacter({...characterToEdit,name, hitpoints, initiativeScore, defense});
     }else{
-      props.saveCharacterChanges({...props.characterToEdit,name: name ||props.characterToEdit.name ,hitpoints: hitpoints|| props.characterToEdit.hitpoints ,initiativeScore: initiativeScore || props.characterToEdit.initiativeScore, defense: defense || props.characterToEdit.defense});
+      props.saveCharacterChanges({...characterToEdit,name: name ||characterToEdit.name ,hitpoints: hitpoints|| characterToEdit.hitpoints ,initiativeScore: initiativeScore || characterToEdit.initiativeScore, defense: defense || characterToEdit.defense});
     }
     
     props.closeModal();
@@ -56,9 +59,11 @@ export default function CharacterEditModal(props: Props) {
   }
 
   function clearModal(){
+    dispatch(clearCharacterEdit());
     setName('');
     setHitpoints(0);
     setInitiativeScore(0);
+    setDefense('ac: 0, ff: 0, t: 0');
   }
 
   function onSearchSavedCharacterInputChange(searchTerm:string){
@@ -68,7 +73,10 @@ export default function CharacterEditModal(props: Props) {
   return (
     <Modal isOpen={props.isOpen} className='characterEditModal'>
       <div className='characterEditCloseContainer'>
-        <button onClick={()=>props.closeModal()} className='characterEditCloseButton'>X</button>
+        <button onClick={()=>{
+          props.closeModal();
+          clearModal();
+          }} className='characterEditCloseButton'>X</button>
       </div>
       <div className='characterAdditionContainer'>
 <div className='characterEditContentContainer'>
@@ -78,27 +86,27 @@ export default function CharacterEditModal(props: Props) {
               <td><label htmlFor="nameInput">Name:</label></td>
             
             <td>
-              <input id='nameInput' type='text' placeholder={props.characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)}/>
+              <input id='nameInput' type='text' placeholder={characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)} value={name ||  characterToEdit?.name}/>
             </td>
             </tr>
             <tr>
               <td><label htmlFor="hitpointInput">Hitpoints: </label></td>
-              <td><input type="number" name="hitpointInput" id="hitpointInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)}/></td>
+              <td><input type="number" name="hitpointInput" id="hitpointInput" placeholder={characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)} value={hitpoints || characterToEdit.hitpoints}/></td>
             </tr>
             <tr>
               <td><label htmlFor="initiativeScoreInput">Initiative score: </label></td>
-              <td><input type="number" name="initiativeScoreInput" id="initiativeScoreInput" placeholder={props.characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onInitiativeScoreChange(e.target.value)}/>
+              <td><input type="number" name="initiativeScoreInput" id="initiativeScoreInput" placeholder={characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onInitiativeScoreChange(e.target.value)} value={initiativeScore || characterToEdit.initiativeScore}/>
               </td>
             </tr>
             <tr>
               <td><label htmlFor="defenseInput">Defense: </label></td>
-              <td><input type="text" name="defenseInput" id="defenseInput" placeholder={props.characterToEdit.defense?.toString() || 'ac: 0, ff:0, t:0'} onChange={(e)=>onDefenseChange(e.target.value)}/>
+              <td><input type="text" name="defenseInput" id="defenseInput" placeholder={characterToEdit.defense?.toString() || 'ac: 0, ff:0, t:0'} onChange={(e)=>onDefenseChange(e.target.value)} value={defense || characterToEdit.defense}/>
               </td>
             </tr>
           </tbody>
         </table>
-      <button onClick={saveCharacter} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Add character' : 'Save changes'}</button>
-      <button onClick={saveCharacterAndClose} className='characterEditConfirmButton'>{props.characterToEdit.name=== '' ? 'Save and exit' : 'Save changes and close'}</button>
+      <button onClick={saveCharacter} className='characterEditConfirmButton'>{characterToEdit.name=== '' ? 'Add character' : 'Save changes'}</button>
+      <button onClick={saveCharacterAndClose} className='characterEditConfirmButton'>{characterToEdit.name=== '' ? 'Save and exit' : 'Save changes and close'}</button>
       </div>
 
       <div className='characterLoadContainer'>
