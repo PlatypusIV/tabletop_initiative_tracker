@@ -7,7 +7,7 @@ import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
-import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage } from './utils/utility';
+import { getAllSavedCharactersFromStorage, getCharactersFromStorage, getCurrentCharacterNumberFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage, setSavedCharacterToStorage } from './utils/utility';
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import Loader from './components/Loader/Loader';
@@ -15,13 +15,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState,
   clearInitiativeQueueStore,
   editInitiativeQueue,
-  editSelectedCharacter,  } from './state/store';
+  editSelectedCharacter,
+  setSavedCharacterCollection,  } from './state/store';
 
 
 export default function App(): JSX.Element {
   const dispatch = useDispatch();
   const storeInitiativeQueue = useSelector((state: RootState)=> state.initiativeQueue.initiativeQueue);
   const storeCharacterBeingEdited = useSelector((state: RootState)=>state.characterBeingEdited.characterBeingEdited);
+  const savedCharacterCollection = useSelector((state: RootState) => state.savedCharactersCollection.savedCharactersCollection);
   const [currentRoundNumber, setCurrentRoundNumber] = useState<number>(1);
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
@@ -42,6 +44,11 @@ export default function App(): JSX.Element {
     if(temp){
       setCurrentCharacterNumber(temp);
     }
+    // if(!savedCharacterCollection.length){
+    //   dispatch(setSavedCharacterCollection(getAllSavedCharactersFromStorage()));
+    // }
+
+
   },[]);
 
   useEffect(()=>{

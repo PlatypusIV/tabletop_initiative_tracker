@@ -15,7 +15,9 @@ interface Props {
 export default function CharacterEditModal(props: Props) {
   const dispatch = useDispatch();
   const characterToEdit = useSelector((state: RootState)=> state.characterBeingEdited.characterBeingEdited);
+  const savedCharacterCollection = useSelector((state: RootState) => state.savedCharactersCollection.savedCharactersCollection);
   const [name,setName] = useState<string>('');
+
   const [hitpoints,setHitpoints] = useState(0);
   const [initiativeScore,setInitiativeScore] = useState(0);
   const [defense,setDefense] = useState<string>('ac: 0, ff: 0, t: 0');
@@ -69,6 +71,10 @@ export default function CharacterEditModal(props: Props) {
   function onSearchSavedCharacterInputChange(searchTerm:string){
     console.log(searchTerm);
   }
+
+  function renderSavedCharacterTable(){
+    console.log("Tuna");
+  }
   
   return (
     <Modal isOpen={props.isOpen} className='characterEditModal'>
@@ -114,7 +120,7 @@ export default function CharacterEditModal(props: Props) {
           <input type="text" id="savedCharacterSearch" onChange={(e)=>onSearchSavedCharacterInputChange(e.target.value)}></input>
           <div className='savedCharacteTableContainer'>
           <table className='savedCharacterTable'>
-
+              {}
           </table>
         </div>
       </div>
