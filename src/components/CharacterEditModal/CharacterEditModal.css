@@ -48,7 +48,7 @@
 }
 
 .characterEditContentContainer {
-  width: 100%;
+  width: 50%;
   height: 90%;
   bottom: 0;
   display: flex;
@@ -70,7 +70,32 @@
 }
 
 .characterLoadContainer {
-  width: 100%;
+  width: 50%;
+  height: 90%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.characterLoadContainer div {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.savedCharacteTableContainer {
+  max-height: 80%;
+  min-height: 80%;
+}
+
+.savedCharacterTable {
+  border: white dashed 4px;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.searchSavedCharacterDiv {
 }
 
 @media only screen and (max-width: 600px) {

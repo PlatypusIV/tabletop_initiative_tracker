@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './CharacterEditModal.css';
 import { Character } from '../../utils/interface';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, clearCharacterEdit } from '../../state/store';
+import { RootState, clearCharacterEdit, setSavedCharacterCollection } from '../../state/store';
+import { getAllSavedCharactersFromStorage } from '../../utils/utility';
 
 interface Props {
     isOpen: boolean;
@@ -21,6 +22,10 @@ export default function CharacterEditModal(props: Props) {
   const [hitpoints,setHitpoints] = useState(0);
   const [initiativeScore,setInitiativeScore] = useState(0);
   const [defense,setDefense] = useState<string>('ac: 0, ff: 0, t: 0');
+
+  useEffect(()=>{
+    dispatch(setSavedCharacterCollection(getAllSavedCharactersFromStorage()));
+  },[]);
 
   function onHitpointChange(newHitpoints:string){
     if(isNaN(parseInt(newHitpoints)))return;
@@ -73,7 +78,14 @@ export default function CharacterEditModal(props: Props) {
   }
 
   function renderSavedCharacterTable(){
-    console.log("Tuna");
+    return savedCharacterCollection.map(chara=>
+    <tr>
+      <td><p>{chara.name}</p></td>
+      <td><p>Hp: {chara.hitpoints || 0}</p></td>
+      <td><button>Add</button></td>
+      <td><button>X</button></td>
+    </tr>
+      );
   }
   
   return (
@@ -116,12 +128,17 @@ export default function CharacterEditModal(props: Props) {
       </div>
 
       <div className='characterLoadContainer'>
+        <div className='savedCharacteTableContainer'>
+          <table className='savedCharacterTable'>
+            <tbody>
+              <tr><th>Name</th><th>hp</th><th>Add to queue</th><th>Delete</th></tr>
+              {renderSavedCharacterTable()}
+            </tbody>
+          </table>
+        </div>
+        <div className='searchSavedCharacterDiv'>
           <label htmlFor="savedCharacterSearch">Search by name:</label>
           <input type="text" id="savedCharacterSearch" onChange={(e)=>onSearchSavedCharacterInputChange(e.target.value)}></input>
-          <div className='savedCharacteTableContainer'>
-          <table className='savedCharacterTable'>
-              {}
-          </table>
         </div>
       </div>
       </div>
