@@ -58,4 +58,4 @@ A lightweight React app for tracking initiative and effects during Dungeons & Dr
 
 ---
 
-_Roll for initiative._
+App is visible at: https://platypusiv.github.io/tabletop_initiative_tracker/
