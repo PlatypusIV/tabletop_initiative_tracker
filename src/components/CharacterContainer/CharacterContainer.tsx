@@ -120,9 +120,12 @@ export default function CharacterContainer(props:Props):JSX.Element {
   }
 
   function onCharacterSaveButtonPress(character: Character): void{
-    //add info popup when character is successfully saved
-    setSavedCharacterToStorage(character);
-
+    try {
+      setSavedCharacterToStorage(character);
+      window.alert(`${character.name} saved`);
+    } catch (_) {
+      window.alert("Failed to save character");
+    }
   }
 
   return (

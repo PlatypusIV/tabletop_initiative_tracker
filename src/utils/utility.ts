@@ -50,9 +50,7 @@ export function getEffectsFromStorage(): Record<string, Effect> {
   return JSON.parse(storageEffectList);
 }
 
-//TODO Logic for saving a list/array of characters to storage that can then be added back in later
 export function setSavedCharacterToStorage(characterToSave: Character): void {
-  //wrap into try catch, then add errorHandling
   const savedCharacters = getAllSavedCharactersFromStorage();
 
   const existingCharacterIndex = savedCharacters.findIndex(
@@ -67,12 +65,31 @@ export function setSavedCharacterToStorage(characterToSave: Character): void {
     savedCharacters.push(characterToSave);
   }
 
-  window.localStorage.setItem(
-    settings.saved_character_collection_storage_key,
-    JSON.stringify(savedCharacters),
+  setSavedCharacterCollectionToStorage(savedCharacters);
+}
+
+function setSavedCharacterCollectionToStorage(
+  savedCharacters: Character[],
+): void {
+  try {
+    window.localStorage.setItem(
+      settings.saved_character_collection_storage_key,
+      JSON.stringify(savedCharacters),
+    );
+  } catch (error) {
+    console.error("Failed to save character to storage", error);
+    throw error;
+  }
+}
+
+export function deleteSavedCharacterFromStorage(name: string): Character[] {
+  const savedCharacters = getAllSavedCharactersFromStorage().filter(
+    (chara) => chara.name.toLocaleLowerCase() !== name.toLocaleLowerCase(),
   );
 
-  //save character to list of stored characters, if character with same name doesnt exist
+  setSavedCharacterCollectionToStorage(savedCharacters);
+
+  return savedCharacters;
 }
 
 export function getAllSavedCharactersFromStorage(): Character[] {

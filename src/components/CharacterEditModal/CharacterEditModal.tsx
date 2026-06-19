@@ -4,7 +4,7 @@ import { Character } from '../../utils/interface';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, clearCharacterEdit, setSavedCharacterCollection } from '../../state/store';
-import { getAllSavedCharactersFromStorage } from '../../utils/utility';
+import { getAllSavedCharactersFromStorage, deleteSavedCharacterFromStorage } from '../../utils/utility';
 
 interface Props {
     isOpen: boolean;
@@ -18,6 +18,7 @@ export default function CharacterEditModal(props: Props) {
   const characterToEdit = useSelector((state: RootState)=> state.characterBeingEdited.characterBeingEdited);
   const savedCharacterCollection = useSelector((state: RootState) => state.savedCharactersCollection.savedCharactersCollection);
   const [name,setName] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
 
   const [hitpoints,setHitpoints] = useState(0);
   const [initiativeScore,setInitiativeScore] = useState(0);
@@ -25,7 +26,7 @@ export default function CharacterEditModal(props: Props) {
 
   useEffect(()=>{
     dispatch(setSavedCharacterCollection(getAllSavedCharactersFromStorage()));
-  },[]);
+  },[props.isOpen]);
 
   function onHitpointChange(newHitpoints:string){
     if(isNaN(parseInt(newHitpoints)))return;
@@ -73,17 +74,28 @@ export default function CharacterEditModal(props: Props) {
     setDefense('ac: 0, ff: 0, t: 0');
   }
 
-  function onSearchSavedCharacterInputChange(searchTerm:string){
-    console.log(searchTerm);
+  function onSearchSavedCharacterInputChange(newSearchTerm:string){
+    setSearchTerm(newSearchTerm);
+  }
+
+  function onAddSavedCharacter(chara: Character){
+    props.addCharacter(structuredClone(chara));
+  }
+
+  function onDeleteSavedCharacter(chara: Character){
+    if(!window.confirm(`Delete saved character "${chara.name}"?`)) return;
+    dispatch(setSavedCharacterCollection(deleteSavedCharacterFromStorage(chara.name)));
   }
 
   function renderSavedCharacterTable(){
-    return savedCharacterCollection.map(chara=>
-    <tr>
+    return savedCharacterCollection
+      .filter(chara=> chara.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()))
+      .map(chara=>
+    <tr key={chara.name}>
       <td><p>{chara.name}</p></td>
       <td><p>Hp: {chara.hitpoints || 0}</p></td>
-      <td><button>Add</button></td>
-      <td><button>X</button></td>
+      <td><button onClick={()=>onAddSavedCharacter(chara)}>Add</button></td>
+      <td><button onClick={()=>onDeleteSavedCharacter(chara)}>X</button></td>
     </tr>
       );
   }
