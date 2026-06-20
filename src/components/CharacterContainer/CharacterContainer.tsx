@@ -71,30 +71,31 @@ export default function CharacterContainer(props:Props):React.JSX.Element {
 
   function removeEffectFromCharacter(effectId: string): void {
       if(!character.effects) return;
-      delete character.effects[effectId];
-      editCharacter(character, character.position);
+      const updatedEffects = {...character.effects};
+      delete updatedEffects[effectId];
+      editCharacter({...character, effects: updatedEffects}, character.position);
   }
 
-  function renderEffectsList(effectList: Record<string, Effect> | undefined):React.JSX.Element[] | React.JSX.Element {
-    if(effectList){
-      return Object.keys(effectList).map(
-        (effectId)=>
-          {
-            return (<li key={effectList[effectId].name}>{`${effectList[effectId].name}: ${effectList[effectId].description || 'N/A'}: ${effectList[effectId].duration || 'N/A'}`} <button onClick={()=> removeEffectFromCharacter(effectId)} className='effectListRemoveButton'>X</button></li>)
-          }
+  function renderEffectsRows(effectList: Record<string, Effect>):React.JSX.Element[] {
+    return Object.keys(effectList).map(
+      (effectId)=>
+        (<tr key={effectList[effectId].name} className='effectRow'>
+          <td className='effectNameCell'><p>{effectList[effectId].name}</p></td>
+          <td className='effectDescCell'>{effectList[effectId].description || 'N/A'}</td>
+          <td className='effectDurationCell'>{effectList[effectId].duration || 'N/A'}</td>
+          <td><button onClick={()=> removeEffectFromCharacter(effectId)} className='effectRemoveButton' title='Remove effect'>✕</button></td>
+        </tr>)
     )
-    }else{
-      return <></>
-    }
   }
 
   function addEffectToCharacter(){
     try {
       if(!characterEffectName) return;
-      const tempCharaEffects: Record<string, Effect> = character.effects || {};
-      tempCharaEffects[characterEffectName] = {name:characterEffectName, duration: characterEffectRounds, description: characterEffectDescription || undefined};
-      character.effects = {...tempCharaEffects};
-      editCharacter(character, character.position);
+      const updatedEffects: Record<string, Effect> = {
+        ...(character.effects || {}),
+        [characterEffectName]: {name: characterEffectName, duration: characterEffectRounds, description: characterEffectDescription || undefined},
+      };
+      editCharacter({...character, effects: updatedEffects}, character.position);
       clearCharacterEffectFields();
     } catch (error) {
       console.log(error);
@@ -151,42 +152,57 @@ export default function CharacterContainer(props:Props):React.JSX.Element {
             <tbody>
               <tr>
                 <td>Hitpoints:</td>
-                <td>{!isHitpointInputVisible && (<p className='hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints}</p>)}
-            {isHitpointInputVisible && (<div>
-              <input className='hitpointInput' id='hitpointInput' defaultValue={character.hitpoints}type='text' onChange={(e)=> setCurrentHitpoints(e.target.value)}/>
-              <button onClick={()=>handleHitpointChange()}>Calculate</button>
+                <td>{!isHitpointInputVisible && (<p className='statValue hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints}</p>)}
+            {isHitpointInputVisible && (<div className='statEditRow'>
+              <input className='statEditInput hitpointInput' id='hitpointInput' defaultValue={character.hitpoints}type='text' onChange={(e)=> setCurrentHitpoints(e.target.value)}/>
+              <button className='statConfirmButton' onClick={()=>handleHitpointChange()}>Calculate</button>
             </div>
             ) }</td>
               </tr>
               <tr>
                 <td>Initiative:</td>
-                <td>{!isInitiativeScoreInputVisible && (<p className='initiativeScoreText' onClick={()=>setIsInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
-            {isInitiativeScoreInputVisible && (<div>
-              <input className='initiativeScoreInput' id='initiativeScoreInput' defaultValue={character.initiativeScore}type='text' onChange={(e)=> setCurrentInitiativeScore(e.target.value)}/>
-              <button onClick={()=>handleInitiativeScoreChange()}>Set initiative</button>
+                <td>{!isInitiativeScoreInputVisible && (<p className='statValue initiativeScoreText' onClick={()=>setIsInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
+            {isInitiativeScoreInputVisible && (<div className='statEditRow'>
+              <input className='statEditInput initiativeScoreInput' id='initiativeScoreInput' defaultValue={character.initiativeScore}type='text' onChange={(e)=> setCurrentInitiativeScore(e.target.value)}/>
+              <button className='statConfirmButton' onClick={()=>handleInitiativeScoreChange()}>Set initiative</button>
             </div>)}</td>
               </tr>
               
               <tr>
                 <td>Defense:</td>
-                <td>{!isDefenseInputVisible && (<p className='defenseText' onClick={()=>setIsDefenseInputVisible(true)}>{character.defense}</p>)}
-            {isDefenseInputVisible && (<div>
-              <input className='defenseInput' id='defenseInput' defaultValue={character.defense}type='text' onChange={(e)=> setCurrentDefense(e.target.value)}/>
-              <button onClick={handleDefenseChange}>Set defense</button>
+                <td>{!isDefenseInputVisible && (<p className='statValue defenseText' onClick={()=>setIsDefenseInputVisible(true)}>{character.defense}</p>)}
+            {isDefenseInputVisible && (<div className='statEditRow'>
+              <input className='statEditInput defenseInput' id='defenseInput' defaultValue={character.defense}type='text' onChange={(e)=> setCurrentDefense(e.target.value)}/>
+              <button className='statConfirmButton' onClick={handleDefenseChange}>Set defense</button>
             </div>)}</td>
               </tr>
             </tbody>
           </table>
           </div>
           <div className='effectContainer'>
-            <label>Effect List </label>
+            <div className='effectHeader'>
+              <h3>Effects</h3>
+            </div>
             <div className="createEffectContainer">
-              <input type="text" className='createEffectNameInput' placeholder='Name' value={characterEffectName} onChange={(e)=>{setCharacterEffectName(e.target.value)}}/>
-              <input type="text" className='createEffectDescriptionInput' placeholder='Effect' value={characterEffectDescription} onChange={(e)=>{setCharacterEffectDescription(e.target.value)}}/>
-              <input type="text" className='createEffectRoundInput' placeholder='Rounds' value={characterEffectRounds || 0} onChange={(e)=>{validateNumber(e.target.value)}}/> 
-              <button className='createEffectAddButton' onClick={addEffectToCharacter}>+</button>
-              </div>
-            {renderEffectsList(character.effects)}
+              <input type="text" className='createEffectInput createEffectNameInput' placeholder='Name' value={characterEffectName} onChange={(e)=>{setCharacterEffectName(e.target.value)}}/>
+              <input type="text" className='createEffectInput createEffectDescriptionInput' placeholder='Effect' value={characterEffectDescription} onChange={(e)=>{setCharacterEffectDescription(e.target.value)}}/>
+              <input type="text" className='createEffectInput createEffectRoundInput' placeholder='Rounds' value={characterEffectRounds || 0} onChange={(e)=>{validateNumber(e.target.value)}}/>
+              <button className='createEffectAddButton' onClick={addEffectToCharacter} title='Add effect'>+</button>
+            </div>
+            <div className='effectTableContainer'>
+              {!character.effects || Object.keys(character.effects).length === 0 ? (
+                <p className='effectEmpty'>No active effects.</p>
+              ) : (
+                <table className='effectTable'>
+                  <thead>
+                    <tr><th>Name</th><th>Effect</th><th>Dur</th><th>Del</th></tr>
+                  </thead>
+                  <tbody>
+                    {renderEffectsRows(character.effects)}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
         </div>
