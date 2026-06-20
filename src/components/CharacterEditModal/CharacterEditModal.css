@@ -3,14 +3,18 @@
   height: 40%;
   color: aliceblue;
   margin: auto;
-  width: 30%;
+  width: 70%;
   display: block;
   z-index: 1;
   top: 25%;
   position: absolute;
   border-radius: 10px;
-  margin-left: 35%;
-  text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+  margin-left: 15%;
+  text-shadow:
+    1px 0 0 #000,
+    0 -1px 0 #000,
+    0 1px 0 #000,
+    -1px 0 0 #000;
 }
 
 .characterEditCloseContainer {
@@ -33,26 +37,269 @@
   font-size: 18px;
 }
 
-.characterEditContentContainer {
+.characterAdditionContainer {
   width: 100%;
   height: 90%;
   bottom: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
+.characterEditContentContainer {
+  width: 50%;
+  height: 90%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0 16px;
+  box-sizing: border-box;
+  gap: 8px;
+}
+
+.characterEditHeader {
+  display: flex;
+  align-items: baseline;
+}
+
+.characterEditHeader h3,
+.savedCharacterHeader h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.characterEditTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.characterEditTable td {
+  padding: 5px 6px;
+  vertical-align: middle;
+}
+
+.characterEditTable td:first-child {
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.characterEditInput,
+.savedCharacterSearchInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background-color: rgb(28, 28, 28);
+  color: aliceblue;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.characterEditInput::placeholder,
+.savedCharacterSearchInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.characterEditInput:focus,
+.savedCharacterSearchInput:focus {
+  border-color: rgba(120, 180, 255, 0.8);
+  box-shadow: 0 0 0 2px rgba(120, 180, 255, 0.25);
+}
+
+.characterEditButtonRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
 .characterEditConfirmButton {
-  margin-top: 10px;
-  height: 30px;
-  font-size: 20px;
+  flex: 1;
+  min-height: 34px;
+  font-size: 15px;
   font-weight: bold;
   color: rgb(255, 255, 255);
-  padding-left: 10px;
-  padding-right: 10px;
-  background-color: rgb(0, 0, 0);
-  border-radius: 10px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.characterLoadContainer {
+  width: 50%;
+  height: 90%;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0 16px;
+  box-sizing: border-box;
+  gap: 8px;
+}
+
+.savedCharacterHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.savedCharacterCount {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  text-shadow: none;
+}
+
+.searchSavedCharacterDiv {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.savedCharacterSearchInput {
+  /* extra right padding leaves room for the clear button */
+  padding-right: 30px;
+}
+
+.savedCharacterSearchClear {
+  position: absolute;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: aliceblue;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.savedCharacterSearchClear:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.savedCharacteTableContainer {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.savedCharacteTableContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.savedCharacteTableContainer::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+}
+
+.savedCharacterTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.savedCharacterTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: rgb(45, 45, 45);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: 8px 10px;
+}
+
+.savedCharacterRow {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.12s ease;
+}
+
+.savedCharacterRow:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.savedCharacterRow td {
+  padding: 6px 10px;
+  vertical-align: middle;
+}
+
+.savedCharacterNameCell p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.savedCharacterStatCell {
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: none;
+}
+
+.savedCharacterAddButton,
+.savedCharacterDeleteButton {
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.savedCharacterAddButton {
+  padding: 5px 12px;
+  color: #fff;
+}
+
+/* shared green action color for the confirm and add buttons */
+.characterEditConfirmButton,
+.savedCharacterAddButton {
+  background-color: rgb(40, 140, 70);
+}
+
+.characterEditConfirmButton:hover,
+.savedCharacterAddButton:hover {
+  background-color: rgb(50, 165, 85);
+}
+
+.savedCharacterDeleteButton {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background-color: rgb(170, 45, 45);
+  color: #fff;
+}
+
+.savedCharacterDeleteButton:hover {
+  background-color: rgb(205, 55, 55);
+}
+
+.savedCharacterEmpty {
+  margin: 0;
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  text-shadow: none;
 }
 
 @media only screen and (max-width: 600px) {
@@ -66,5 +313,32 @@
 
   .characterEditConfirmButton {
     font-size: 14px;
+  }
+
+  .characterAdditionContainer {
+    flex-direction: column;
+  }
+
+  .characterEditContentContainer,
+  .characterLoadContainer {
+    width: 100%;
+    height: 50%;
+  }
+
+  .characterLoadContainer {
+    padding: 0 8px;
+  }
+
+  .savedCharacterHeader h3 {
+    font-size: 15px;
+  }
+
+  .savedCharacterTable thead th {
+    font-size: 10px;
+    padding: 6px 6px;
+  }
+
+  .savedCharacterRow td {
+    padding: 5px 6px;
   }
 }

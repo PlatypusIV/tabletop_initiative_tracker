@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import initiativeQueueReducer from "./initiativeQueueSlice";
 import characterEditReducer from "./characterEditSlice";
+import savedCharacterCollectionReducer from "./savedCharacterCollectionSlice";
 import {
   clearInitiativeQueueStore,
   editInitiativeQueue,
@@ -9,11 +10,13 @@ import {
   editSelectedCharacter,
   clearCharacterEdit,
 } from "./characterEditSlice";
+import { setSavedCharacterCollection } from "./savedCharacterCollectionSlice";
 
 export const store = configureStore({
   reducer: {
     initiativeQueue: initiativeQueueReducer,
     characterBeingEdited: characterEditReducer,
+    savedCharactersCollection: savedCharacterCollectionReducer,
   },
 });
 
@@ -25,4 +28,5 @@ export {
   editInitiativeQueue,
   editSelectedCharacter,
   clearCharacterEdit,
+  setSavedCharacterCollection,
 };

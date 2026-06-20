@@ -50,9 +50,53 @@ export function getEffectsFromStorage(): Record<string, Effect> {
   return JSON.parse(storageEffectList);
 }
 
-export function setEffectsToStorage(effectList: Record<string, Effect>) {
-  window.localStorage.setItem(
-    settings.effect_list_storage_key,
-    JSON.stringify(effectList),
+export function setSavedCharacterToStorage(characterToSave: Character): void {
+  const savedCharacters = getAllSavedCharactersFromStorage();
+
+  const existingCharacterIndex = savedCharacters.findIndex(
+    (chara) =>
+      chara.name.toLocaleLowerCase() ===
+      characterToSave.name.toLocaleLowerCase(),
   );
+  //if exists, overwrite, else add to list
+  if (existingCharacterIndex > -1) {
+    savedCharacters[existingCharacterIndex] = characterToSave;
+  } else {
+    savedCharacters.push(characterToSave);
+  }
+
+  setSavedCharacterCollectionToStorage(savedCharacters);
+}
+
+function setSavedCharacterCollectionToStorage(
+  savedCharacters: Character[],
+): void {
+  try {
+    window.localStorage.setItem(
+      settings.saved_character_collection_storage_key,
+      JSON.stringify(savedCharacters),
+    );
+  } catch (error) {
+    console.error("Failed to save character to storage", error);
+    throw error;
+  }
+}
+
+export function deleteSavedCharacterFromStorage(name: string): Character[] {
+  const savedCharacters = getAllSavedCharactersFromStorage().filter(
+    (chara) => chara.name.toLocaleLowerCase() !== name.toLocaleLowerCase(),
+  );
+
+  setSavedCharacterCollectionToStorage(savedCharacters);
+
+  return savedCharacters;
+}
+
+export function getAllSavedCharactersFromStorage(): Character[] {
+  const characterListString = window.localStorage.getItem(
+    settings.saved_character_collection_storage_key,
+  );
+  if (!characterListString) return [];
+  const characterList = JSON.parse(characterListString);
+  return characterList as Character[];
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Character, Effect } from '../../utils/interface';
 import './CharacterContainer.css';
+import { setSavedCharacterToStorage } from '../../utils/utility';
 
 interface Props {
     currentlyActiveCharacter: number;
@@ -118,6 +119,15 @@ export default function CharacterContainer(props:Props):JSX.Element {
     setCharacterEffectRounds(0);
   }
 
+  function onCharacterSaveButtonPress(character: Character): void{
+    try {
+      setSavedCharacterToStorage(character);
+      window.alert(`${character.name} saved`);
+    } catch (_) {
+      window.alert("Failed to save character");
+    }
+  }
+
   return (
     <div className={character.position === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
         <div className='characterContainerTitleRow'>
@@ -128,6 +138,7 @@ export default function CharacterContainer(props:Props):JSX.Element {
             <p>{character.name}</p>
           </div>
           <div className='positionContainer'>
+              <button className='characterSaveButton' onClick={()=> onCharacterSaveButtonPress(character)}>Save</button>
               <button className='characterDirectEditButton' onClick={()=> openCharacterEditor(character.position)}>Edit</button>
               <button className='positionUpButton' onClick={()=>changeCharacterPosition(character.position, '-')} />
               <button className='positionDownButton' onClick={()=>changeCharacterPosition(character.position, '+')} />

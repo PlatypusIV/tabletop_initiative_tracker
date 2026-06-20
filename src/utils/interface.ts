@@ -5,7 +5,8 @@ export interface Character {
   initiativeScore?: number;
   initiativeBonus?: number;
   hitpoints?: number;
-  hitpointHistory?: number[]; //use this when making hp history
+  hitpointHistory?: number[];
+  baseHitpoints?: number; //use this when making hp history
   effects?: Record<string, Effect>;
   defense?: string;
 }
@@ -16,3 +17,4 @@ export interface Effect {
   //   damagePerRound?: number;
   description?: string;
 }
+

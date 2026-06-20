@@ -16,7 +16,7 @@ import { RootState,
   clearInitiativeQueueStore,
   editInitiativeQueue,
   editSelectedCharacter
-} from './state/store';
+ } from './state/store';
 
 
 export default function App(): JSX.Element {
