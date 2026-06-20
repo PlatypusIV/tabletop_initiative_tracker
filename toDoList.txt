@@ -72,3 +72,8 @@ make modals look better
     close button with a X in in it
     normal sized buttons
     brown bg to match rest of site maybe?
+
+
+theme setup
+Cyberpunk/Sci fi theme
+Fantasy theme
