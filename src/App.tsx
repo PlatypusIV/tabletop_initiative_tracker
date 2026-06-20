@@ -17,9 +17,10 @@ import { RootState,
   editInitiativeQueue,
   editSelectedCharacter
  } from './state/store';
+import React from 'react';
 
 
-export default function App(): JSX.Element {
+export default function App(): React.JSX.Element {
   const dispatch = useDispatch();
   const storeInitiativeQueue = useSelector((state: RootState)=> state.initiativeQueue.initiativeQueue);
   const storeCharacterBeingEdited = useSelector((state: RootState)=>state.characterBeingEdited.characterBeingEdited);

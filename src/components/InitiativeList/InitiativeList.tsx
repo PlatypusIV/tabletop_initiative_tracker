@@ -11,7 +11,7 @@ interface Props {
   changeCharacterPosition: (position: number, change: "+"| "-")=>void;
 }
 
-export default function InitiativeList(props: Props): JSX.Element {
+export default function InitiativeList(props: Props):React.JSX.Element {
   const {initiativeQueue} = props;
 
   return (

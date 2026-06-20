@@ -7,7 +7,7 @@ interface DiceRollLog {
   originalFormula: string;
 }
 
-export default function DiceRollsContainer(): JSX.Element {
+export default function DiceRollsContainer():React.JSX.Element {
   const [diceRollsLog, setDiceRollsLog] = useState<DiceRollLog[]>([]);
   const [diceFormula, setDiceFormula] = useState<string>('');
 

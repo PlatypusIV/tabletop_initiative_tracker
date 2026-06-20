@@ -13,7 +13,7 @@ interface Props {
     addCharacter: (character: Character)=> void;
 }
 
-export default function CharacterEditModal(props: Props) {
+export default function CharacterEditModal(props: Props):React.JSX.Element {
   const dispatch = useDispatch();
   const characterToEdit = useSelector((state: RootState)=> state.characterBeingEdited.characterBeingEdited);
   const savedCharacterCollection = useSelector((state: RootState) => state.savedCharactersCollection.savedCharactersCollection);

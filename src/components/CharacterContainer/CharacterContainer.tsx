@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Character, Effect } from '../../utils/interface';
 import './CharacterContainer.css';
 import { setSavedCharacterToStorage } from '../../utils/utility';
+import React from 'react';
 
 interface Props {
     currentlyActiveCharacter: number;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 //openCharacterEditor, // add back later
-export default function CharacterContainer(props:Props):JSX.Element {
+export default function CharacterContainer(props:Props):React.JSX.Element {
   const {character, removeCharacter, changeCharacterPosition, currentlyActiveCharacter, editCharacter, openCharacterEditor} = props;
   const [currentHitpoints,setCurrentHitpoints] = useState<string>('');
   const [currentInitiativeScore, setCurrentInitiativeScore] = useState<string>('');
@@ -74,7 +75,7 @@ export default function CharacterContainer(props:Props):JSX.Element {
       editCharacter(character, character.position);
   }
 
-  function renderEffectsList(effectList: Record<string, Effect> | undefined): JSX.Element[] | JSX.Element {
+  function renderEffectsList(effectList: Record<string, Effect> | undefined):React.JSX.Element[] | React.JSX.Element {
     if(effectList){
       return Object.keys(effectList).map(
         (effectId)=>
