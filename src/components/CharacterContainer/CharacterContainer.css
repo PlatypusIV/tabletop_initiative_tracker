@@ -82,9 +82,10 @@
   flex: 0 0 auto;
 }
 
-/* Active character: accent frame + glow, surface unchanged */
+/* Active character: bold white frame + glow, surface unchanged */
 .active {
-  border-color: var(--accent);
+  border-color: var(--active-border);
+  border-width: 3px;
   box-shadow:
     0 0 0 2px var(--accent-glow),
     0 0 14px var(--accent-glow);

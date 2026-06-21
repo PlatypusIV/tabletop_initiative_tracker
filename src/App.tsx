@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import settings from './utils/settings.json';
 import './App.css';
 import Header from './components/Header/Header';
@@ -6,7 +6,7 @@ import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
 import CharacterEditModal from './components/CharacterEditModal/CharacterEditModal';
-import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage } from './utils/utility';
+import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getNextCharacterName, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage } from './utils/utility';
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import Loader from './components/Loader/Loader';
@@ -62,6 +62,53 @@ useEffect(()=>{
   }
 }, [isCharacterEditModalOpen]);
 
+// Latest turn-control handlers/state, so the keydown listener can subscribe once
+// instead of re-binding on every turn change.
+const turnControlRef = useRef({
+  next: continueAlongInitiative,
+  back: goBackAlongInitiative,
+  blocked: isCharacterEditModalOpen || isWarningPromptOpen,
+});
+turnControlRef.current = {
+  next: continueAlongInitiative,
+  back: goBackAlongInitiative,
+  blocked: isCharacterEditModalOpen || isWarningPromptOpen,
+};
+
+// Keyboard turn control: Space/Right advance, Left/Backspace go back.
+// Ignored while a modal is open, or while a form control is focused so that
+// native typing/button activation (e.g. Space on a focused button) keeps working.
+useEffect(()=>{
+  function onKeyDown(event: KeyboardEvent){
+    const { next, back, blocked } = turnControlRef.current;
+    if(blocked) return;
+    const target = event.target as HTMLElement | null;
+    if(target && (
+      target.tagName === 'INPUT' ||
+      target.tagName === 'TEXTAREA' ||
+      target.tagName === 'SELECT' ||
+      target.tagName === 'BUTTON' ||
+      target.tagName === 'A' ||
+      target.isContentEditable
+    )) return;
+
+    switch(event.code){
+      case 'Space':
+      case 'ArrowRight':
+        event.preventDefault();
+        next();
+        break;
+      case 'ArrowLeft':
+      case 'Backspace':
+        event.preventDefault();
+        back();
+        break;
+    }
+  }
+  window.addEventListener('keydown', onKeyDown);
+  return ()=> window.removeEventListener('keydown', onKeyDown);
+}, []);
+
   function setBackground(){
     setCurrentBackgroundNumber(Math.floor(Math.random() * settings.background_image_count)+1);
     setIsLoading(false);
@@ -81,10 +128,21 @@ useEffect(()=>{
     }
   }
 
-  function addNewCharacterToQueue(character:Character): void {
+  function goBackAlongInitiative(): void {
+    if(storeInitiativeQueue.length && currentCharacterNumber > 0){
+      setCurrentCharacterNumber(currentCharacterNumber - 1);
+    }
+  }
+
+  function addCharactersToQueue(characters:Character[]): void {
+    if(!characters.length) return;
     const temp = [...storeInitiativeQueue];
-    character.position=storeInitiativeQueue.length;
-    temp.push(character);
+    const existingNames = temp.map(c=>c.name);
+    characters.forEach(character => {
+      const name = getNextCharacterName(character.name, existingNames);
+      temp.push({...character, name, position: temp.length});
+      existingNames.push(name);
+    });
     dispatch(editInitiativeQueue([...temp]));
   }
 
@@ -223,7 +281,7 @@ useEffect(()=>{
             </div>
             </div>
           </div>
-        <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
+        <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} saveCharacterChanges={saveCharacterChanges} addCharacters={addCharactersToQueue}/>
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
     </div>}
     </div>

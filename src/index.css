@@ -34,6 +34,8 @@
   /* Accent (input focus ring + active-character highlight) */
   --accent: rgba(120, 180, 255, 0.8);
   --accent-glow: rgba(120, 180, 255, 0.25);
+  /* Active-character border: aggressive white so it reads over any background */
+  --active-border: rgba(255, 255, 255, 0.95);
 
   /* Button roles */
   --action: rgb(40, 140, 70);

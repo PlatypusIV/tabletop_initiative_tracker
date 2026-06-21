@@ -4,14 +4,17 @@ import { Character } from '../../utils/interface';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, clearCharacterEdit, setSavedCharacterCollection } from '../../state/store';
-import { getAllSavedCharactersFromStorage, deleteSavedCharacterFromStorage } from '../../utils/utility';
+import { getAllSavedCharactersFromStorage, deleteSavedCharacterFromStorage, evaluateDiceFormula } from '../../utils/utility';
 
 interface Props {
     isOpen: boolean;
     closeModal: ()=> void;
     saveCharacterChanges: (character:Character)=> void;
-    addCharacter: (character: Character)=> void;
+    addCharacters: (characters: Character[])=> void;
 }
+
+const MAX_COUNT = 50;
+const DEFAULT_DEFENSE = 'ac: 0, ff: 0, t: 0';
 
 export default function CharacterEditModal(props: Props):React.JSX.Element {
   const dispatch = useDispatch();
@@ -20,58 +23,127 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
   const [name,setName] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const [hitpoints,setHitpoints] = useState(0);
-  const [initiativeScore,setInitiativeScore] = useState(0);
-  const [defense,setDefense] = useState<string>('ac: 0, ff: 0, t: 0');
+  // HP and initiative are free text: either a flat integer or a dice formula (e.g. 2d8+2).
+  const [hitpoints,setHitpoints] = useState<string>('');
+  const [initiativeScore,setInitiativeScore] = useState<string>('');
+  const [defense,setDefense] = useState<string>(DEFAULT_DEFENSE);
+  const [count,setCount] = useState<number>(1);
+  const [error,setError] = useState<string>('');
+
+  const isAddMode = characterToEdit.name === '';
 
   useEffect(()=>{
     dispatch(setSavedCharacterCollection(getAllSavedCharactersFromStorage()));
   },[props.isOpen]);
 
-  function onHitpointChange(newHitpoints:string){
-    if(isNaN(parseInt(newHitpoints)))return;
-    setHitpoints(parseInt(newHitpoints));
-  }
+  // Seed the form from the character being edited when the modal opens in edit mode.
+  useEffect(()=>{
+    if(!props.isOpen) return;
+    if(characterToEdit.name === '') return;
+    setName(characterToEdit.name);
+    setHitpoints(characterToEdit.hitpoints?.toString() ?? '');
+    setInitiativeScore(characterToEdit.initiativeScore?.toString() ?? '');
+    setDefense(characterToEdit.defense ?? DEFAULT_DEFENSE);
+  },[props.isOpen, characterToEdit]);
 
-  function onInitiativeScoreChange(newInitiativeScore: string){
-    if(isNaN(parseInt(newInitiativeScore)))return;
-    setInitiativeScore(parseInt(newInitiativeScore));
+  function onCountChange(newCount: string){
+    const parsed = parseInt(newCount);
+    if(isNaN(parsed)){ setCount(1); return; }
+    setCount(Math.min(MAX_COUNT, Math.max(1, parsed)));
   }
 
   function onDefenseChange(newDefense: string) {
-    if(defense === null && defense === undefined) return;
     setDefense(newDefense);
   }
 
-  function saveCharacter(){
-    if(!name && !characterToEdit.name)return;
-    if(characterToEdit.name ===''){
-      props.addCharacter({...characterToEdit,name, hitpoints, initiativeScore, defense});
-    }else{
-      props.saveCharacterChanges({...characterToEdit,name: name ||characterToEdit.name ,hitpoints: hitpoints|| characterToEdit.hitpoints ,initiativeScore: initiativeScore || characterToEdit.initiativeScore, defense: defense || characterToEdit.defense});
+  // Adds N copies of the creature. Flat numbers are identical across copies;
+  // formulas are rolled independently per creature.
+  function submitAdd(): boolean {
+    const resolvedName = name.trim();
+    if(!resolvedName){ setError('Name is required.'); return false; }
+    if(evaluateDiceFormula(hitpoints) === null){
+      setError('Hitpoints must be a whole number or a dice formula (e.g. 2d8+2).');
+      return false;
     }
-    clearModal();
-    
+    if(evaluateDiceFormula(initiativeScore) === null){
+      setError('Initiative must be a whole number or a dice formula (e.g. 1d20+3).');
+      return false;
+    }
+
+    const characters: Character[] = [];
+    for(let i = 0; i < count; i++){
+      const hp = evaluateDiceFormula(hitpoints)!.total;
+      const initiative = evaluateDiceFormula(initiativeScore)!.total;
+      characters.push({
+        ...characterToEdit,
+        name: resolvedName,
+        hitpoints: hp,
+        baseHitpoints: hp,
+        initiativeScore: initiative,
+        defense,
+        position: 0, // assigned by the queue on insert
+      });
+    }
+    props.addCharacters(characters);
+    setError('');
+    return true;
+  }
+
+  function submitEdit(): boolean {
+    if(!name && !characterToEdit.name){ setError('Name is required.'); return false; }
+
+    let hp = characterToEdit.hitpoints;
+    if(hitpoints){
+      const result = evaluateDiceFormula(hitpoints);
+      if(result === null){
+        setError('Hitpoints must be a whole number or a dice formula (e.g. 2d8+2).');
+        return false;
+      }
+      hp = result.total;
+    }
+
+    let initiative = characterToEdit.initiativeScore;
+    if(initiativeScore){
+      const result = evaluateDiceFormula(initiativeScore);
+      if(result === null){
+        setError('Initiative must be a whole number or a dice formula (e.g. 1d20+3).');
+        return false;
+      }
+      initiative = result.total;
+    }
+
+    props.saveCharacterChanges({
+      ...characterToEdit,
+      name: name || characterToEdit.name,
+      hitpoints: hp,
+      initiativeScore: initiative,
+      defense: defense || characterToEdit.defense,
+    });
+    setError('');
+    return true;
+  }
+
+  function saveCharacter(){
+    const ok = isAddMode ? submitAdd() : submitEdit();
+    if(ok) clearModal();
   }
 
   function saveCharacterAndClose(){
-    if(!name && !characterToEdit.name)return;
-    if(characterToEdit.name ===''){
-      props.addCharacter({...characterToEdit,name, hitpoints, initiativeScore, defense});
-    }else{
-      props.saveCharacterChanges({...characterToEdit,name: name ||characterToEdit.name ,hitpoints: hitpoints|| characterToEdit.hitpoints ,initiativeScore: initiativeScore || characterToEdit.initiativeScore, defense: defense || characterToEdit.defense});
+    const ok = isAddMode ? submitAdd() : submitEdit();
+    if(ok){
+      props.closeModal();
+      clearModal();
     }
-    
-    props.closeModal();
-    clearModal();
   }
 
   function clearModal(){
     dispatch(clearCharacterEdit());
     setName('');
-    setHitpoints(0);
-    setInitiativeScore(0);
-    setDefense('ac: 0, ff: 0, t: 0');
+    setHitpoints('');
+    setInitiativeScore('');
+    setDefense(DEFAULT_DEFENSE);
+    setCount(1);
+    setError('');
   }
 
   function onSearchSavedCharacterInputChange(newSearchTerm:string){
@@ -79,7 +151,7 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
   }
 
   function onAddSavedCharacter(chara: Character){
-    props.addCharacter(structuredClone(chara));
+    props.addCharacters([structuredClone(chara)]);
   }
 
   function onDeleteSavedCharacter(chara: Character){
@@ -100,7 +172,7 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
     </tr>
       );
   }
-  
+
   return (
     <Modal isOpen={props.isOpen} className='characterEditModal'>
       <div className='characterEditCloseContainer'>
@@ -112,7 +184,7 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
       <div className='characterAdditionContainer'>
 <div className='characterEditContentContainer'>
         <div className='characterEditHeader'>
-          <h3>{characterToEdit.name === '' ? 'Add character' : 'Edit character'}</h3>
+          <h3>{isAddMode ? 'Add character' : 'Edit character'}</h3>
         </div>
         <table className='characterEditTable'>
           <tbody>
@@ -120,28 +192,36 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
               <td><label htmlFor="nameInput">Name:</label></td>
 
             <td>
-              <input className='characterEditInput' id='nameInput' type='text' placeholder={characterToEdit?.name || 'Insert name'} onChange={(e)=> setName(e.target.value)} value={name ||  characterToEdit?.name}/>
+              <input className='characterEditInput' id='nameInput' type='text' placeholder='Insert name' onChange={(e)=> setName(e.target.value)} value={name}/>
             </td>
             </tr>
             <tr>
               <td><label htmlFor="hitpointInput">Hitpoints: </label></td>
-              <td><input className='characterEditInput' type="number" name="hitpointInput" id="hitpointInput" placeholder={characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onHitpointChange(e.target.value)} value={hitpoints || characterToEdit.hitpoints}/></td>
+              <td><input className='characterEditInput' type="text" name="hitpointInput" id="hitpointInput" placeholder='e.g. 12 or 2d8+2' onChange={(e)=>setHitpoints(e.target.value)} value={hitpoints}/></td>
             </tr>
             <tr>
               <td><label htmlFor="initiativeScoreInput">Initiative score: </label></td>
-              <td><input className='characterEditInput' type="number" name="initiativeScoreInput" id="initiativeScoreInput" placeholder={characterToEdit.hitpoints?.toString() || '0'} onChange={(e)=>onInitiativeScoreChange(e.target.value)} value={initiativeScore || characterToEdit.initiativeScore}/>
+              <td><input className='characterEditInput' type="text" name="initiativeScoreInput" id="initiativeScoreInput" placeholder='e.g. 15 or 1d20+3' onChange={(e)=>setInitiativeScore(e.target.value)} value={initiativeScore}/>
               </td>
             </tr>
             <tr>
               <td><label htmlFor="defenseInput">Defense: </label></td>
-              <td><input className='characterEditInput' type="text" name="defenseInput" id="defenseInput" placeholder={characterToEdit.defense?.toString() || 'ac: 0, ff:0, t:0'} onChange={(e)=>onDefenseChange(e.target.value)} value={defense || characterToEdit.defense}/>
+              <td><input className='characterEditInput' type="text" name="defenseInput" id="defenseInput" placeholder={characterToEdit.defense?.toString() || DEFAULT_DEFENSE} onChange={(e)=>onDefenseChange(e.target.value)} value={defense}/>
               </td>
             </tr>
+            {isAddMode && (
+            <tr>
+              <td><label htmlFor="countInput">Count: </label></td>
+              <td><input className='characterEditInput' type="number" name="countInput" id="countInput" min={1} max={MAX_COUNT} onChange={(e)=>onCountChange(e.target.value)} value={count}/>
+              </td>
+            </tr>
+            )}
           </tbody>
         </table>
+      {error && <p className='characterEditError'>{error}</p>}
       <div className='characterEditButtonRow'>
-        <button onClick={saveCharacter} className='characterEditConfirmButton'>{characterToEdit.name=== '' ? 'Add character' : 'Save changes'}</button>
-        <button onClick={saveCharacterAndClose} className='characterEditConfirmButton'>{characterToEdit.name=== '' ? 'Save and exit' : 'Save changes and close'}</button>
+        <button onClick={saveCharacter} className='characterEditConfirmButton'>{isAddMode ? 'Add character' : 'Save changes'}</button>
+        <button onClick={saveCharacterAndClose} className='characterEditConfirmButton'>{isAddMode ? 'Save and exit' : 'Save changes and close'}</button>
       </div>
       </div>
 
@@ -186,8 +266,8 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
         </div>
       </div>
       </div>
-      
-      
+
+
     </Modal>
   )
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Character, Effect } from '../../utils/interface';
 import './CharacterContainer.css';
 import { setSavedCharacterToStorage } from '../../utils/utility';
@@ -25,6 +25,16 @@ export default function CharacterContainer(props:Props):React.JSX.Element {
   const [characterEffectName, setCharacterEffectName] = useState<string>('');
   const [characterEffectDescription, setCharacterEffectDescription] = useState<string>('');
   const [characterEffectRounds, setCharacterEffectRounds] = useState<number>(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const isActive = character.position === currentlyActiveCharacter;
+
+  // When this card becomes the active turn, scroll it into view so an off-screen
+  // (overflowed) character's turn is visible without manual scrolling.
+  useEffect(()=>{
+    if(isActive){
+      cardRef.current?.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+    }
+  },[isActive]);
 
   function handleInitiativeScoreChange(): void {
     const newInitiativeScore = parseInt(currentInitiativeScore);
@@ -131,7 +141,7 @@ export default function CharacterContainer(props:Props):React.JSX.Element {
   }
 
   return (
-    <div className={character.position === currentlyActiveCharacter? 'characterContainer active' :'characterContainer'}>
+    <div ref={cardRef} className={isActive ? 'characterContainer active' :'characterContainer'}>
         <div className='characterContainerTitleRow'>
           <div className='removeButtonContainer'>
             <button onClick={()=>removeCharacter(character.position)} className='characterContainerRemoveButton'>X</button>

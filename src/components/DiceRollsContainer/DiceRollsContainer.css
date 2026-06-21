@@ -18,19 +18,16 @@
     padding: 2px;
     flex: 1;
     min-height: 0;
-    overflow-y: scroll;
-    scrollbar-width: none;
-}
-
-.diceRollsLogContainer::-webkit-scrollbar{
-    display: none;
+    /* No scroll: newest results sit at the top, older ones are clipped off the bottom. */
+    overflow-y: hidden;
 }
 
 .diceRollsLogContainer ol {
     width: 100%;
     padding: 1px;
     display: flex;
-    flex-direction: column;
+    /* reverse so the most recent roll renders first (top) and stays visible */
+    flex-direction: column-reverse;
 }
 
 .diceRollingNumberInput {
@@ -118,7 +115,8 @@ textarea {
     .diceRollsLogContainer ol {
         max-height: 100%;
         overflow-y: scroll;
-        flex-direction: column-reverse;
+        /* mobile: newest roll at the bottom (desktop keeps newest on top) */
+        flex-direction: column;
     }
 
     /* Pin the input column to ~40% (was effectively full width) so the

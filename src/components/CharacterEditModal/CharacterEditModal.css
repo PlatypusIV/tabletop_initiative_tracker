@@ -114,6 +114,13 @@
   box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
+.characterEditError {
+  margin: 0;
+  color: var(--destructive);
+  font-size: 13px;
+  font-weight: bold;
+}
+
 .characterEditButtonRow {
   display: flex;
   flex-direction: row;

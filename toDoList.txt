@@ -57,6 +57,8 @@ Legend: [x] done   [~] partial / needs polish   [ ] not started
 - [ ] Saved-character library UI (savedCharacterCollection slice exists; no load-from-saved UI yet)
 - [ ] Dice roll breakdown in log (separateValues + originalFormula stored but only total shown)
 - [ ] Block adding new characters while editing a character
+- [ ] How-to / tutorial modal (in-app guide covering adding/mass-adding creatures,
+      dice-formula stats, effects, and the keyboard turn controls)
 - [ ] Improve modal styling
       - close button at top, separate from reset
       - close button with an X

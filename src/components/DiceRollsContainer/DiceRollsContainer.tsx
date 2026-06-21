@@ -1,5 +1,6 @@
 import './DiceRollsContainer.css';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+import { evaluateDiceFormula } from '../../utils/utility';
 
 interface DiceRollLog {
   total: number;
@@ -7,67 +8,39 @@ interface DiceRollLog {
   originalFormula: string;
 }
 
+// Most recent rolls kept in the log; the newest are shown first and older ones
+// fall off the bottom (the log area clips overflow, no scrollbar).
+const MAX_DICE_LOG = 20;
+
 export default function DiceRollsContainer():React.JSX.Element {
   const [diceRollsLog, setDiceRollsLog] = useState<DiceRollLog[]>([]);
   const [diceFormula, setDiceFormula] = useState<string>('');
+  const newestRollRef = useRef<HTMLLIElement>(null);
 
-  const mathOperatorSeparator = /[+-]/g;
-
+  // Bring the newest roll into view when a result is added. 'nearest' makes this a
+  // no-op on desktop (newest already sits at the top) while scrolling the mobile
+  // log down to the newest result at the bottom.
   useEffect(()=>{
-    console.log('diceFormula: ', diceFormula);
-  },[diceFormula]);
-
-
-  //clean this up
-  useEffect(()=>{
-    if(diceRollsLog.length > 10){
-      diceRollsLog.shift()
-      setDiceRollsLog([...diceRollsLog]);
-    }
+    newestRollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
   },[diceRollsLog]);
 
-
-  //TODO: separate validation from rollDice
   function rollDice(): void{
     if(!diceFormula)return;
 
-    const tempDiceRoll: DiceRollLog = {total:0, separateValues:[], originalFormula: ''};
-
-    const mathOperators = diceFormula.match(/[-+]/g);
-
-
-    const diceCombos = [...diceFormula.replace(' ','').toLowerCase().split(mathOperatorSeparator)];
-
-    const results:number[] = [];
-
-    for(let i = 0;i<diceCombos.length;i++){
-      const combo = diceCombos[i];
-      // if(/[^\d{1,3},d?,\d]/g.test(combo)) return;
-      if(/[d*]/g.test(combo)){
-        const elementsInCombo = combo.split('d');
-        const amountOfDiceToRoll = parseInt(elementsInCombo[0]);
-        const diceToRoll = parseInt(elementsInCombo[1]);
-        if(isNaN(amountOfDiceToRoll) || isNaN(diceToRoll) || amountOfDiceToRoll <1 || diceToRoll < 2) throw new Error('Incorrect input!');
-
-        let roll = 0;
-        for(let j = 0; j <amountOfDiceToRoll; j++){
-          roll += Math.floor(Math.random()*diceToRoll)+1;
-        }
-        results.push(roll);
-      }else{
-        results.push(parseInt(combo));
-      }
+    const result = evaluateDiceFormula(diceFormula);
+    if(!result){
+      window.alert('Incorrect input!');
+      return;
     }
 
-    tempDiceRoll.total = results[0];
-    mathOperators?.forEach((operator, i) => {
-      operator === '+' ? tempDiceRoll.total+= results[i+1] : tempDiceRoll.total-= results[i+1]
-    });
-    tempDiceRoll.separateValues= [...results];
-    tempDiceRoll.originalFormula = diceFormula;
+    const tempDiceRoll: DiceRollLog = {
+      total: result.total,
+      separateValues: result.separateValues,
+      originalFormula: diceFormula,
+    };
 
     const tempRollLogs = diceRollsLog;
-    if(tempRollLogs.length >= 6){
+    if(tempRollLogs.length >= MAX_DICE_LOG){
       tempRollLogs.shift();
     }
     setDiceRollsLog([...tempRollLogs, tempDiceRoll]);
@@ -78,7 +51,10 @@ export default function DiceRollsContainer():React.JSX.Element {
   }
 
   function renderDiceLogs(){
-    return diceRollsLog.map((diceRollLog, index)=>{return<li key={index} className='diceRollListElement'><p>Result: {diceRollLog.total}</p></li>});
+    return diceRollsLog.map((diceRollLog, index)=>{
+      const isNewest = index === diceRollsLog.length - 1;
+      return <li key={index} ref={isNewest ? newestRollRef : undefined} className='diceRollListElement'><p>Result: {diceRollLog.total}</p></li>;
+    });
   }
 
   return (
