@@ -1,79 +1,101 @@
-initiative order
+# Tabletop Initiative Tracker — TODO
 
-add new cahracters
-
-change character positions in initiative
-
-add buffs/debuffs (round based)
-
-track buffs/debuffs
-
-browser cache for buffs/debuffs/characters/monsters
-
-web view for start
-
-add character modal
-
-----------------------------------------------------------------
-by initiative roll position
-
----------------------------------------------------------------- actual things to do during development
-
-header
-
-main
-initiativeList
-ContolBox
-
-footer
+Legend: [x] done   [~] partial / needs polish   [ ] not started
 
 
-reset button
-    reset confirmation prompt
+## Core combat (done)
 
-setup laptop for remote work
-
-implement Redux to get rid of Props mess
-
-------------------
-
-auto snap by initiative score and bonus
-
-hp history
-
-when editing character, wont allow to add new cahracters
-
-confirmation prompts
-    reset initiative
-    remove character
-
-create effect
-
-effect area on character container
-
-dice roll input
-
-update effects on round change
-
-mobile view
-
-warning popup
-
-edit InitiativeScore
-
-Screen size
-
-cache list
-
-dice rolling?????
-
-make modals look better
-    close button on the top separate from the reset
-    close button with a X in in it
-    normal sized buttons
-    brown bg to match rest of site maybe?
+- [x] Initiative order tracking
+- [x] Add new characters / monsters
+- [x] Change character positions in initiative (manual reorder)
+- [x] Sort by initiative score
+- [x] Round counter (auto-increments when order cycles)
+- [x] Highlight currently active character
+- [x] Next button to advance turn
+- [x] Reset round
+- [x] Clear all (with confirmation warning prompt)
 
 
-theme setup
-Cyberpunk/Sci fi theme
-Fantasy theme
+## Characters & stats (done)
+
+- [x] Add character modal
+- [x] Edit character stats (direct + modal)
+- [x] Hitpoints with quick math input (e.g. 20-5+3)
+- [x] Edit initiative score inline
+- [x] Defense field
+- [x] Save individual character to storage
+
+
+## Effects (done)
+
+- [x] Add buffs / debuffs (round based)
+- [x] Track buffs / debuffs per character
+- [x] Effect area on character container
+- [x] Update / decrement effects on round change
+- [x] Permanent (no-duration) effects
+
+
+## Dice (done)
+
+- [x] Dice roll input with formula parsing (e.g. 4d6+8, 1d8-1)
+- [x] Dice roll log
+
+
+## Infrastructure (done)
+
+- [x] Redux Toolkit (replace prop drilling)
+- [x] Browser cache / localStorage persistence
+- [x] Web view for start
+- [x] Header / main (initiative list + control box) / footer layout
+- [x] Mobile view
+
+
+## Backlog / polish
+
+- [ ] HP history (hitpointHistory + baseHitpoints already on interface, not wired up)
+- [ ] Auto-snap sort: break initiative ties using initiativeBonus (field exists, unused)
+- [ ] Saved-character library UI (savedCharacterCollection slice exists; no load-from-saved UI yet)
+- [ ] Dice roll breakdown in log (separateValues + originalFormula stored but only total shown)
+- [ ] Block adding new characters while editing a character
+- [ ] Improve modal styling
+      - close button at top, separate from reset
+      - close button with an X
+      - normal-sized buttons
+      - brown bg to match the rest of the site
+
+
+## Planned features
+
+### Low-HP visual states (CSS)
+- [ ] Add a CSS variant for a creature dropped below 50% HP ("bloodied")
+- [ ] Add a CSS variant for a creature dropped below 25% HP (critical)
+- [ ] Drive thresholds off current hitpoints vs. baseHitpoints (max HP)
+- [ ] Reuse existing :root design tokens for the colors (no hardcoded values)
+
+### Save / load encounters
+- [ ] Save the current roster as a named encounter TEMPLATE
+      (names, max HP, AC, initiative bonus — no live turn state)
+- [ ] Resume snapshot: restore live fight (current HP, effects, round, active turn)
+- [ ] Decide on load behavior: replace current queue vs. merge (drop in a second wave)
+- [ ] Export encounter to a JSON file
+- [ ] Import encounter from a JSON file
+      (frontend-only way to SHARE encounters between GMs — no backend needed)
+- [ ] Store saved encounters by name in localStorage
+
+### Mass-add creatures
+- [ ] Add N copies of a creature in one action, auto-numbered (Goblin 1..N)
+- [ ] Continue numbering when adding more of the same mid-fight (5,6,7...)
+- [ ] Toggle: shared HP for the group vs. roll each creature's HP separately
+- [ ] Toggle: shared group initiative vs. roll initiative per creature
+- [ ] Remove group members individually as they drop (not all at once)
+
+### Themes
+- [ ] Theme switcher
+- [ ] Fantasy theme
+- [ ] Cyberpunk / Sci-fi theme
+
+
+## Parked ideas
+
+- SRD monster import (frontend-only is feasible: bundle a static SRD JSON in the
+  build, OR fetch from a public CORS-enabled API like open5e — no backend required)
