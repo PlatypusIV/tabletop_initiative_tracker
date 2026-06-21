@@ -7,10 +7,13 @@ A lightweight React app for tracking initiative, hitpoints, and effects during D
 ## Features
 
 - **Initiative Tracking** — Add characters and monsters to a combat roster, sorted by initiative roll.
+- **Mass-Add Creatures** — Add several copies of a creature at once (up to 50). Copies are auto-numbered (`Goblin`, `Goblin 2`, `Goblin 3`…), and numbering continues when you add more of the same mid-fight.
+- **Dice-Formula Stats** — Enter hitpoints and initiative as either a flat number or a dice formula (e.g. `2d8+2`, `1d20+3`). Formulas are rolled independently for each creature in a batch, so a wave of goblins gets varied HP.
 - **Hitpoint Tracking** — Edit a combatant's HP inline, including arithmetic input like `-5+3` to apply damage and healing in one go.
 - **Defense Tracking** — Record each combatant's defenses (e.g. `ac: 18, ff: 14, t: 12`).
 - **Effect Tracking** — Attach active effects and conditions to any combatant, each with a name, description, and round duration.
-- **Turn & Round Management** — Step through combat round by round with a clear view of who's up next; the current combatant is highlighted.
+- **Turn & Round Management** — Step through combat round by round with a clear view of who's up next; the current combatant is highlighted and scrolls into view automatically.
+- **Keyboard Turn Controls** — Advance the turn with **Space** or **→**, and step back with **←** or **Backspace**.
 - **Saved Characters** — Save combatants to a reusable collection and drop them back into any encounter, with search and delete.
 - **Dice Roller** — Roll dice formulas (e.g. `4d6+8`, `1d8-1`) with a running log of recent results.
 - **Persistence** — The current roster, active turn, and saved characters are stored in the browser's local storage, so your encounter survives a refresh.
@@ -22,6 +25,8 @@ A lightweight React app for tracking initiative, hitpoints, and effects during D
 ### Starting a Combat Encounter
 
 1. Press **Add character** and fill in the name, hitpoints, initiative score, and defense for each combatant (players and enemies).
+   - **Hitpoints** and **Initiative score** accept either a flat number (e.g. `12`) or a dice formula (e.g. `2d8+2`).
+   - Set **Count** to add several copies at once (up to 50). With a dice formula, each copy rolls its own value; with a flat number, every copy gets the same value. Copies are auto-numbered.
 2. Press **Sort by initiative** to order the roster automatically.
 
 ### Managing Combatants
@@ -46,7 +51,8 @@ A lightweight React app for tracking initiative, hitpoints, and effects during D
 ### Running Combat
 
 - Use the **Next** button to advance through the initiative order.
-- The current combatant is highlighted so it's always clear whose turn it is.
+- Or use the keyboard: **Space** / **→** advance to the next combatant, **←** / **Backspace** step back one (stops at the first combatant without reversing the round).
+- The current combatant is highlighted so it's always clear whose turn it is, and it scrolls into view automatically even when the roster overflows the screen.
 - The round counter increments automatically when the order cycles back to the top.
 - **Reset round** sends the turn marker back to the top, **Clear all** wipes the roster (with a confirmation prompt).
 
@@ -69,6 +75,14 @@ A lightweight React app for tracking initiative, hitpoints, and effects during D
 ---
 
 ## Update Log
+
+### v1.3.0 — Mass-add & quality of life
+
+- **Mass-add creatures**: add up to 50 copies in one action, auto-numbered with numbering that continues mid-fight.
+- **Dice-formula stats**: hitpoints and initiative accept a flat number or a dice formula, rolled per creature for a batch.
+- **Keyboard turn controls**: Space / → to advance, ← / Backspace to step back.
+- The active combatant now scrolls into view, and the roster scrolls horizontally (mouse wheel supported).
+- The dice roller keeps the 20 most recent results, shows the newest first, and reports invalid formulas instead of failing silently.
 
 ### v1.2.0 — UI unification
 
