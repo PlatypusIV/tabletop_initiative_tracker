@@ -9,6 +9,7 @@ import CharacterEditModal from './components/CharacterEditModal/CharacterEditMod
 import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getNextCharacterName, remapCharacterPositions, setCharactersToStorage, setCurrentCharacterNumberToStorage } from './utils/utility';
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
+import GuideModal from './components/GuideModal/GuideModal';
 import Loader from './components/Loader/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState,
@@ -27,6 +28,7 @@ export default function App(): React.JSX.Element {
   const [currentCharacterNumber, setCurrentCharacterNumber] = useState<number>(0);
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
+  const [isGuideModalOpen, setIsGuideModalOpen] = useState<boolean>(false);
   const [currentBackgroundNumber, setCurrentBackgroundNumber] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -67,12 +69,12 @@ useEffect(()=>{
 const turnControlRef = useRef({
   next: continueAlongInitiative,
   back: goBackAlongInitiative,
-  blocked: isCharacterEditModalOpen || isWarningPromptOpen,
+  blocked: isCharacterEditModalOpen || isWarningPromptOpen || isGuideModalOpen,
 });
 turnControlRef.current = {
   next: continueAlongInitiative,
   back: goBackAlongInitiative,
-  blocked: isCharacterEditModalOpen || isWarningPromptOpen,
+  blocked: isCharacterEditModalOpen || isWarningPromptOpen || isGuideModalOpen,
 };
 
 // Keyboard turn control: Space/Right advance, Left/Backspace go back.
@@ -258,7 +260,9 @@ useEffect(()=>{
             openCharacterEditor={openCharacterEditor}
             changeCharacterPosition={changeQueuePosition}
             currentlyActiveCharacter={currentCharacterNumber}
-            /> 
+            />
+            <div className='controlColumn'>
+            <button onClick={()=>setIsGuideModalOpen(true)} className='guideButton'>How to use</button>
             <div className='controlSection'>
             <div className='roundAndDiceContainer'>
 
@@ -280,9 +284,11 @@ useEffect(()=>{
                 </div>
             </div>
             </div>
+            </div>
           </div>
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} saveCharacterChanges={saveCharacterChanges} addCharacters={addCharactersToQueue}/>
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
+        <GuideModal isOpen={isGuideModalOpen} closeModal={()=>setIsGuideModalOpen(false)}/>
     </div>}
     </div>
   )
