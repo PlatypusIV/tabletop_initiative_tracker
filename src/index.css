@@ -10,7 +10,42 @@
 
 :root {
   background-color: black;
-  overflow-x: hidden;
+  overflow: hidden;
   height: 100vh;
   width: 100vw;
+
+  /* --- Design tokens (shared by modal + initiative cards) --- */
+  /* Surfaces */
+  --surface: rgb(37, 37, 37);
+  --surface-raised: rgb(45, 45, 45);
+  --surface-input: rgb(28, 28, 28);
+  --surface-sunken: rgba(0, 0, 0, 0.2);
+
+  /* Text */
+  --text: aliceblue;
+  --text-muted: rgba(255, 255, 255, 0.7);
+  --text-subtle: rgba(255, 255, 255, 0.55);
+  --text-outline:
+    1px 0 0 #000,
+    0 -1px 0 #000,
+    0 1px 0 #000,
+    -1px 0 0 #000;
+
+  /* Accent (input focus ring + active-character highlight) */
+  --accent: rgba(120, 180, 255, 0.8);
+  --accent-glow: rgba(120, 180, 255, 0.25);
+
+  /* Button roles */
+  --action: rgb(40, 140, 70);
+  --action-hover: rgb(50, 165, 85);
+  --destructive: rgb(170, 45, 45);
+  --destructive-hover: rgb(205, 55, 55);
+  --neutral: rgba(255, 255, 255, 0.1);
+  --neutral-hover: rgba(255, 255, 255, 0.2);
+
+  /* Lines */
+  --divider: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.15);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --hover: rgba(255, 255, 255, 0.06);
 }

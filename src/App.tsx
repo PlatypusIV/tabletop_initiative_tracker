@@ -2,7 +2,6 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import settings from './utils/settings.json';
 import './App.css';
 import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
 import InitiativeList from './components/InitiativeList/InitiativeList';
 import RoundCounter from './components/RoundCounter/RoundCounter';
 import { Character, Effect } from './utils/interface';
@@ -168,21 +167,24 @@ useEffect(()=>{
   }
 
   function progressEffects(){
-    const tempCharacterQueue = [...storeInitiativeQueue];
-    for(let i = 0;i<tempCharacterQueue.length;i++){
-      if(tempCharacterQueue[i].effects){
-        const characterEffectList = tempCharacterQueue[i].effects as Record<string, Effect>;
-        const charaEffectKeys = Object.keys(tempCharacterQueue[i].effects as Record<string, Effect>);
+    const tempCharacterQueue = storeInitiativeQueue.map(character => {
+      if(!character.effects) return character;
 
-        charaEffectKeys.forEach(key => {
-          if(characterEffectList[key].duration && characterEffectList[key].duration >0){
-            characterEffectList[key] = {...characterEffectList[key], duration:characterEffectList[key].duration-1};
-            if(characterEffectList[key].duration<=0) delete characterEffectList[key];
-          }
-        });
-      }
-    }
-    dispatch(editInitiativeQueue([...tempCharacterQueue]));
+      const updatedEffects: Record<string, Effect> = {};
+      Object.keys(character.effects).forEach(key => {
+        const effect = (character.effects as Record<string, Effect>)[key];
+        if(effect.duration && effect.duration > 0){
+          const newDuration = effect.duration - 1;
+          if(newDuration <= 0) return; // effect expired, drop it
+          updatedEffects[key] = {...effect, duration: newDuration};
+        } else {
+          updatedEffects[key] = effect;
+        }
+      });
+
+      return {...character, effects: updatedEffects};
+    });
+    dispatch(editInitiativeQueue(tempCharacterQueue));
   }
 
   return (
@@ -214,14 +216,13 @@ useEffect(()=>{
                     <button onClick={()=>setIsCharacterEditModalOpen(true)} className='addCharacterButton'>Add character</button>
                 </div>
                 <div className='extraButtons'>
-                  <button onClick={sortByInitiativeScore}>Sort by initiative</button>
+                  <button onClick={sortByInitiativeScore} className='sortInitiativeButton'>Sort by initiative</button>
                   <button onClick={resetRound} className='resetRondButton'>Reset round</button>
                   <button onClick={()=>setIsWarningPromptOpen(true)} className='clearInitiativeButton'>Clear all</button>
                 </div>
             </div>
             </div>
           </div>
-        <Footer />
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} saveCharacterChanges={saveCharacterChanges} addCharacter={addNewCharacterToQueue}/>
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
     </div>}
