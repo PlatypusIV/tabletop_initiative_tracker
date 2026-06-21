@@ -60,7 +60,7 @@ useEffect(()=>{
 
 useEffect(()=>{
   if(!isCharacterEditModalOpen){
-    dispatch(editSelectedCharacter({name:'', position:0,initiativeScore:0, hitpoints: 0}));
+    dispatch(editSelectedCharacter({name:'', position:0}));
   }
 }, [isCharacterEditModalOpen]);
 

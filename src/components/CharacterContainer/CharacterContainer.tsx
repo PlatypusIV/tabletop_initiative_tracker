@@ -162,7 +162,7 @@ export default function CharacterContainer(props:Props):React.JSX.Element {
             <tbody>
               <tr>
                 <td>Hitpoints:</td>
-                <td>{!isHitpointInputVisible && (<p className='statValue hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints}</p>)}
+                <td>{!isHitpointInputVisible && (<p className='statValue hitpointText' onClick={()=>setIsHitpointInputVisible(true)}>{character.hitpoints ?? '—'}</p>)}
             {isHitpointInputVisible && (<div className='statEditRow'>
               <input className='statEditInput hitpointInput' id='hitpointInput' defaultValue={character.hitpoints}type='text' onChange={(e)=> setCurrentHitpoints(e.target.value)}/>
               <button className='statConfirmButton' onClick={()=>handleHitpointChange()}>Calculate</button>
@@ -171,7 +171,7 @@ export default function CharacterContainer(props:Props):React.JSX.Element {
               </tr>
               <tr>
                 <td>Initiative:</td>
-                <td>{!isInitiativeScoreInputVisible && (<p className='statValue initiativeScoreText' onClick={()=>setIsInitiativeScoreInputVisible(true)}>{character.initiativeScore}</p>)}
+                <td>{!isInitiativeScoreInputVisible && (<p className='statValue initiativeScoreText' onClick={()=>setIsInitiativeScoreInputVisible(true)}>{character.initiativeScore ?? '—'}</p>)}
             {isInitiativeScoreInputVisible && (<div className='statEditRow'>
               <input className='statEditInput initiativeScoreInput' id='initiativeScoreInput' defaultValue={character.initiativeScore}type='text' onChange={(e)=> setCurrentInitiativeScore(e.target.value)}/>
               <button className='statConfirmButton' onClick={()=>handleInitiativeScoreChange()}>Set initiative</button>

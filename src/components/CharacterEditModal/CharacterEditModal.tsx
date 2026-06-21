@@ -61,19 +61,24 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
   function submitAdd(): boolean {
     const resolvedName = name.trim();
     if(!resolvedName){ setError('Name is required.'); return false; }
-    if(evaluateDiceFormula(hitpoints) === null){
+    // Blank HP/initiative are allowed and stored as undefined ("unknown, fill in later").
+    // Only non-blank values are validated as a number or dice formula.
+    const hpBlank = hitpoints.trim() === '';
+    const initBlank = initiativeScore.trim() === '';
+    if(!hpBlank && evaluateDiceFormula(hitpoints) === null){
       setError('Hitpoints must be a whole number or a dice formula (e.g. 2d8+2).');
       return false;
     }
-    if(evaluateDiceFormula(initiativeScore) === null){
+    if(!initBlank && evaluateDiceFormula(initiativeScore) === null){
       setError('Initiative must be a whole number or a dice formula (e.g. 1d20+3).');
       return false;
     }
 
     const characters: Character[] = [];
     for(let i = 0; i < count; i++){
-      const hp = evaluateDiceFormula(hitpoints)!.total;
-      const initiative = evaluateDiceFormula(initiativeScore)!.total;
+      // Formulas roll independently per copy; blank stays undefined for every copy.
+      const hp = hpBlank ? undefined : evaluateDiceFormula(hitpoints)!.total;
+      const initiative = initBlank ? undefined : evaluateDiceFormula(initiativeScore)!.total;
       characters.push({
         ...characterToEdit,
         name: resolvedName,
@@ -166,7 +171,7 @@ export default function CharacterEditModal(props: Props):React.JSX.Element {
     return filteredSavedCharacters.map(chara=>
     <tr key={chara.name} className='savedCharacterRow'>
       <td className='savedCharacterNameCell'><p>{chara.name}</p></td>
-      <td className='savedCharacterStatCell'><span>Hp {chara.hitpoints || 0}</span><span>Init {chara.initiativeScore || 0}</span></td>
+      <td className='savedCharacterStatCell'><span>Hp {chara.hitpoints ?? '—'}</span><span>Init {chara.initiativeScore ?? '—'}</span></td>
       <td><button className='savedCharacterAddButton' onClick={()=>onAddSavedCharacter(chara)}>Add</button></td>
       <td><button className='savedCharacterDeleteButton' onClick={()=>onDeleteSavedCharacter(chara)} title={`Delete ${chara.name}`}>✕</button></td>
     </tr>
