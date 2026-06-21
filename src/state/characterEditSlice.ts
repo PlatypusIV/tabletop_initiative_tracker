@@ -9,8 +9,8 @@ const characterEditInitialState: CharacterEditState = {
   characterBeingEdited: {
     name: "",
     position: 0,
-    initiativeScore: 0,
-    hitpoints: 0,
+    // hitpoints/initiativeScore intentionally omitted: unset means "unknown",
+    // which is distinct from a real value of 0.
   },
 };
 
