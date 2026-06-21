@@ -1,15 +1,23 @@
 
 
+.diceRollsContainer {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 .diceInputContainer {
     width: 100%;
     display: grid;
-    height: 30%;
+    flex: 0 0 auto;
 }
 
 .diceRollsLogContainer {
     width: 100%;
     padding: 2px;
-    max-height: 100%;
+    flex: 1;
+    min-height: 0;
     overflow-y: scroll;
     scrollbar-width: none;
 }
@@ -28,14 +36,27 @@
 .diceRollingNumberInput {
     width: 100%;
     height: 40px;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    background-color: var(--surface-input);
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.diceRollingNumberInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
 .diceRollListElement {
     width: 100%;
-    background: beige;
-    border-radius: 10px;
-    border: 1px solid black;
-    color: black;
+    background: var(--surface-input);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--text);
     padding-left: 4px;
     word-wrap: break-word;
     font-weight: bold;
@@ -48,32 +69,48 @@ textarea {
 }
 
 .diceRollsClearLogsButton {
-    background-color: red;
-    border-radius: 10px;
+    background-color: var(--destructive);
+    border-radius: 8px;
     font-weight: bold;
-    color: white;
-    border: solid 2px black;
+    color: #fff;
+    border: none;
     height: 30px;
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+}
+
+.diceRollsClearLogsButton:hover {
+    background-color: var(--destructive-hover);
 }
 
 .diceRollsRollButton {
     height: 30px;
-    border-radius: 10px;
-    background-color: green;
+    border-radius: 8px;
+    background-color: var(--action);
     font-weight: bold;
-    color: white;
-    border: solid 2px black;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.12s ease;
+}
+
+.diceRollsRollButton:hover {
+    background-color: var(--action-hover);
 }
 
 @media only screen and (max-width: 600px) {
     .diceRollsContainer {
         display: flex;
         flex-direction: row;
-        width: 100%;
+        flex: 1;
+        min-width: 0;
         max-height: 100%;
+        gap: 4px;
     }
 
     .diceRollsLogContainer {
+       flex: 1 1 auto;
+       min-width: 0;
        max-height: 100%;
        overflow-y: scroll;
     }
@@ -84,7 +121,11 @@ textarea {
         flex-direction: column-reverse;
     }
 
+    /* Pin the input column to ~40% (was effectively full width) so the
+       roll log keeps the remaining ~60% of the row and stays visible. */
     .diceInputContainer {
+        flex: 0 0 40%;
+        min-width: 0;
         height: 100%;
     }
 }

@@ -1,5 +1,5 @@
 .roundCounterTitle {
-    color: aliceblue;
+    color: var(--text);
     text-align: center;
     margin: 10px;
     font-size: 36px;

@@ -17,8 +17,9 @@
 @media only screen and (max-width: 600px) {
   .initiativeList {
     width: 100%;
-    margin: 2px;
-    height: 70%;
+    margin: 2px 0;
+    flex: 1;
+    min-height: 0;
     overflow-y: scroll;
     overflow-x: hidden;
     display: flex;
