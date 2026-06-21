@@ -38,7 +38,8 @@
 
 .controlSection {
   width: 12%;
-  height: 100%;
+  height: 60%;
+  align-self: center;
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;

@@ -105,9 +105,12 @@ textarea {
         flex: 1;
         min-width: 0;
         max-height: 100%;
+        gap: 4px;
     }
 
     .diceRollsLogContainer {
+       flex: 1 1 auto;
+       min-width: 0;
        max-height: 100%;
        overflow-y: scroll;
     }
@@ -118,7 +121,11 @@ textarea {
         flex-direction: column-reverse;
     }
 
+    /* Pin the input column to ~40% (was effectively full width) so the
+       roll log keeps the remaining ~60% of the row and stays visible. */
     .diceInputContainer {
+        flex: 0 0 40%;
+        min-width: 0;
         height: 100%;
     }
 }
