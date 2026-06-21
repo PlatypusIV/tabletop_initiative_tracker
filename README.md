@@ -16,11 +16,14 @@ A lightweight React app for tracking initiative, hitpoints, and effects during D
 - **Keyboard Turn Controls** — Advance the turn with **Space** or **→**, and step back with **←** or **Backspace**.
 - **Saved Characters** — Save combatants to a reusable collection and drop them back into any encounter, with search and delete.
 - **Dice Roller** — Roll dice formulas (e.g. `4d6+8`, `1d8-1`) with a running log of recent results.
+- **In-App Guide** — A **How to use** button opens a quick-reference modal covering turn flow, managing characters, and dice-formula syntax — no need to leave the app.
 - **Persistence** — The current roster, active turn, and saved characters are stored in the browser's local storage, so your encounter survives a refresh.
 
 ---
 
 ## How to Use
+
+> **Tip:** Press the **How to use** button in the app at any time to open the in-app guide — a condensed version of the steps below covering turn flow, managing characters, and dice-formula syntax.
 
 ### Starting a Combat Encounter
 
@@ -75,6 +78,10 @@ A lightweight React app for tracking initiative, hitpoints, and effects during D
 ---
 
 ## Update Log
+
+### v1.4.0 — In-app guide
+
+- **How to use** button opens an in-app guide modal covering turn flow, managing characters, and dice-formula syntax. Closes on overlay click, **Esc**, or the close button.
 
 ### v1.3.0 — Mass-add & quality of life
 
