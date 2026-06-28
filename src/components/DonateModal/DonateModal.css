@@ -1,0 +1,99 @@
+.donateModal {
+  background-color: var(--surface);
+  color: var(--text);
+  width: 50%;
+  max-height: 80%;
+  margin: auto;
+  position: absolute;
+  top: 10%;
+  left: 25%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-shadow: var(--text-outline);
+  overflow: hidden;
+}
+
+.donateCloseContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  padding: 4px;
+  flex: 0 0 auto;
+}
+
+.donateCloseButton {
+  width: 40px;
+  height: 30px;
+  background-color: var(--destructive);
+  border: none;
+  border-radius: 10px;
+  color: var(--text);
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.12s ease;
+}
+
+.donateCloseButton:hover {
+  background-color: var(--destructive-hover);
+}
+
+.donateContent {
+  padding: 0 24px 24px;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.donateTitle {
+  margin-bottom: 12px;
+}
+
+.donateSection {
+  margin-bottom: 16px;
+  color: var(--text-muted);
+}
+
+.donateLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.donateLink {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: var(--text);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  background-color: var(--surface-raised);
+  transition: background-color 0.12s ease;
+}
+
+.donateLink:hover {
+  background-color: var(--hover);
+}
+
+.donateThanks {
+  color: var(--text);
+}
+
+@media only screen and (max-width: 600px) {
+  .donateModal {
+    width: 100%;
+    left: 0;
+    top: 5%;
+    max-height: 90%;
+    margin: 0;
+  }
+
+  .donateContent {
+    padding: 0 12px 12px;
+  }
+}

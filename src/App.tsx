@@ -10,6 +10,7 @@ import { getCharactersFromStorage, getCurrentCharacterNumberFromStorage, getNext
 import DiceRollsContainer from './components/DiceRollsContainer/DiceRollsContainer';
 import WarningPrompt from './components/WarningPrompt/WarningPrompt';
 import GuideModal from './components/GuideModal/GuideModal';
+import DonateModal from './components/DonateModal/DonateModal';
 import Loader from './components/Loader/Loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState,
@@ -29,6 +30,7 @@ export default function App(): React.JSX.Element {
   const [isCharacterEditModalOpen, setIsCharacterEditModalOpen] = useState<boolean>(false);
   const [isWarningPromptOpen, setIsWarningPromptOpen] = useState<boolean>(false);
   const [isGuideModalOpen, setIsGuideModalOpen] = useState<boolean>(false);
+  const [isDonateModalOpen, setIsDonateModalOpen] = useState<boolean>(false);
   const [currentBackgroundNumber, setCurrentBackgroundNumber] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -69,12 +71,12 @@ useEffect(()=>{
 const turnControlRef = useRef({
   next: continueAlongInitiative,
   back: goBackAlongInitiative,
-  blocked: isCharacterEditModalOpen || isWarningPromptOpen || isGuideModalOpen,
+  blocked: isCharacterEditModalOpen || isWarningPromptOpen || isGuideModalOpen || isDonateModalOpen,
 });
 turnControlRef.current = {
   next: continueAlongInitiative,
   back: goBackAlongInitiative,
-  blocked: isCharacterEditModalOpen || isWarningPromptOpen || isGuideModalOpen,
+  blocked: isCharacterEditModalOpen || isWarningPromptOpen || isGuideModalOpen || isDonateModalOpen,
 };
 
 // Keyboard turn control: Space/Right advance, Left/Backspace go back.
@@ -262,6 +264,7 @@ useEffect(()=>{
             currentlyActiveCharacter={currentCharacterNumber}
             />
             <div className='controlColumn'>
+            <button onClick={()=>setIsDonateModalOpen(true)} className='donateButton'>Donate</button>
             <button onClick={()=>setIsGuideModalOpen(true)} className='guideButton'>How to use</button>
             <div className='controlSection'>
             <div className='roundAndDiceContainer'>
@@ -289,6 +292,7 @@ useEffect(()=>{
         <CharacterEditModal isOpen={isCharacterEditModalOpen} closeModal={()=>setIsCharacterEditModalOpen(false)} saveCharacterChanges={saveCharacterChanges} addCharacters={addCharactersToQueue}/>
         <WarningPrompt isOpen={isWarningPromptOpen} clearInitiativeQueue={clearInitiativeQueue}/>
         <GuideModal isOpen={isGuideModalOpen} closeModal={()=>setIsGuideModalOpen(false)}/>
+        <DonateModal isOpen={isDonateModalOpen} closeModal={()=>setIsDonateModalOpen(false)}/>
     </div>}
     </div>
   )
